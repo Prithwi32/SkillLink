@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -10,12 +10,27 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  hobbies: {
+  password: {
+    type: String,
+    required: true,
+  },
+  skills: {
     type: [String],
     default: [],
   },
+  rating: {
+    type: Number,
+    default: 5,
+  },
+  reviews: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Review",
+  },
+  photo: {
+    type: String,
+  },
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;
