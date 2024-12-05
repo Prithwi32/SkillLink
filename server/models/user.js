@@ -14,11 +14,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  skillsOffered: {
-    type: [String],
-    default: [],
-  },
-  skillsRequested: {
+  skills: {
     type: [String],
     default: [],
   },
@@ -32,10 +28,6 @@ const userSchema = new mongoose.Schema({
   },
   photo: {
     type: String,
-  },
-  collaborationInterest: {
-    type: [String],
-    default: [],
   },
 });
 
