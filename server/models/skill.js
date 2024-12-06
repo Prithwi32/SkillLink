@@ -5,6 +5,12 @@ const skillSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  desc: {
+    type: String,
+    required: true,
+    trim: true,
+    maxLength: 255,
+  },
 });
 
 const Skill = mongoose.model("Skill", skillSchema);

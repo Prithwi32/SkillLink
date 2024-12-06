@@ -14,8 +14,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  skills: {
-    type: [String],
+  skillsOffered: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Skill",
+    default: [],
+  },
+  skillsRequested: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Skill",
     default: [],
   },
   rating: {
