@@ -1,0 +1,17 @@
+export const HOBBY_SUGGESTIONS = [
+  "Reading",
+  "Writing",
+  "Cooking",
+  "Gaming",
+  "Photography",
+  "Traveling",
+  "Hiking",
+  "Painting",
+  "Music",
+  "Dancing",
+  "Gardening",
+  "Yoga",
+  "Swimming",
+  "Cycling",
+  "Running",
+];
