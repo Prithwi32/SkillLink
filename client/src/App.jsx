@@ -4,6 +4,7 @@ import AppLayout from "./layout/AppLayout";
 import { SignupCard } from "./components/SignupCard";
 import { LoginCard } from "./components/LoginCard";
 import ReportUserForm from "./components/ReportUserForm";
+import EventCreationForm from "./components/EventCreation.jsx"
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/signup" element={<SignupCard />} />
         <Route path="/login" element={<LoginCard />} />
         <Route path="/reportuser" element={<ReportUserForm/>}/>
+        <Route path="/createEvent" element={<EventCreationForm/>}/>
       </Route>
 
       {/* Add the routes which do not need the layout */}
