@@ -20,6 +20,12 @@ const sessionSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  skillsInvolved: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Skill",
+    required: true,
+    validate: [(array) => array.length > 0, "At least one skill is required."],
+  },
   link: {
     type: String,
     default: "Add meeting link",

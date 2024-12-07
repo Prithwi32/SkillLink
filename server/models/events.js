@@ -21,14 +21,30 @@ const eventSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    date_time: {
+    date: {
       type: Date,
       required: true,
     },
-    location: {
-      type: String,
-      enum: ["Online", "Physical Location"],
+    start_time: {
+      type: Date,
       required: true,
+    },
+    end_time: {
+      type: Date,
+      required: true,
+      validate: {
+        validator: {
+          function(value) {
+            return this.start_time < value;
+          },
+          message: "End time must be after start time.",
+        },
+      },
+    },
+    link: {
+      type: String,
+      required: true,
+      trim: true,
     },
     max_participants: {
       type: Number,
@@ -44,19 +60,6 @@ const eventSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-      },
-    ],
-    role_distribution: [
-      {
-        user_id: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-        },
-        role: {
-          type: String,
-          enum: ["Teacher", "Learner"],
-          required: true,
-        },
       },
     ],
     status: {
