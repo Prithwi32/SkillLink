@@ -15,12 +15,12 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   skillsOffered: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: [String],
     ref: "Skill",
     default: [],
   },
   skillsRequested: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: [String],
     ref: "Skill",
     default: [],
   },

@@ -1,8 +1,11 @@
-import React, { useState } from "react";
-import { HobbyInput } from "./HobbyInput";
-import { InputField } from "./InputField";
+import { useState } from "react";
+import { HobbyInput } from "../HobbyInput";
+import { InputField } from "../InputField";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export function SignupCard() {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -40,14 +43,46 @@ export function SignupCard() {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Ensure passwords match before proceeding
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Passwords do not match");
       return;
     }
-    // Form submission logic will go here
-    console.log("Form submitted successfully", formData);
+  
+    // Log the form data to ensure it's structured correctly
+    console.log('Form Data:', formData);
+  
+    try {
+      const response = await fetch('http://localhost:5000/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          skillsOffered: Array.isArray(formData.skillsOffered) ? formData.skillsOffered : [formData.skillsOffered],
+          skillsRequested: Array.isArray(formData.skillsRequired) ? formData.skillsRequired : [formData.skillsRequired],
+        }),
+      });
+  
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message || "Signup failed");
+      }
+      toast.success("Signup successful");
+      navigate("/login");
+      console.log("Signup successful", responseData);
+      // handle successful signup (e.g., redirect to login)
+    } catch (error) {
+      toast.error("SignUp Failed!")
+      console.error('Error during signup:', error);
+      setErrorMessage(error.message || "Signup failed. Please try again later.");
+    }
   };
 
   return (
