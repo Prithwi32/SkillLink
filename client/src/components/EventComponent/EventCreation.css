@@ -1,0 +1,166 @@
+
+body {
+  background-image: url("https://dovilearn.s3.eu-west-2.amazonaws.com/images/course-images/1612287896eventmanagement.jpeg");
+  height: 100vh;
+  margin: 0;
+}
+
+.container{
+  max-width: 500px;
+  max-height: 700px;
+  background-size: cover;
+  background-position: center;
+  margin: 30px auto;  
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif sans-serif;
+  background-color: white;
+  backdrop-filter: blur(10px);
+  display: grid;
+  grid-row: 20px 1fr;
+
+}
+
+.event-creation{
+  padding: 20px;
+}
+
+
+/* Heading Styles */
+.headline  {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  text-align: center;
+  color: white;
+  font-size: 24px;
+  background: linear-gradient(90deg, #243dff, #4364F7, #6FB1FC);
+}
+
+
+
+/* Form Styles */
+.event-creation form {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* Label Styles */
+.event-creation label {
+  font-weight: bold;
+  color: rgb(117, 107, 107);
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Input, Textarea Styles */
+.event-creation input,
+.event-creation textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  background-color: rgb(246, 238, 238);
+}
+
+.event-creation input:focus,
+.event-creation textarea:focus {
+  border-color: #007BFF;
+}
+
+/* Textarea Styles */
+.event-creation textarea {
+  height: 60px;
+  resize: none;
+}
+
+/* Button Styles */
+.event-creation button {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(90deg, #0052D4, #4364F7, #6FB1FC);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.event-creation button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .event-creation {
+      padding: 15px;
+  }
+
+  .event-creation h2 {
+      font-size: 20px;
+  }
+
+  .event-creation input,
+  .event-creation textarea {
+      font-size: 14px;
+  }
+
+  .event-creation button {
+      font-size: 14px;
+      padding: 10px;
+  }
+}
+
+/* Dropdown Styles for AM/PM */
+.event-creation select {
+  padding: 8px;
+  margin: 2px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Dropdown Hover and Focus States */
+.event-creation select:hover {
+  border-color: #007BFF;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.event-creation select:focus {
+  border-color: #007BFF;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.7);
+}
+
+/* To Align Time Input and Dropdown */
+.time-select-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.timings{
+    display: flex;
+    gap: 100px; /* Space between the fields */
+    justify-content: space-between; /* Distribute space evenly */
+    align-items: center;
+}
+
+.time-field {
+  flex: 1; /* Equal width for both fields */
+  display: flex;
+  flex-direction: row;
+  gap: 10px; /* Space between input and dropdown */
+  align-items: center;
+}
