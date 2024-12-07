@@ -9,13 +9,24 @@ export function SignupCard() {
     password: "",
     confirmPassword: "",
     location: "",
-    skillsOffered: [],   // State for skills offered
-    skillsRequired: [],  // State for skills required
+    skillsOffered: [], // State for skills offered
+    skillsRequired: [], // State for skills required
   });
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   // Handle form input changes for regular fields
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (name === "confirmPassword") {
+      if (formData.password !== value) {
+        setErrorMessage("Passwords do not match");
+      } else {
+        setErrorMessage("");
+      }
+    }
   };
 
   // Handle changes for skills offered
@@ -28,10 +39,15 @@ export function SignupCard() {
     setFormData({ ...formData, skillsRequired: newSkills });
   };
 
-  // Handle form submission (currently empty as per the request)
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Form submission logic will go here (currently empty)
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
+    // Form submission logic will go here
+    console.log("Form submitted successfully", formData);
   };
 
   return (
@@ -39,7 +55,7 @@ export function SignupCard() {
       <img
         src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
         alt="auth_bg_img"
-        className="absolute z-0 opacity-75 w-full h-full object-cover"
+        className="fixed top-0 z-0 opacity-75 w-full h-screen object-cover"
       />
       <div className="absolute inset-0"></div>
 
@@ -77,10 +93,22 @@ export function SignupCard() {
             required
           />
 
+          <InputField
+            label="Confirm Password"
+            name="confirmPassword"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={handleInputChange}
+            required
+          />
+          {errorMessage && (
+            <p className="text-red-500 text-sm">{errorMessage}</p>
+          )}
+
           {/* Skills Offered Input */}
           <HobbyInput
             selectedHobbies={formData.skillsOffered}
-            onChange={handleSkillsOfferedChange}  // Handle change for skills offered
+            onChange={handleSkillsOfferedChange} // Handle change for skills offered
             title={"Skills Offered"}
             placeholderTitle={"Skills"}
           />
@@ -88,7 +116,7 @@ export function SignupCard() {
           {/* Skills Requested Input */}
           <HobbyInput
             selectedHobbies={formData.skillsRequired}
-            onChange={handleSkillsRequiredChange}  // Handle change for skills required
+            onChange={handleSkillsRequiredChange} // Handle change for skills required
             title={"Skills Requested"}
             placeholderTitle={"Skills"}
           />
@@ -106,6 +134,15 @@ export function SignupCard() {
           <p className="text-center text-sm text-gray-600">
             Join our community of skilled individuals and start sharing your
             expertise today
+          </p>
+          <p className="text-center text-sm text-gray-600">
+            Already have an account?{" "}
+            <a
+              href="/login"
+              className="text-blue-600 hover:text-blue-800 font-semibold transition-all duration-300"
+            >
+              Login here
+            </a>
           </p>
         </form>
       </div>
