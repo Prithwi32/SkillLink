@@ -11,6 +11,11 @@ const skillSchema = new mongoose.Schema({
     trim: true,
     maxLength: 255,
   },
+  status: {
+    type: String,
+    enum: ["Pending", "Rejected", "Approved"],
+    default: "Pending",
+  },
 });
 
 const Skill = mongoose.model("Skill", skillSchema);
