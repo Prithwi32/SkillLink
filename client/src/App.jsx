@@ -3,6 +3,7 @@ import { Button } from "./components/ui/button";
 import AppLayout from "./layout/AppLayout";
 import { SignupCard } from "./components/SignupCard";
 import { LoginCard } from "./components/LoginCard";
+import ReportUserForm from "./components/ReportUserForm";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         {/* Other routes which need the layout */}
         <Route path="/signup" element={<SignupCard />} />
         <Route path="/login" element={<LoginCard />} />
+        <Route path="/reportuser" element={<ReportUserForm/>}/>
       </Route>
 
       {/* Add the routes which do not need the layout */}
