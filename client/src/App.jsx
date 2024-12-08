@@ -3,6 +3,7 @@ import { Button } from "./components/ui/button";
 import AppLayout from "./layout/AppLayout";
 import { SignupCard } from "./components/SignupCard";
 import { LoginCard } from "./components/LoginCard";
+import UserProfilePage from "./pages/UserProfilePage";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
       </Route>
 
       {/* Add the routes which do not need the layout */}
+      <Route path="/userprofile" element={<UserProfilePage/>}/>
     </Routes>
   );
 }
