@@ -1,20 +1,34 @@
-import React, { useState } from "react";
-import { InputField } from "./InputField";
+import { useState } from "react";
+import { InputField } from "../InputField";
+import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export function LoginCard() {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const { login } = useAuth();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Backend integration logic will go here
+
+    try {
+      const { user } = await login(formData);
+      toast.success("Login successful");
+      console.log("Login successful:", user);
+      navigate("/userDashboard");
+    } catch (error) {
+      toast.error("Login Failed!")
+      console.error("Login failed:", error.message);
+    }
   };
 
   return (
