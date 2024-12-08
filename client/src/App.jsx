@@ -9,6 +9,7 @@ import { AuthProvider } from "./context/AuthContext";
 // import ProtectedRoute from "./components/ProtectedRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import UserProfilePage from "./pages/UserProfilePage"
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
 
           {/* Other routes */}
           <Route path="/reportuser" element={<ReportUserForm />} />
+          <Route path="/userDashboard" element={<UserProfilePage />} />
 
           {/* ProtectedRoute example
           <Route
