@@ -3,10 +3,12 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 
 import AuthRouter from './routes/AuthRouter.js'
 import ProtectedRouter from './routes/ProtectedRoute.js'
 import userRoutes from './routes/user.js'
+import adminRouter from './routes/adminRoutes.js'
 
 dotenv.config();
 
@@ -16,6 +18,7 @@ const PORT = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 mongoose.connect(process.env.MONGO_URI, {
     authSource: 'admin'
@@ -32,6 +35,9 @@ app.get('/', (req, res) => {
 
 app.use('/auth', AuthRouter)
 app.use('/protectedRoute', ProtectedRouter)
+
+// Admin routes
+app.use('/api/admin', adminRouter);
 
 // custom routes
 app.use('/api/user', userRoutes);
