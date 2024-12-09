@@ -30,7 +30,6 @@ app.use(bodyParser.json());
 //     },
 //     credentials: true,
 // }));
-
 app.use(cors({
     origin: function (origin, callback) {
       const regex = /^http:\/\/localhost:(517[3-9])$/;
