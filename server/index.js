@@ -16,7 +16,17 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+    origin: function (origin, callback) {
+      const regex = /^http:\/\/localhost:(517[3-9])$/;
+      if (regex.test(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+  }));
 app.use(express.json());
 app.use(cookieParser());
 
