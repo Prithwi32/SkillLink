@@ -11,7 +11,7 @@ const navItems = [
 export default function Sidebar({ isOpen, onClose, activeSection, setActiveSection }) {
   return (
     <div
-      className={`fixed top-0 left-0 h-full w-64 bg-blue-600 text-white transform transition-transform duration-300 ease-in-out ${
+      className={`fixed z-10 top-0 left-0 h-full w-64 bg-blue-600 text-white transform transition-transform duration-300 ease-in-out ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
