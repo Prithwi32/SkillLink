@@ -82,7 +82,11 @@ export const adminLogin = (req, res) => {
   });
 
   res
-    .cookie("token", token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 })
+    .cookie("token", token, {
+      httpOnly: true,
+      sameSite: "strict",
+      maxAge: 1000 * 60 * 60 * 24,
+    })
     .json({ success: true, message: "Logged in successfully" });
 };
 
