@@ -32,18 +32,19 @@ function App() {
 
           {/* Other routes */}
           <Route path="/reportuser" element={<ReportUserForm />} />
-          <Route path="/userDashboard" element={<UserProfilePage />} />
 
-          {/* ProtectedRoute example
+          {/* ProtectedRoute example 
           <Route
-            path="/createEvent"
-            element={
-              <ProtectedRoute>
-                <EventCreationForm />
-              </ProtectedRoute>
+          path="/createEvent"
+          element={
+            <ProtectedRoute>
+            <EventCreationForm />
+            </ProtectedRoute>
             }
-          /> */}
+            /> */}
         </Route>
+        {/* Routes which has side bar and doesnt require navbar and footer */}
+        <Route path="/userDashboard" element={<UserProfilePage />} />
       </Routes>
       <ToastContainer />
     </AuthProvider>
