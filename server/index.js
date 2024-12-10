@@ -16,7 +16,31 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
-app.use(cors());
+// const allowedOrigins = [
+//   'http://localhost:5174', // Admin frontend
+//   'http://localhost:5173', // Client frontend
+// ];
+// app.use(cors({
+//     origin: function (origin, callback) {
+//         if (!origin || allowedOrigins.includes(origin)) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     },
+//     credentials: true,
+// }));
+app.use(cors({
+    origin: function (origin, callback) {
+      const regex = /^http:\/\/localhost:(517[3-9])$/;
+      if (regex.test(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+  }));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -25,8 +49,6 @@ mongoose.connect(process.env.MONGO_URI, {
 })
 .then(()=> console.log('Successfully Connected to MongoDB '))
 .catch((err) => console.error('MongoDB connection error: ', err));
-
-
 
 // default routes
 app.get('/', (req, res) => {

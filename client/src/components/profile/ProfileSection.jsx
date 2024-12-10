@@ -1,35 +1,66 @@
-import React from 'react';
+import React, { useState } from "react";
+import { ProfilePage } from "../ProfilePage";
+import { HOBBY_SUGGESTIONS as AVAILABLE_SKILLS } from "../../constants/hobby-suggestions";
 
-export default function ProfileSection() {
+const INITIAL_USER = {
+  id: "1",
+  name: "John Doe",
+  email: "john.doe@example.com",
+  avatar: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=400",
+  about:
+    "Full-stack developer with a passion for building great user experiences.",
+  skills: ["Gardening", "Yoga", "Digital marketing"],
+  interestedSkills: ["Music", "Dancing"],
+};
+
+const SAMPLE_MENTORS = [
+  {
+    id: "1",
+    name: "Sarah Wilson",
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400",
+    skills: ["Yoga", "Carrer mentoring", "Time management"],
+  },
+  {
+    id: "2",
+    name: "Michael Chen",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+    skills: ["Gaming", "Photography", "Email marketing"],
+  },
+];
+
+function ProfileSection() {
+  const [user, setUser] = useState(INITIAL_USER);
+
+  const handleUpdateProfile = (field, value) => {
+    setUser((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleUpdateAvatar = (file) => {
+    // In a real app, you would upload the file to a server
+    const imageUrl = URL.createObjectURL(file);
+    handleUpdateProfile("avatar", imageUrl);
+  };
+
+  const handleRequestNewSkill = () => {
+    // In a real app, this would navigate to a new page
+    alert("Redirecting to new skill request page...");
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto">
-      <h2 className="text-3xl font-bold mb-6 text-blue-600">User Profile</h2>
-      <div className="flex items-center mb-6">
-        <img
-          src="https://via.placeholder.com/150"
-          alt="User Avatar"
-          className="w-24 h-24 rounded-full mr-6"
-        />
-        <div>
-          <h3 className="text-2xl font-semibold">John Doe</h3>
-          <p className="text-gray-600">Web Developer</p>
-        </div>
-      </div>
-      <div className="mb-6">
-        <h4 className="text-xl font-semibold mb-2 text-blue-600">About Me</h4>
-        <p className="text-gray-700">
-          Passionate web developer with 5 years of experience in creating
-          responsive and user-friendly websites. Always eager to learn new
-          technologies and improve my skills.
-        </p>
-      </div>
-      <div>
-        <h4 className="text-xl font-semibold mb-2 text-blue-600">Contact Information</h4>
-        <p className="text-gray-700">Email: john.doe@example.com</p>
-        <p className="text-gray-700">Location: New York, NY</p>
-        <p className="text-gray-700">GitHub: github.com/johndoe</p>
-      </div>
-    </div>
+    <ProfilePage
+      user={user}
+      availableSkills={AVAILABLE_SKILLS}
+      mentors={SAMPLE_MENTORS}
+      onUpdateProfile={handleUpdateProfile}
+      onUpdateAvatar={handleUpdateAvatar}
+      onRequestNewSkill={handleRequestNewSkill}
+    />
   );
 }
 
+export default ProfileSection;
