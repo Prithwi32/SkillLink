@@ -10,7 +10,7 @@ import ProtectedRouter from './routes/ProtectedRoute.js'
 import userRoutes from './routes/user.js'
 import adminRouter from './routes/adminRoutes.js'
 import eventRoutes from './routes/eventRoutes.js'
-
+import reviewRouter from './routes/reviewRoutes.js'
 dotenv.config();
 
 const app = express();
@@ -43,6 +43,8 @@ app.use(cors({
 //     },
 //     credentials: true,
 //   }));
+
+// app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
@@ -62,6 +64,9 @@ app.use('/protectedRoute', ProtectedRouter)
 
 // Admin routes
 app.use('/api/admin', adminRouter);
+
+// Review routes
+app.use('/api/reviews',reviewRouter);
 
 // custom routes
 app.use('/api/user', userRoutes);

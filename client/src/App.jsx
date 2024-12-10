@@ -8,8 +8,9 @@ import EventCreationForm from "./components/EventCreation";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import UserProfilePage from "./pages/UserProfilePage";
 // import ProtectedRoute from "./components/ProtectedRoutes";
+import UserProfilePage from "./pages/UserProfilePage"
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   return (
@@ -19,10 +20,11 @@ function App() {
           <Route
             index
             element={
-              <div className="flex flex-col mx-auto my-auto justify-center items-center w-full gap-10">
-                <h1 className="text-3xl text-blue-800">Sample Heading</h1>
-                <Button className="text-base">Click here</Button>
-              </div>
+              // <div className="flex flex-col mx-auto my-auto justify-center items-center w-full gap-10">
+              //   <h1 className="text-3xl text-blue-800">Sample Heading</h1>
+              //   <Button className="text-base">Click here</Button>
+              // </div>
+              <LandingPage/>
             }
           />
 
