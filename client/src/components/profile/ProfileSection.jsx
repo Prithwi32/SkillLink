@@ -19,14 +19,14 @@ const SAMPLE_MENTORS = [
     name: "Sarah Wilson",
     avatar:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400",
-    skills: ["Yoga", "Carrer mentoring", "Time management"],
+    skills: ["Music", "Carrer mentoring", "Time management"],
   },
   {
     id: "2",
     name: "Michael Chen",
     avatar:
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
-    skills: ["Gaming", "Photography", "Email marketing"],
+    skills: ["Dancing", "Photography", "Email marketing"],
   },
 ];
 
