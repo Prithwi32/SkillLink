@@ -9,8 +9,8 @@ import {
   rejectSkill,
   adminLogout,
 } from "../controllers/adminController.js";
-import { loginValidation } from "../middlewares/AuthValidation.js";
-import { adminAuth } from "../middlewares/Auth.js";
+import { loginValidation } from "../middlewares/Auth/AuthValidation.js";
+import { adminAuth } from "../middlewares/Auth/Auth.js";
 
 const router = Router();
 
