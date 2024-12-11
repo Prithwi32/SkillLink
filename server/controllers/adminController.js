@@ -68,6 +68,8 @@ export const approveSkill = async (req, res) => {
 export const adminLogin = (req, res) => {
   const { email, password } = req.body;
 
+  console.log(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD);
+
   if (
     email !== process.env.ADMIN_EMAIL ||
     password !== process.env.ADMIN_PASSWORD
