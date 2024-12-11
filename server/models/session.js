@@ -20,15 +20,27 @@ const sessionSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  skillsInvolved: {
-    type: [mongoose.Schema.Types.ObjectId],
+  skillTaughtByUserOne: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Skill",
     required: true,
-    validate: [(array) => array.length > 0, "At least one skill is required."],
+  },
+  skillTaughtByUserTwo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Skill",
+    required: true,
   },
   link: {
     type: String,
-    default: "Add meeting link",
+    required:true,
+  },
+  isReviewProvidedByUserOne: {
+    type: Boolean,
+    default: false,
+  },
+  isReviewProvidedByUserTwo: {
+    type: Boolean,
+    default: false,
   },
 });
 
