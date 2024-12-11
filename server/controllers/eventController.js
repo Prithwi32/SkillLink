@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Event from "../models/events.js";
 import Skill from "../models/skill.js";
 import User from "../models/user.js";
@@ -550,5 +551,88 @@ export const getUserParticipatingEvents = async (req, res) => {
   } catch (error) {
     console.error("Error fetching user's participating events:", error);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Get events based on skills user want to learn
+export const getEventsBasedOnSkillsRequested = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId).select("skillsRequested");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found", success: false });
+    }
+    const skillsObjectIds = await Skill.find({
+      name: { $in: user.skillsRequested },
+    }).select("_id");
+
+    if (skillsObjectIds.length === 0) {
+      return res.status(200).json({
+        success: true,
+        events: [],
+        message: "No events found for the requested skills",
+      });
+    }
+
+    const events = await Event.find({
+      skills_id: { $in: skillsObjectIds.map((skill) => skill._id) },
+      status: "Upcoming",
+    })
+      .select("title description date start_time end_time skills_id")
+      .populate("skills_id", "name")
+      .lean();
+
+    res.status(200).json({
+      success: true,
+      events,
+    });
+  } catch (err) {
+    console.error("Error fetching events:", err);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: err.message,
+    });
+  }
+};
+
+// Get events for specific skills (excluding created by him and upcoming)
+export const getEventsForSpecificSkill = async (req, res) => {
+  try {
+    const { skillId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(skillId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid skill ID format",
+      });
+    }
+    const skill = await Skill.findById(skillId).select("_id name");
+    if (!skill) {
+      return res.status(404).json({
+        success: false,
+        message: "Skill not found",
+      });
+    }
+    const events = await Event.find({
+      skills_id: skill._id,
+      status: "Upcoming",
+    })
+      .select("title description date start_time end_time skills_id")
+      .populate("skills_id", "name")
+      .lean();
+
+    res.status(200).json({
+      success: true,
+      skill: skill.name,
+      events,
+    });
+  } catch (err) {
+    console.error("Error fetching events for specific skill:", err);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: err.message,
+    });
   }
 };

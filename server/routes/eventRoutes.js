@@ -13,7 +13,9 @@ import {
   registerForEvent,
   getEventRequests,
   handleEventRequest,
-  getUserParticipatingEvents
+  getUserParticipatingEvents,
+  getEventsBasedOnSkillsRequested,
+  getEventsForSpecificSkill
 } from "../controllers/eventController.js";
 
 const router = express.Router();
@@ -53,5 +55,11 @@ router.post("/:eventId/handle-request", ensureAuthenticated, handleEventRequest)
 
 // Route to get events which is registered by specific user
 router.get("/get-participating-events", ensureAuthenticated, getUserParticipatingEvents);
+
+// Route to get list of events for user learning skills
+router.get("/get-learn-events", ensureAuthenticated, getEventsBasedOnSkillsRequested);
+
+// Route to get upcoming events for specific skill
+router.get("/events/skill/:skillId", getEventsForSpecificSkill);
 
 export default router;

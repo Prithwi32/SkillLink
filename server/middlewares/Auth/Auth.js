@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
+import User from '../../models/user.js'
 
-const ensureAuthenticated = (req, res, next) => {
+const ensureAuthenticated = async (req, res, next) => {
   const auth = req.headers['authorization'];
   // console.log("Authorization Header: ", auth);
 
@@ -16,6 +17,11 @@ const ensureAuthenticated = (req, res, next) => {
       if (!decoded || !decoded._id) {
       return res.status(403).json({ message: 'Invalid token payload' });
     }
+    const user = await User.findById(decoded._id);
+
+    if (!user || user.isBanned) {
+      return res.status(403).json({ message: 'Access denied: User is banned' });
+    }
       req.user = decoded;
       next();
   } catch (err) {
@@ -24,7 +30,7 @@ const ensureAuthenticated = (req, res, next) => {
   }
 };
 
-export const adminAuth = (req,res,next) => {
+export const adminAuth = async (req,res,next) => {
     const token = req.cookies.token;
 
     try {
@@ -39,7 +45,11 @@ export const adminAuth = (req,res,next) => {
         if (!decoded) {
           return res.status(401).json({ success: false, message: "Invalid token" });
         }
-    
+        const user = await User.findOne({ email: decoded.email });
+
+        if (!user || user.isBanned) {
+          return res.status(403).json({ message: 'Access denied: User is banned' });
+        }
         req.body.email = decoded.email;
         next();
       } catch (error) {

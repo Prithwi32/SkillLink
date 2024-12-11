@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  about: {
+    type: String,
+    default: ""
+  },
   skillsOffered: {
     type: [String],
     ref: "Skill",
@@ -31,10 +35,15 @@ const userSchema = new mongoose.Schema({
   reviews: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Review",
+    default: null,
   },
   photo: {
     type: String,
   },
+  isBanned: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const User = mongoose.model("User", userSchema);
