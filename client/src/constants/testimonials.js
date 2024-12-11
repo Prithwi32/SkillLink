@@ -7,7 +7,7 @@ export const testimonials = [
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200&h=200",
     review:
       "An exceptional mentor who made complex React concepts easy to understand. Her practical approach to teaching helped me land my dream job.",
-    rating: 5,
+    rating: 3.5,
   },
   {
     id: "2",
