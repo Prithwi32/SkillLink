@@ -9,38 +9,42 @@ import AuthRouter from './routes/AuthRouter.js'
 import ProtectedRouter from './routes/ProtectedRoute.js'
 import userRoutes from './routes/user.js'
 import adminRouter from './routes/adminRoutes.js'
-
+import eventRoutes from './routes/eventRoutes.js'
+import reviewRouter from './routes/reviewRoutes.js'
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
-// const allowedOrigins = [
-//   'http://localhost:5174', // Admin frontend
-//   'http://localhost:5173', // Client frontend
-// ];
-// app.use(cors({
-//     origin: function (origin, callback) {
-//         if (!origin || allowedOrigins.includes(origin)) {
-//             callback(null, true);
-//         } else {
-//             callback(new Error('Not allowed by CORS'));
-//         }
-//     },
-//     credentials: true,
-// }));
+const allowedOrigins = [
+  'http://localhost:5174', // Admin frontend
+  'http://localhost:5173', // Client frontend
+];
 app.use(cors({
     origin: function (origin, callback) {
-      const regex = /^http:\/\/localhost:(517[3-9])$/;
-      if (regex.test(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
     },
     credentials: true,
-  }));
+}));
+
+// app.use(cors({
+//     origin: function (origin, callback) {
+//       const regex = /^http:\/\/localhost:(517[3-9])$/;
+//       if (regex.test(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error('Not allowed by CORS'));
+//       }
+//     },
+//     credentials: true,
+//   }));
+
+// app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
@@ -61,8 +65,12 @@ app.use('/protectedRoute', ProtectedRouter)
 // Admin routes
 app.use('/api/admin', adminRouter);
 
+// Review routes
+app.use('/api/reviews',reviewRouter);
+
 // custom routes
 app.use('/api/user', userRoutes);
+app.use('/api/events', eventRoutes);
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on port ${PORT}`);
