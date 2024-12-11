@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import { Button } from "./components/ui/button";
 import AppLayout from "./layout/AppLayout";
 import { SignupCard } from "./components/Auth/SignupCard";
 import { LoginCard } from "./components/Auth/LoginCard";
