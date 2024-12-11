@@ -54,7 +54,7 @@ const EventCarousel = ({ events }) => {
   return (
     <Carousel
       setApi={setApi}
-      className="w-full max-w-xs sm:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto"
+      className="w-full max-w-sm md:max-w-2xl lg:max-w-4xl mx-auto"
       opts={{
         align: "start",
         loop: true,
