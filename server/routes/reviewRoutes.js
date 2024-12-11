@@ -5,7 +5,7 @@ import {
   getReviews,
   updateReview,
 } from "../controllers/reviewController.js";
-import ensureAuthenticated from "../middlewares/Auth.js";
+import ensureAuthenticated from "../middlewares/Auth/Auth.js";
 import { editReviewValidation, newReviewValidation } from "../middlewares/reviewValidation.js";
 
 const router = new Router();

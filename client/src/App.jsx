@@ -4,11 +4,11 @@ import AppLayout from "./layout/AppLayout";
 import { SignupCard } from "./components/Auth/SignupCard";
 import { LoginCard } from "./components/Auth/LoginCard";
 import ReportUserForm from "./components/ReportUserForm";
-// import EventCreationForm from "./components/EventCreation";
+import EventCreationForm from "./components/EventCreation";
 import { AuthProvider } from "./context/AuthContext";
-// import ProtectedRoute from "./components/ProtectedRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import ProtectedRoute from "./components/ProtectedRoutes";
 import UserProfilePage from "./pages/UserProfilePage"
 import LandingPage from "./pages/LandingPage";
 
@@ -28,25 +28,26 @@ function App() {
             }
           />
 
-          {/* Routes that require authentication context */}
-          <Route path="/signup" element={<SignupCard />} />
-          <Route path="/login" element={<LoginCard />} />
+          {/* Public routes */}
+          <Route path="signup" element={<SignupCard />} />
+          <Route path="login" element={<LoginCard />} />
+          <Route path="reportuser" element={<ReportUserForm />} />
 
-          {/* Other routes */}
-          <Route path="/reportuser" element={<ReportUserForm />} />
-
-          {/* ProtectedRoute example 
+          {/* Protected routes */}
           <Route
-          path="/createEvent"
-          element={
-            <ProtectedRoute>
-            <EventCreationForm />
-            </ProtectedRoute>
-            }
-            /> */}
+            path="userDashboard"
+            element={<UserProfilePage />}
+          />
+          {/* <Route
+            path="createEvent"
+            element={<ProtectedRoute element={<EventCreationForm />} />}
+          />
+        </Route> */}
+        <Route
+            path="createEvent"
+            element={<EventCreationForm />}
+          />
         </Route>
-        {/* Routes which has side bar and doesnt require navbar and footer */}
-        <Route path="/userDashboard" element={<UserProfilePage />} />
       </Routes>
       <ToastContainer />
     </AuthProvider>
@@ -54,3 +55,4 @@ function App() {
 }
 
 export default App;
+

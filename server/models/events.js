@@ -7,11 +7,13 @@ const eventSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    skills_id: {
+    skills_id:[
+    {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Skill",
       required: true,
     },
+  ],
     description: {
       type: String,
       required: true,
@@ -33,14 +35,13 @@ const eventSchema = new mongoose.Schema(
       type: Date,
       required: true,
       validate: {
-        validator: {
+        validator:
           function(value) {
             return this.start_time < value;
           },
           message: "End time must be after start time.",
         },
       },
-    },
     link: {
       type: String,
       required: true,
