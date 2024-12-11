@@ -1,34 +1,41 @@
-import React from 'react'
+import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-const EventsPage = () => {
+import { ScrollArea } from "../components/ui/scroll-area"
+import EventList from "../components/events/EventsList"
+
+export default function EventsDashboard() {
   return (
-   <div>Events page</div>
-      // <div className="flex-1 p-6  ">
-      //   <Tabs defaultValue="requested" className="space-y-4">
-      //     <TabsList className="grid w-full grid-cols-2 max-w-[400px] bg-blue-500 mb-10 text-gray-100 h-12">
-      //       <TabsTrigger 
-      //         value="all"
-      //         className="data-[state=active]:bg-blue-700 data-[state=active]:text-white"
-      //       >
-      //         All Users
-      //       </TabsTrigger>
-      //       <TabsTrigger 
-      //         value="requested"
-      //         className="data-[state=active]:bg-blue-700 data-[state=active]:text-white"
-      //       >
-      //         Requested Users
-      //       </TabsTrigger>
-      //     </TabsList>
-      //     <TabsContent value="all" className="space-y-4">
-           
-      //     </TabsContent>
-      //     <TabsContent value="requested" className="space-y-4">
-           
-      //     </TabsContent>
-      //   </Tabs>
-      // </div>
-    )
-  
+    <div className="flex-1 overflow-hidden ">
+      <div className="h-full flex flex-col ">
+        <header className="border-b p-4">
+          <h1 className="text-2xl font-semibold">Events</h1>
+        </header>
+
+        <div className="flex-1 p-4 w-96">
+          <Tabs defaultValue="upcoming" className="h-full ">
+            <TabsList className="bg-blue-600  text-gray-100 ">
+              <TabsTrigger value="upcoming" >Upcoming</TabsTrigger>
+              <TabsTrigger value="past">Past</TabsTrigger>
+              <TabsTrigger value="canceled">Canceled</TabsTrigger>
+            </TabsList>
+            
+            <ScrollArea className="h-[calc(100vh-12rem)]">
+              <TabsContent value="upcoming" className="space-y-4 mt-4 ">
+                <EventList status="upcoming" />
+              </TabsContent>
+              
+              <TabsContent value="past" className="space-y-4 mt-4">
+                <EventList status="past" />
+              </TabsContent>
+              
+              <TabsContent value="canceled" className="space-y-4 mt-4">
+                <EventList status="canceled" />
+              </TabsContent>
+            </ScrollArea>
+          </Tabs>
+        </div>
+      </div>
+    </div>
+  )
 }
 
-export default EventsPage
