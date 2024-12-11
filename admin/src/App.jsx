@@ -7,7 +7,7 @@ import HomePage from "./pages/HomePage";
 import SkillPage from "./pages/SkillPage";
 import EventsPage from "./pages/EventsPage";
 import UsersPage from "./pages/UsersPage";
-import Navbar from "./components/Navbar";
+// import Navbar from "./components/Navbar";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import Loader from "./pages/Loader";
 
@@ -31,7 +31,7 @@ function App() {
         </Routes>
       ) : (
         <>
-          <Navbar />
+          {/* <Navbar /> */}
 
           <div className="flex items-start">
             <Sidebar />
@@ -58,6 +58,16 @@ function App() {
                 }
               />
 
+             
+              <Route
+                path="/users"
+                element={
+                  <ProtectedRoute>
+                    <UsersPage />
+                  </ProtectedRoute>
+                }
+              />
+
               <Route
                 path="/events"
                 element={
@@ -67,14 +77,6 @@ function App() {
                 }
               />
 
-              <Route
-                path="/users"
-                element={
-                  <ProtectedRoute>
-                    <UsersPage />
-                  </ProtectedRoute>
-                }
-              />
 
               <Route path="*" element={<Navigate to="/login" />} />
             </Routes>
