@@ -1,4 +1,5 @@
 import CustomComponentsHere from "@/components/CustomComponentsHere";
+import Event from "@/components/Event";
 import TopSkills from "@/components/TopSkills";
 const LandingPage = () => {
   return (
@@ -6,7 +7,7 @@ const LandingPage = () => {
       {/* adding components */}
       {/* <CustomComponentsHere /> */}
       <TopSkills/>
-      test page
+      <Event/>
     </div>
   );
 };
