@@ -4,7 +4,7 @@ import AppLayout from "./layout/AppLayout";
 import { SignupCard } from "./components/Auth/SignupCard";
 import { LoginCard } from "./components/Auth/LoginCard";
 import ReportUserForm from "./components/ReportUserForm";
-// import EventCreationForm from "./components/EventCreation";
+// import {EventCreationForm} from "./components/EventCreation";
 import { AuthProvider } from "./context/AuthContext";
 // import ProtectedRoute from "./components/ProtectedRoutes";
 import { ToastContainer } from "react-toastify";
@@ -32,7 +32,7 @@ function App() {
 
           {/* Other routes */}
           <Route path="/reportuser" element={<ReportUserForm />} />
-
+            {/* <Route path="/eventCreationForm" element={<EventCreationForm/>}/> */}
           {/* ProtectedRoute example 
           <Route
           path="/createEvent"
