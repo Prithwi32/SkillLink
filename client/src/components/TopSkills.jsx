@@ -59,12 +59,13 @@ const App = () => {
   const [selectedCard, setSelectedCard] = useState(null);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8 px-16">
+    <div className="bg-gray-100 p-8 px-16">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">Top skills</h1>
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">Top skills</h1>
         <Carousel
           opts={{
             align: "start",
+            loop: "true"
           }}
           className="w-full"
         >
