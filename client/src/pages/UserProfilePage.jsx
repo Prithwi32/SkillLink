@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Profile/Sidebar';
 import ProfileSection from '../components/Profile/ProfileSection';
-import EventsSection from '../components/Profile/EventsSection';
-import FeedbackSection from '../components/Profile/FeedbackSection';
+// import EventsSection from '../components/Profile/EventsSection';
+// import FeedbackSection from '../components/Profile/FeedbackSection';
 import SessionPage from './SessionPage';
+import EventPage from './EventPage';
 
 export default function UserProfilePage() {
   const [activeSection, setActiveSection] = useState('profile');
@@ -31,7 +32,7 @@ export default function UserProfilePage() {
           </svg>
         </button>
         {activeSection === 'profile' && <ProfileSection />}
-        {activeSection === 'events' && <EventsSection />}
+        {activeSection === 'events' && <EventPage/>}
         {activeSection === 'session' && <SessionPage/>}
       </main>
       
