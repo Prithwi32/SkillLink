@@ -5,9 +5,9 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "./ui/carousel";
+} from "../ui/carousel";
 import { cards } from "@/constants/carousel-content";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 const Card = ({ title, image, onClick }) => {
   return (

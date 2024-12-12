@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ProfilePage } from "../ProfilePage";
+import { ProfilePage } from "../../pages/ProfilePage";
 import { HOBBY_SUGGESTIONS as AVAILABLE_SKILLS } from "../../constants/hobby-suggestions";
 
 const INITIAL_USER = {

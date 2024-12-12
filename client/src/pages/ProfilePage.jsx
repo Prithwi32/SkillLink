@@ -1,8 +1,8 @@
 import React from 'react';
-import { Avatar } from './Avatar';
-import { EditableField } from './EditableField';
-import { SkillsList } from './SkillsList';
-import { MentorCard } from './MentorCard';
+import { Avatar } from '../components/HelperComponents/Avatar';
+import { EditableField } from '../components/HelperComponents/EditableField';
+import { SkillsList } from '../components/HelperComponents/SkillsList';
+import { MentorCard } from '../components/Cards/MentorCard';
 
 export function ProfilePage({
   user,

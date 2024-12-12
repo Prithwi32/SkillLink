@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HOBBY_SUGGESTIONS } from '../constants/hobby-suggestions';
+import { HOBBY_SUGGESTIONS } from '../../constants/hobby-suggestions';
 
 export default function SessionForm({ onSubmit, onCancel }) {
   const [formData, setFormData] = useState({
