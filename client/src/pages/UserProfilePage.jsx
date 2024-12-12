@@ -3,6 +3,7 @@ import Sidebar from '../components/profile/Sidebar';
 import ProfileSection from '../components/profile/ProfileSection';
 import EventsSection from '../components/profile/EventsSection';
 import FeedbackSection from '../components/profile/FeedbackSection';
+import SessionPage from './SessionPage';
 
 export default function UserProfilePage() {
   const [activeSection, setActiveSection] = useState('profile');
@@ -31,7 +32,7 @@ export default function UserProfilePage() {
         </button>
         {activeSection === 'profile' && <ProfileSection />}
         {activeSection === 'events' && <EventsSection />}
-        {activeSection === 'feedback' && <FeedbackSection />}
+        {activeSection === 'session' && <SessionPage/>}
       </main>
       
     </div>
