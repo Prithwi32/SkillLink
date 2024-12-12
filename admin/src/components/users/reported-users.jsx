@@ -32,11 +32,11 @@ const requestedUsers = [
 
 export function RequestedUsers() {
   return (
-    <div className=" grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className=" grid gap-4 md:grid-cols-2 lg:grid-cols-3 ">
       {requestedUsers.map((user) => (
         <Card key={user.id}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+            <CardTitle className="text-sm font-bold">
               {user.name}
             </CardTitle>
             <Badge
@@ -55,7 +55,7 @@ export function RequestedUsers() {
             <div className="flex flex-col space-y-2">
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">
+                <span className="text-sm text-muted-foreground text-gray-700">
                   {user.email}
                 </span>
               </div>
@@ -67,7 +67,7 @@ export function RequestedUsers() {
               </div>
               <div className="flex flex-wrap gap-1 mt-2">
                 {user.skills.map((skill, index) => (
-                  <Badge key={index} variant="outline">
+                  <Badge key={index} variant="outline" className="bg-gray-50">
                     {skill}
                   </Badge>
                 ))}
@@ -77,7 +77,7 @@ export function RequestedUsers() {
                   <Button
                     size="sm"
                     variant="outline"
-                    className="w-[48%]"
+                    className="w-[48%] bg-blue-700 text-white rounded-md hover:bg-green-700 transition-colors duration-200 "
                     onClick={() => {
                       // Handle approval logic
                       console.log(`Approved user: ${user.id}`)
@@ -88,7 +88,7 @@ export function RequestedUsers() {
                   <Button
                     size="sm"
                     variant="destructive"
-                    className="w-[48%]"
+                    className="w-[48%]  bg-blue-700 text-white rounded-md hover:bg-red-700 transition-colors duration-200 "
                     onClick={() => {
                       // Handle block logic
                       console.log(`Blocked user: ${user.id}`)
