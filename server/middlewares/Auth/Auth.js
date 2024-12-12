@@ -45,11 +45,7 @@ export const adminAuth = async (req,res,next) => {
         if (!decoded) {
           return res.status(401).json({ success: false, message: "Invalid token" });
         }
-        const user = await User.findOne({ email: decoded.email });
-
-        if (!user || user.isBanned) {
-          return res.status(403).json({ message: 'Access denied: User is banned' });
-        }
+        
         req.body.email = decoded.email;
         next();
       } catch (error) {
