@@ -14,8 +14,7 @@ const reviewModel = new mongoose.Schema({
   sessionId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Session",
-    // required: true,
-    default:null,
+    required: true,
   },
   skillId: {
     type: mongoose.Schema.Types.ObjectId,
