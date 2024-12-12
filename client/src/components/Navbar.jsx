@@ -1,7 +1,19 @@
-// Navbar.jsx
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
+import { UserCircle } from "lucide-react";
 
 const Navbar = () => {
+  const { user, token } = useAuth();
+  const location = useLocation();
+
+  useEffect(() => {
+    // This effect will run whenever the token changes
+    // It's here to force a re-render when the auth state changes
+  }, [token]);
+
+  const isUserDashboard = location.pathname === "/userDashboard";
+
   return (
     <nav className="bg-gradient-to-r from-blue-500 to-blue-700 text-white shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -17,34 +29,77 @@ const Navbar = () => {
 
         {/* Center Section */}
         <div className="hidden md:flex space-x-6">
-          <Link
-            to="/"
-            className="hover:text-blue-300 hover:underline transition duration-300"
-          >
-            Home
-          </Link>
-          <Link
-            to="/about"
-            className="hover:text-blue-300 hover:underline transition duration-300"
-          >
-            About Us
-          </Link>
-          <Link
-            to="/blogs"
-            className="hover:text-blue-300 hover:underline transition duration-300"
-          >
-            Blogs
-          </Link>
+          {isUserDashboard ? (
+            <>
+              <Link
+                to="/events"
+                className="hover:text-blue-300 hover:underline transition duration-300"
+              >
+                Events
+              </Link>
+              <Link
+                to="/users"
+                className="hover:text-blue-300 hover:underline transition duration-300"
+              >
+                Users
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/"
+                className="hover:text-blue-300 hover:underline transition duration-300"
+              >
+                Home
+              </Link>
+              <Link
+                to="/about"
+                className="hover:text-blue-300 hover:underline transition duration-300"
+              >
+                About Us
+              </Link>
+              <Link
+                to="/blogs"
+                className="hover:text-blue-300 hover:underline transition duration-300"
+              >
+                Blogs
+              </Link>
+              <Link
+                to="/events"
+                className="hover:text-blue-300 hover:underline transition duration-300"
+              >
+                Events
+              </Link>
+              <Link
+                to="/users"
+                className="hover:text-blue-300 hover:underline transition duration-300"
+              >
+                Users
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Right Section */}
-        <div>
-          <Link
-            to="/signup"
-            className="bg-blue-600 hover:bg-blue-800 hover:shadow-lg text-white px-4 py-2 rounded-lg transition-all"
-          >
-            Sign Up / Login
-          </Link>
+        <div className="hidden md:flex items-center space-x-4">
+          {token ? (
+            <>
+              <Link
+                to="/userDashboard"
+                className="flex items-center space-x-2 hover:text-blue-300 transition duration-300"
+              >
+                <UserCircle size={24} />
+                <span>{user?.username || "Profile"}</span>
+              </Link>
+            </>
+          ) : (
+            <Link
+              to="/signup"
+              className="bg-blue-600 hover:bg-blue-800 hover:shadow-lg text-white px-4 py-2 rounded-lg transition-all"
+            >
+              Sign Up / Login
+            </Link>
+          )}
         </div>
 
         {/* Hamburger Menu for Mobile */}
@@ -52,7 +107,7 @@ const Navbar = () => {
           <button
             className="text-white focus:outline-none"
             onClick={() => {
-              // Add toggle functionality for the mobile menu if needed
+              // Add toggle functionality for the mobile menu
               alert("Implement mobile menu toggle");
             }}
           >

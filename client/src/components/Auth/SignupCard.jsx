@@ -3,8 +3,10 @@ import { HobbyInput } from "../HelperComponents/HobbyInput";
 import { InputField } from "../HelperComponents/InputField";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 export function SignupCard() {
+  const {backendUrl} = useAuth();
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
     name: "",
@@ -56,7 +58,7 @@ export function SignupCard() {
     console.log('Form Data:', formData);
   
     try {
-      const response = await fetch('http://localhost:5000/auth/signup', {
+      const response = await fetch(`${backendUrl}/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

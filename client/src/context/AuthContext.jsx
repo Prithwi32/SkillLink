@@ -1,18 +1,22 @@
 // AuthContext.jsx
 import { createContext, useContext, useState } from 'react';
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
 
 export const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
+  const backendUrl = "http://localhost:5000";
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
   // Signup function
   const signup = async (formData) => {
     try {
-      const response = await fetch("http://localhost:5000/auth/signup", {
+      const response = await fetch(`${backendUrl}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -29,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   // Login function
   const login = async (formData) => {
     try {
-      const response = await fetch("http://localhost:5000/auth/login", {
+      const response = await fetch(`${backendUrl}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -54,7 +58,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, signup, login, logout }}>
+    <AuthContext.Provider value={{ backendUrl, user, token, signup, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
