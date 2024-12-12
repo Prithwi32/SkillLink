@@ -39,10 +39,10 @@ function App() {
           <Route path="users" element={<UsersPage />} />
 
           {/* Protected routes */}
-          <Route
+          {/* <Route
             path="createEvent"
             element={<ProtectedRoute element={<EventCreationForm />} />}
-          />
+          /> */}
           <Route
             path="createEvent"
             element={<EventCreationForm />}
