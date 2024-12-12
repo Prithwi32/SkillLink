@@ -15,27 +15,18 @@ export default function UsersPage() {
           <h1 className="text-3xl font-bold text-blue-700">Users</h1>
       </header>
     <div className="flex-1 p-6  ">
-      <Tabs defaultValue="requested" className="space-y-4 ">
-      <TabsList className="flex flex-col sm:grid sm:grid-cols-3 w-full max-w-full sm:max-w-[600px] bg-blue-500 text-white rounded-lg overflow-hidden mb-10 ">
-        <TabsTrigger 
-            value="all"
-            className="data-[state=active]:bg-blue-700 data-[state=active]:text-white"
-          >
-            All Users
-          </TabsTrigger>
-          <TabsTrigger 
-            value="requested"
-            className="data-[state=active]:bg-blue-700 data-[state=active]:text-white"
-          >
-            Reported Users
-          </TabsTrigger>
-          <TabsTrigger 
-            value="blocked"
-            className="data-[state=active]:bg-blue-700 data-[state=active]:text-white"
-          >
-            Blocked Users
-          </TabsTrigger>
-        </TabsList>
+      <Tabs defaultValue="all" className="space-y-4 ">
+          <TabsList className="mb-6 bg-blue-600 p-1 rounded-lg shadow-sm text-gray-100">
+              <TabsTrigger value="all"   className="data-[state=active]:bg-white data-[state=active]:text-blue-600">
+                All Users
+                </TabsTrigger>
+              <TabsTrigger value="requested"  className="data-[state=active]:bg-white data-[state=active]:text-blue-600">
+                Reported Users
+                </TabsTrigger>
+              <TabsTrigger value="blocked"  className="data-[state=active]:bg-white data-[state=active]:text-blue-600">
+                Blocked Users
+                </TabsTrigger>
+            </TabsList>
         <TabsContent value="all" className="space-y-4">
           <UsersTable />
         </TabsContent>

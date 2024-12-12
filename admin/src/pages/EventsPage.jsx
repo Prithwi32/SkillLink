@@ -16,13 +16,13 @@ export default function EventsDashboard() {
         <div className="flex-1 pt-8">
           <Tabs defaultValue="upcoming" className="h-full">
             <TabsList className="mb-6 bg-blue-600 p-1 rounded-lg shadow-sm text-gray-100">
-              <TabsTrigger value="upcoming"   className="data-[state=active]:bg-blue-700 data-[state=active]:text-white">
+              <TabsTrigger value="upcoming"   className="data-[state=active]:bg-white data-[state=active]:text-blue-600">
                 Upcoming
                 </TabsTrigger>
-              <TabsTrigger value="past"  className="data-[state=active]:bg-blue-700 data-[state=active]:text-white">
+              <TabsTrigger value="past"  className="data-[state=active]:bg-white data-[state=active]:text-blue-600">
                 Past
                 </TabsTrigger>
-              <TabsTrigger value="canceled"  className="data-[state=active]:bg-blue-700 data-[state=active]:text-white">
+              <TabsTrigger value="canceled"  className="data-[state=active]:bg-white data-[state=active]:text-blue-600">
                 Canceled
                 </TabsTrigger>
             </TabsList>
