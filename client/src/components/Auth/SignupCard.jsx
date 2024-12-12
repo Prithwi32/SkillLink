@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { HobbyInput } from "../HobbyInput";
-import { InputField } from "../InputField";
+import { HobbyInput } from "../HelperComponents/HobbyInput";
+import { InputField } from "../HelperComponents/InputField";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";

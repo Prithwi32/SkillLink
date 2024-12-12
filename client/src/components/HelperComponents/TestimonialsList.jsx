@@ -1,6 +1,6 @@
 import React from 'react';
-import { TestimonialCard } from './TestimonialCard';
-import { testimonials } from '../constants/testimonials';
+import { TestimonialCard } from '../Cards/TestimonialCard';
+import { testimonials } from '../../constants/testimonials';
 
 //I am using placeholder data which is in testimonials in constants folder
 //While intergrating send the data here so that map funtion will render based on the number

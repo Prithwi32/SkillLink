@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Sidebar from '../components/profile/Sidebar';
-import ProfileSection from '../components/profile/ProfileSection';
-import EventsSection from '../components/profile/EventsSection';
-import FeedbackSection from '../components/profile/FeedbackSection';
+import Sidebar from '../components/Profile/Sidebar';
+import ProfileSection from '../components/Profile/ProfileSection';
+import EventsSection from '../components/Profile/EventsSection';
+import FeedbackSection from '../components/Profile/FeedbackSection';
 import SessionPage from './SessionPage';
 
 export default function UserProfilePage() {

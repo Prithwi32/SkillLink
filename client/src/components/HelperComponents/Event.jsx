@@ -1,4 +1,4 @@
-import EventCarousel from "@/components/EventCarousel"
+import EventCarousel from "@/components/HelperComponents/EventCarousel"
 
 const events = [
   {

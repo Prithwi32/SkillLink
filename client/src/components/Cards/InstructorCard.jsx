@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { StarRating } from './StarRating';
+import { StarRating } from '../ui/StarRating';
 
 export function InstructorCard({ photo, name, skill, description, date, rating }) {
   return (
