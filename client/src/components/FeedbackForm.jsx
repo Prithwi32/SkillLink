@@ -1,84 +1,55 @@
-import React, { useState } from 'react';
-const FeedbackForm = () => {
-    const [instructorName, setInstructorName] = useState('');
-    const [suggestions, setSuggestions] = useState([]);
-    const [rating, setRating] = useState('');
-    const [feedback, setFeedback] = useState('');
-  
-    const registeredInstructors = [
-      'John Doe',
-      'Jane Smith',
-      'Emily Davis',
-      'Michael Brown',
-      'Sarah Wilson',
-    ];
-  
-    const handleInstructorChange = (e) => {
-      const value = e.target.value;
-      setInstructorName(value);
-  
-      if (value) {
-        const filteredSuggestions = registeredInstructors.filter((name) =>
-          name.toLowerCase().includes(value.toLowerCase())
-        );
-        setSuggestions(filteredSuggestions);
-      } else {
-        setSuggestions([]);
-      }
-    };
-  
-    const selectSuggestion = (name) => {
-      setInstructorName(name);
-      setSuggestions([]);
-    };
-  
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      console.log({ instructorName, rating, feedback });
-      alert('Feedback submitted successfully!');
-      setInstructorName('');
-      setRating('');
-      setFeedback('');
-    };
-  
-    return (
+import React, { useState } from "react";
+
+const FeedbackForm = ({ mentorName, closeForm }) => {
+  const [rating, setRating] = useState("");
+  const [feedback, setFeedback] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log({ mentorName, rating, feedback });
+    alert("Feedback submitted successfully!");
+    setRating("");
+    setFeedback("");
+    closeForm(); // Close the form after submission
+  };
+
+  const handleClose = () => {
+    closeForm(); // Close the form without submitting
+  };
+
+  return (
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
       <form
         onSubmit={handleSubmit}
-        className="w-full p-8 bg-white shadow-lg rounded-lg transform transition-all hover:scale-105 hover:shadow-2xl"
+        className="w-full max-w-lg p-8 bg-white shadow-lg rounded-lg transform transition-all hover:scale-105 hover:shadow-2xl relative"
       >
-        <h2 className="text-2xl font-bold text-blue-600 mb-6 text-center">Instructor Feedback Form</h2>
-  
+        <h2 className="text-2xl font-bold text-blue-600 mb-6 text-center">
+          Instructor Feedback Form
+        </h2>
+
         {/* Instructor Name */}
-        <div className="mb-4 relative">
-          <label htmlFor="instructor" className="block text-blue-700 font-medium mb-2">
+        <div className="mb-4">
+          <label
+            htmlFor="instructor"
+            className="block text-blue-700 font-medium mb-2"
+          >
             Instructor Name
           </label>
           <input
             type="text"
             id="instructor"
-            value={instructorName}
-            onChange={handleInstructorChange}
+            value={mentorName}
+            readOnly
             className="w-full p-3 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Start typing..."
           />
-          {suggestions.length > 0 && (
-            <ul className="absolute z-10 bg-white border border-blue-300 rounded shadow mt-1 max-h-40 overflow-y-auto">
-              {suggestions.map((name, index) => (
-                <li
-                  key={index}
-                  onClick={() => selectSuggestion(name)}
-                  className="p-2 hover:bg-blue-100 cursor-pointer"
-                >
-                  {name}
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
-  
+
         {/* Rating */}
         <div className="mb-4">
-          <label htmlFor="rating" className="block text-blue-700 font-medium mb-2">
+          <label
+            htmlFor="rating"
+            className="block text-blue-700 font-medium mb-2"
+          >
             Rating (1-5)
           </label>
           <input
@@ -92,10 +63,13 @@ const FeedbackForm = () => {
             placeholder="Enter a rating..."
           />
         </div>
-  
+
         {/* Feedback */}
         <div className="mb-6">
-          <label htmlFor="feedback" className="block text-blue-700 font-medium mb-2">
+          <label
+            htmlFor="feedback"
+            className="block text-blue-700 font-medium mb-2"
+          >
             Feedback
           </label>
           <textarea
@@ -107,7 +81,7 @@ const FeedbackForm = () => {
             rows="4"
           ></textarea>
         </div>
-  
+
         {/* Submit Button */}
         <button
           type="submit"
@@ -116,8 +90,8 @@ const FeedbackForm = () => {
           Submit
         </button>
       </form>
-    );
-  };
-  
-  export default FeedbackForm;
-  
+    </div>
+  );
+};
+
+export default FeedbackForm;

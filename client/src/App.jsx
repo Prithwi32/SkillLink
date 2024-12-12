@@ -6,7 +6,7 @@ import ReportUserForm from "./components/ReportUserForm";
 import EventCreationForm from "./components/EventCreation";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css"
 // import ProtectedRoute from "./components/ProtectedRoutes";
 import UserProfilePage from "./pages/UserProfilePage"
 import LandingPage from "./pages/LandingPage";
@@ -33,10 +33,7 @@ function App() {
           <Route path="reportuser" element={<ReportUserForm />} />
 
           {/* Protected routes */}
-          <Route
-            path="userDashboard"
-            element={<UserProfilePage />}
-          />
+          
           {/* <Route
             path="createEvent"
             element={<ProtectedRoute element={<EventCreationForm />} />}
@@ -47,6 +44,10 @@ function App() {
             element={<EventCreationForm />}
           />
         </Route>
+        <Route
+            path="userDashboard"
+            element={<UserProfilePage />}
+          />
       </Routes>
       <ToastContainer />
     </AuthProvider>
