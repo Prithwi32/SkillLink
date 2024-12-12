@@ -38,7 +38,7 @@ export default function EventCard({ title, date, status, host, description, loca
         <p className="text-sm text-gray-600 mb-4 line-clamp-2">{description}</p>
        
       </CardContent>
-      <CardFooter className="p-4 bg-gray-50 flex justify-center">
+      <CardFooter className="p-4 bg-gray-200 flex justify-center">
         <button className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors duration-200">
           View Details
         </button>

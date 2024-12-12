@@ -24,22 +24,42 @@ export const createReview = async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
-    // check whether session exists
-    // const session = await Session.find({ _id: sessionId });
-
-    // if (!session) {
-    //   return res
-    //     .status(404)
-    //     .json({ success: false, message: "Session not found" });
-    // }
-
     // check whether skill exists
-    const skill = await Skill.findById({ _id: skillId });
+    const skill = await Skill.findById({ _id: skillId, status: "Approved" });
 
     if (!skill) {
       return res
         .status(404)
-        .json({ success: false, message: "Skill not found" });
+        .json({ success: false, message: "Either Skill not found or is not approved by admin" });
+    }
+
+    // check whether session exists
+    const session = await Session.findOne({ _id: sessionId });
+
+    if (!session || session.status == "Cancelled") {
+      return res.status(404).json({
+        success: false,
+        message: "Either Session not found or session is cancelled",
+      });
+    }
+
+    // check whether user is one the user in session
+    if (!(session.userOne.toString() === _id || session.userTwo.toString() === _id)) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not a part of this session",
+      });
+    }
+
+    // check whether user has already reviewed the user in the session
+    if (
+      (session.userOne.toString() == _id && session.isReviewProvidedByUserOne) ||
+      (session.userTwo.toString() == _id && session.isReviewProvidedByUserTwo)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "You have already reviewed this user in this session",
+      });
     }
 
     // create new review
@@ -53,6 +73,15 @@ export const createReview = async (req, res) => {
     });
 
     await newReview.save();
+
+    // make isReview provided by user in session model true
+    if (session.userOne.toString() === _id) {
+      session.isReviewProvidedByUserOne = true;
+    } else {
+      session.isReviewProvidedByUserTwo = true;
+    }
+    await session.save();
+
     return res
       .status(201)
       .json({ success: true, message: "Review created successfully" });
@@ -73,7 +102,9 @@ export const getReviews = async (req, res) => {
         .json({ success: false, message: "User ID is required" });
     }
 
-    const reviews = await Review.find({ userId: id });
+    const reviews = await Review.find({ userId: id })
+      .populate("skillId")
+      .populate("reviewedBy", "name _id");
     return res.status(200).json({ success: true, reviews });
   } catch (error) {
     console.log(error);

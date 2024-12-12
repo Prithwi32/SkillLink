@@ -12,6 +12,7 @@ import adminRouter from './routes/adminRoutes.js'
 import eventRoutes from './routes/eventRoutes.js'
 import reviewRouter from './routes/reviewRoutes.js'
 import sessionRouter from './routes/sessionRoutes.js'
+import ReportedUserRouter from './routes/reportedUserRoutes.js'
 dotenv.config();
 
 const app = express();
@@ -72,6 +73,9 @@ app.use('/api/reviews',reviewRouter);
 
 // session routes
 app.use('/api/sessions', sessionRouter);
+
+// reported user routes
+app.use('/api/report-user', ReportedUserRouter);
 
 // custom routes
 app.use('/api/user', userRoutes);
