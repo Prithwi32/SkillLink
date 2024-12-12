@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { InputField } from "./HelperComponents/InputField";
+import { InputField } from "./InputField";
 
 export function EventCreationForm() {
   const [eventDetails, setEventDetails] = useState({

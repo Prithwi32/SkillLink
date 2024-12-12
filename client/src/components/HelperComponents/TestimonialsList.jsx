@@ -1,5 +1,5 @@
 import React from 'react';
-import { TestimonialCard } from './TestimonialCard';
+import { TestimonialCard } from '../Cards/TestimonialCard';
 import { testimonials } from '../../constants/testimonials';
 
 //I am using placeholder data which is in testimonials in constants folder

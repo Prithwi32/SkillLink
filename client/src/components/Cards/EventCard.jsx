@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Star, Users } from "lucide-react";
-import { StarRating } from "./StarRating";
+import { StarRating } from "../ui/StarRating";
 
 const EventCard = ({ skillName, rating, participants, description }) => {
   return (

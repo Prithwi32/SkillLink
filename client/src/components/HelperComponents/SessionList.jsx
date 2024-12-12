@@ -1,5 +1,5 @@
 import React from 'react';
-import SessionCard from '../Profile/SessionCard';
+import SessionCard from '../Cards/SessionCard';
 
 export default function SessionList({ 
   title, 

@@ -8,7 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
-import EventCard from "./EventCard"
+import EventCard from "../Cards/EventCard"
 
 const EventCarousel = ({ events }) => {
   const [api, setApi] = useState()

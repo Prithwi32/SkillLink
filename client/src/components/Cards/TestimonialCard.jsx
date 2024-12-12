@@ -1,5 +1,5 @@
 import React from 'react';
-import { StarRating } from './ui/StarRating';
+import { StarRating } from '../ui/StarRating';
 
 export const TestimonialCard = ({ testimonial }) => {
   return (

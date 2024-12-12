@@ -3,7 +3,7 @@ import AppLayout from "./layout/AppLayout";
 import { SignupCard } from "./components/Auth/SignupCard";
 import { LoginCard } from "./components/Auth/LoginCard";
 import ReportUserForm from "./components/Forms/ReportUserForm";
-import EventCreationForm from "./components/EventCreation";
+import EventCreationForm from "../src/components/HelperComponents/EventCreation";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
