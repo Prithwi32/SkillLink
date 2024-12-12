@@ -1,7 +1,7 @@
 import { PlusCircle } from "lucide-react";
-import { TestimonialsList } from "../TestimonialsList";
+import { TestimonialsList } from "../HelperComponents/TestimonialsList";
 import React, { useState } from 'react';
-import FeedbackForm from '../FeedbackForm';
+import FeedbackForm from '../Forms/FeedbackForm';
 
 const FeedbackSection = () => {
   const [showForm, setShowForm] = useState(false);

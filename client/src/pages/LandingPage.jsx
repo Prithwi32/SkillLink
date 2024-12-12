@@ -1,7 +1,7 @@
-import CustomComponentsHere from "@/components/CustomComponentsHere";
-import Event from "@/components/Event";
-import SuggestedCard from "@/components/SuggestedCard";
-import TopSkills from "@/components/TopSkills";
+import CustomComponentsHere from "@/components/HelperComponents/CustomComponentsHere";
+import Event from "@/components/HelperComponents/Event";
+import SuggestedCard from "@/components/Cards/SuggestedCard";
+import TopSkills from "@/components/HelperComponents/TopSkills";
 const LandingPage = () => {
   return (
     <div>

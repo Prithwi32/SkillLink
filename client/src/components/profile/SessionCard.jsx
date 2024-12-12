@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Edit2, Ban, CheckCircle, ExternalLink, Star } from 'lucide-react';
 import { HOBBY_SUGGESTIONS } from '../../constants/hobby-suggestions';
-import FeedbackForm from '../FeedbackForm';  // Import the FeedbackForm component
+import FeedbackForm from '../Forms/FeedbackForm';  // Import the FeedbackForm component
 
 export default function SessionCard({ session, status, onStatusChange, onEdit }) {
   const [isEditing, setIsEditing] = useState(false);

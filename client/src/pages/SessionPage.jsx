@@ -74,9 +74,9 @@
 // export default SessionPage;
 import React, { useState } from 'react';
 import { PlusCircle } from 'lucide-react';
-import SessionList from '../components/SessionList';
+import SessionList from '../components/HelperComponents/SessionList';
 import SessionForm from '../components/SessionForm';
-import SessionFilter from '../components/SessionFilter';
+import SessionFilter from '../components/HelperComponents/SessionFilter';
 
 function SessionPage() {
   const [showForm, setShowForm] = useState(false);

@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import AppLayout from "./layout/AppLayout";
 import { SignupCard } from "./components/Auth/SignupCard";
 import { LoginCard } from "./components/Auth/LoginCard";
-import ReportUserForm from "./components/ReportUserForm";
+import ReportUserForm from "./components/Forms/ReportUserForm";
 import EventCreationForm from "./components/EventCreation";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";

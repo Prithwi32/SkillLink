@@ -1,5 +1,5 @@
 import React from 'react';
-import { InstructorCardCarousel } from "@/components/InstructorCardCarousel"
+import { InstructorCardCarousel } from "@/components/Cards/InstructorCardCarousel"
 
 const instructors = [
   {

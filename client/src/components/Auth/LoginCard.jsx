@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { InputField } from "../InputField";
+import { InputField } from "../HelperComponents/InputField";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
