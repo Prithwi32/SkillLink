@@ -5,7 +5,7 @@ import ensureAuthenticated from "../middlewares/Auth/Auth.js"
 const router = express.Router();
 
 // Route to get All users
-router.get('/getAll', ensureAuthenticated, getAllUsers);
+router.get('/getAll', getAllUsers);
 
 // Route to get user by ID
 router.get("/get/:userId", ensureAuthenticated, getUserById);
