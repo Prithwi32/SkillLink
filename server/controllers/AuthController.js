@@ -14,6 +14,12 @@ export const signup = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      if (existingUser.isBanned) {
+        return res.status(403).json({
+          message: "Sign-up denied: User is banned",
+          success: false,
+        });
+      }
       return res.status(409).json({
         message: "User already exists, you can login",
         success: false,
@@ -64,7 +70,12 @@ export const login = async (req, res) => {
           success: false,
         });
       }
-  
+      if (user.isBanned) {
+        return res.status(403).json({
+          message: "Login denied: User is banned",
+          success: false,
+        });
+      }
       const isPasswordEqual = await bcrypt.compare(password, user.password);
       if (!isPasswordEqual) {
         return res.status(403).json({

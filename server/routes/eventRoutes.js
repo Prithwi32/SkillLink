@@ -1,4 +1,4 @@
-import ensureAuthenticated from "../middlewares/Auth/Auth.js"
+import ensureAuthenticated, { adminAuth } from "../middlewares/Auth/Auth.js"
 
 import express from "express";
 import {
@@ -7,11 +7,15 @@ import {
   updateEvent,
   deleteEvent,
   getEventsByStatus,
+  getEventsByStatusAndUser,
   getEventById,
   getMyEvents,
   registerForEvent,
   getEventRequests,
-  handleEventRequest
+  handleEventRequest,
+  getUserParticipatingEvents,
+  getEventsBasedOnSkillsRequested,
+  getEventsForSpecificSkill
 } from "../controllers/eventController.js";
 
 const router = express.Router();
@@ -29,10 +33,13 @@ router.put("/update/:id", ensureAuthenticated, updateEvent);
 router.delete("/delete/:id", ensureAuthenticated, deleteEvent);
 
 // Route to get events by ID
-router.get('/getEvent/:id', ensureAuthenticated, getEventById)
+router.get('/getEvent/:id', getEventById)
 
 // Route to get events by their status
-router.get("/status", ensureAuthenticated, getEventsByStatus);
+router.get("/status", adminAuth, getEventsByStatus);
+
+// Route to get events by their status
+router.get("/user-events-status", ensureAuthenticated, getEventsByStatusAndUser);
 
 // Route to get Events created by me
 router.get("/getMyEvents", ensureAuthenticated, getMyEvents);
@@ -45,5 +52,14 @@ router.get("/:eventId/requests", ensureAuthenticated, getEventRequests);
 
 // Route to Approve or reject user request
 router.post("/:eventId/handle-request", ensureAuthenticated, handleEventRequest);
+
+// Route to get events which is registered by specific user
+router.get("/get-participating-events", ensureAuthenticated, getUserParticipatingEvents);
+
+// Route to get list of events for user learning skills
+router.get("/get-learn-events", ensureAuthenticated, getEventsBasedOnSkillsRequested);
+
+// Route to get upcoming events for specific skill
+router.get("/events/skill/:skillId", getEventsForSpecificSkill);
 
 export default router;

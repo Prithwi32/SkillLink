@@ -7,10 +7,11 @@ import cookieParser from 'cookie-parser'
 
 import AuthRouter from './routes/AuthRouter.js'
 import ProtectedRouter from './routes/ProtectedRoute.js'
-import userRoutes from './routes/user.js'
+import userRoutes from './routes/userRoutes.js'
 import adminRouter from './routes/adminRoutes.js'
 import eventRoutes from './routes/eventRoutes.js'
 import reviewRouter from './routes/reviewRoutes.js'
+import sessionRouter from './routes/sessionRoutes.js'
 dotenv.config();
 
 const app = express();
@@ -48,9 +49,10 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-mongoose.connect(process.env.MONGO_URI, {
-    authSource: 'admin'
-})
+// mongoose.connect(process.env.MONGO_URI, {
+//     authSource: 'admin'
+// })
+mongoose.connect('mongodb+srv://prithwionline11:prithwi@hobbyverse-cluster.9fu1u.mongodb.net/hobbyverse1?retryWrites=true&w=majority')
 .then(()=> console.log('Successfully Connected to MongoDB '))
 .catch((err) => console.error('MongoDB connection error: ', err));
 
@@ -67,6 +69,9 @@ app.use('/api/admin', adminRouter);
 
 // Review routes
 app.use('/api/reviews',reviewRouter);
+
+// session routes
+app.use('/api/sessions', sessionRouter);
 
 // custom routes
 app.use('/api/user', userRoutes);

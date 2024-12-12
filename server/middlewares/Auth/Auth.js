@@ -1,34 +1,27 @@
 import jwt from 'jsonwebtoken';
+import User from '../../models/user.js'
 
-// const ensureAuthenticated = (req, res, next) => {
-//     const auth = req.headers['authorization'];
-//     if (!auth) {
-//         return res.status(403)
-//             .json({ message: 'Unauthorized, JWT token is required' });
-//     }
-//     try {
-//         const decoded = jwt.verify(auth, process.env.JWT_SECRET);
-//         req.user = decoded;
-//         next();
-//     } catch (err) {
-//         return res.status(403)
-//             .json({ message: 'Unauthorized, JWT token wrong or expired' });
-//     }
-// };
-
-
-const ensureAuthenticated = (req, res, next) => {
+const ensureAuthenticated = async (req, res, next) => {
   const auth = req.headers['authorization'];
   // console.log("Authorization Header: ", auth);
 
   if (!auth) {
       return res.status(403).json({ message: 'Unauthorized, JWT token is required' });
   }
-  
+
+  const token = auth.split(" ")[1];
+
   try {
-      const token = auth.split(" ")[1];
       // console.log("Extracted Token: ", token);
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      if (!decoded || !decoded._id) {
+      return res.status(403).json({ message: 'Invalid token payload' });
+    }
+    const user = await User.findById(decoded._id);
+
+    if (!user || user.isBanned) {
+      return res.status(403).json({ message: 'Access denied: User is banned' });
+    }
       req.user = decoded;
       next();
   } catch (err) {
@@ -37,8 +30,7 @@ const ensureAuthenticated = (req, res, next) => {
   }
 };
 
-
-export const adminAuth = (req,res,next) => {
+export const adminAuth = async (req,res,next) => {
     const token = req.cookies.token;
 
     try {
@@ -53,7 +45,11 @@ export const adminAuth = (req,res,next) => {
         if (!decoded) {
           return res.status(401).json({ success: false, message: "Invalid token" });
         }
-    
+        const user = await User.findOne({ email: decoded.email });
+
+        if (!user || user.isBanned) {
+          return res.status(403).json({ message: 'Access denied: User is banned' });
+        }
         req.body.email = decoded.email;
         next();
       } catch (error) {
