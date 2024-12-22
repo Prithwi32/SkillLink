@@ -38,7 +38,7 @@ function App() {
           <Route path="login" element={<LoginCard />} />
           <Route path="reportuser" element={<ReportUserForm />} />
           <Route path="users" element={<UsersPage />} />
-          <Route path="userProfile" element={<UserProfilePage/>}/>
+          <Route path="/users/:userId" element={<UserProfilePage/>}/>
 
           {/* Protected routes */}
           {/* <Route

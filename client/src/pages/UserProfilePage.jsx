@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 import UserProfile from '../components/UserProfile';
 import Reviews from '../components/HelperComponents/Reviews';

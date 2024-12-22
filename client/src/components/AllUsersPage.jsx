@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -12,16 +13,17 @@ import { Star, UserCircle } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const UsersPage = () => {
-  const {backendUrl} = useAuth()
+  const { backendUrl } = useAuth();
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response = await fetch(backendUrl + "/api/user/getAll");
-        console.log(response);
+        // console.log(response);
         if (!response.ok) {
           throw new Error("Failed to fetch users");
         }
@@ -92,9 +94,10 @@ const UsersPage = () => {
             <CardFooter className="bg-gray-50 rounded-b-lg justify-end">
               <Button
                 variant="outline"
-                className="w-30 gradient-button text-white"
+                className="w-50 gradient-button text-white"
+                onClick={() => navigate(`/users/${user._id}`)}
               >
-                View More
+                View Details
               </Button>
             </CardFooter>
           </Card>
