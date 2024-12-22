@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
   CarouselContent,
@@ -16,7 +17,11 @@ const Card = ({ title, image, onClick }) => {
       className="bg-white rounded-lg shadow-md cursor-pointer transform transition-transform duration-200 hover:scale-105"
     >
       {image && (
-        <img src={image} alt={title} className="w-full h-48 object-cover rounded-t-lg" />
+        <img
+          src={image}
+          alt={title}
+          className="w-full h-48 object-cover rounded-t-lg"
+        />
       )}
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-800 text-center">
@@ -58,15 +63,22 @@ const Modal = ({ isOpen, onClose, children }) => {
 const App = () => {
   const [selectedCard, setSelectedCard] = useState(null);
 
+  const plugin = React.useRef(
+    Autoplay({ delay: 2000, loop:true}),
+  );
+
   return (
     <div className="bg-gray-100 p-8 px-16">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">Top skills</h1>
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
+          Top skills
+        </h1>
         <Carousel
           opts={{
             align: "start",
-            loop: "true"
+            loop: "true",
           }}
+          plugins={[plugin.current]}
           className="w-full"
         >
           <CarouselContent>
