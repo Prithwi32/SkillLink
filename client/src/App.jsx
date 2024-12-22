@@ -7,13 +7,14 @@ import ReportUserForm from "./components/Forms/ReportUserForm";
 import EventCreationForm from "../src/components/HelperComponents/EventCreation";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"
+import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./components/ProtectedRoutes";
-import UserProfilePage from "./pages/UserProfilePage"
+import MyUserProfilePage from "./pages/MyUserProfilePage"
 import LandingPage from "./pages/LandingPage";
 import UsersPage from "./components/AllUsersPage";
+import UserProfilePage from "./pages/UserProfilePage";
 
-// axios.defaults.baseURL = "http://localhost:5000"
+// axios.defaults.baseURL = "http://localhost:5000";
 // axios.defaults.withCredentials = true;
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
           <Route path="login" element={<LoginCard />} />
           <Route path="reportuser" element={<ReportUserForm />} />
           <Route path="users" element={<UsersPage />} />
+          <Route path="userProfile" element={<UserProfilePage/>}/>
 
           {/* Protected routes */}
           {/* <Route
@@ -47,11 +49,11 @@ function App() {
             path="createEvent"
             element={<EventCreationForm />}
           />
+      </Route>
         <Route
             path="userDashboard"
-            element={<UserProfilePage />}
+            element={<MyUserProfilePage />}
           />
-      </Route>
       </Routes>
       <ToastContainer />
     </AuthProvider>
