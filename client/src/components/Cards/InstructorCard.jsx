@@ -7,7 +7,7 @@ import { StarRating } from '../ui/StarRating';
 export function InstructorCard({ photo, name, skill, description, date, rating }) {
   return (
     <Card className="w-full h-full flex flex-col">
-      <CardContent className="p-6 flex-grow">
+      <CardContent className="px-4 py-6 flex-grow">
         <div className="flex items-center mb-4">
           <Avatar className="h-12 w-12 mr-4">
             <AvatarImage src={photo} alt={name} />
