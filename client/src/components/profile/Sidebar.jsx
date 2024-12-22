@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext.jsx'
+import { useAuth } from '../../context/AuthContext.jsx';
 
 const navItems = [
   { id: 'home', label: 'Home', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
@@ -10,10 +10,18 @@ const navItems = [
 
 export default function Sidebar({ isOpen, onClose, activeSection, setActiveSection }) {
   const navigate = useNavigate();
-  const {logout} = useAuth();
+  const { logout } = useAuth();
+
   const handleLogout = () => {
     logout();
     navigate('/');
+    onClose(); // Close the sidebar after logout
+  };
+
+  const handleSectionClick = (sectionId) => {
+    setActiveSection(sectionId);
+    onClose(); // Close the sidebar when a button is clicked
+    if (sectionId === 'home') navigate('/'); // Redirect to the home page
   };
 
   return (
@@ -24,7 +32,10 @@ export default function Sidebar({ isOpen, onClose, activeSection, setActiveSecti
     >
       <div className="flex flex-col h-full">
         <button
-          onClick={() => window.location.href = '/'} // Redirect to home page
+          onClick={() => {
+            navigate('/');
+            onClose(); // Close the sidebar after navigating
+          }}
           className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-6 mb-6 transition-colors duration-300"
         >
           HobbyVerse
@@ -33,11 +44,7 @@ export default function Sidebar({ isOpen, onClose, activeSection, setActiveSecti
           {navItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => {
-                setActiveSection(item.id);
-                if (window.innerWidth < 768) onClose();
-                if (item.id === 'home') window.location.href = '/'; // Redirect to home page
-              }}
+              onClick={() => handleSectionClick(item.id)}
               className={`w-full text-left py-3 px-6 hover:bg-blue-700 transition-colors duration-300 flex items-center ${
                 activeSection === item.id ? 'bg-blue-700' : ''
               }`}
@@ -59,4 +66,3 @@ export default function Sidebar({ isOpen, onClose, activeSection, setActiveSecti
     </div>
   );
 }
-

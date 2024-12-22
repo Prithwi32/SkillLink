@@ -1,41 +1,39 @@
 import React, { useState } from 'react';
-import Sidebar from '../components/Profile/Sidebar';
-import ProfileSection from '../components/Profile/ProfileSection';
-// import EventsSection from '../components/Profile/EventsSection';
-// import FeedbackSection from '../components/Profile/FeedbackSection';
-import SessionPage from './SessionPage';
-import EventPage from './EventPage';
+import { MessageCircle } from 'lucide-react';
+import UserProfile from '../components/UserProfile';
+import Reviews from '../components/HelperComponents/Reviews';
 
-export default function UserProfilePage() {
-  const [activeSection, setActiveSection] = useState('profile');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+function UserProfilePage() {
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+  const handleChatToggle = () => {
+    setIsChatOpen(!isChatOpen);
+    console.log('Chat button clicked. Chat is now:', isChatOpen ? 'Closed' : 'Open');
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
-      <Sidebar
-        isOpen={isSidebarOpen}
-        onClose={toggleSidebar}
-        activeSection={activeSection}
-        setActiveSection={setActiveSection}
-      />
-      <main className="flex-grow p-8">
+    <div className="min-h-screen bg-gray-100">
+      <div className="max-w-4xl mx-auto py-8 px-4 space-y-8">
+        <UserProfile />
+        <Reviews />
+
+        {/* Chat Button */}
         <button
-          onClick={toggleSidebar}
-          className="fixed top-2 left-4 z-50 bg-blue-500 text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300"
+          onClick={handleChatToggle}
+          className="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
+          <MessageCircle className="w-6 h-6" />
         </button>
-        {activeSection === 'profile' && <ProfileSection />}
-        {activeSection === 'events' && <EventPage/>}
-        {activeSection === 'session' && <SessionPage/>}
-      </main>
-      
+
+        {/* Chat State Indicator */}
+        {isChatOpen && (
+          <div className="fixed bottom-20 right-6 bg-white p-4 rounded-lg shadow-lg">
+            <p className="text-gray-700">Chat is open!</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+
+export default UserProfilePage;
