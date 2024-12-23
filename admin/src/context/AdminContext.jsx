@@ -31,7 +31,7 @@ const AdminContextProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      const { data } = await axios.get(backendUrl + "/api/admin/auth/logout");
+      const { data } = await axios.post(backendUrl + "/api/admin/auth/logout");
 
       if (data.success) {
         setIsLoggedIn(false);
