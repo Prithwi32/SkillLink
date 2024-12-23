@@ -13,6 +13,7 @@ import MyUserProfilePage from "./pages/MyUserProfilePage"
 import LandingPage from "./pages/LandingPage";
 import UsersPage from "./components/AllUsersPage";
 import UserProfilePage from "./pages/UserProfilePage";
+import EventListPage from "./pages/EventListPage";
 
 // axios.defaults.baseURL = "http://localhost:5000";
 // axios.defaults.withCredentials = true;
@@ -38,6 +39,7 @@ function App() {
           <Route path="login" element={<LoginCard />} />
           <Route path="reportuser" element={<ReportUserForm />} />
           <Route path="users" element={<UsersPage />} />
+          <Route path="/events" element={<EventListPage/>}/>
           <Route path="/users/:userId" element={<UserProfilePage/>}/>
 
           {/* Protected routes */}
