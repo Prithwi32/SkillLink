@@ -1,4 +1,3 @@
-// AuthContext.jsx
 import { createContext, useContext, useState } from "react";
 import axios from "axios";
 import {jwtDecode }from "jwt-decode";
@@ -42,23 +41,27 @@ export const AuthProvider = ({ children }) => {
       });
       if (!response.ok) throw new Error("Login failed");
       const { name, email, jwtToken } = await response.json();
-
-      // Decode the JWT token to extract the user ID
-      const decoded = jwtDecode(jwtToken);
-      const userId = decoded._id;
-      // console.log(userId);
-
+  
+      const decoded = jwtDecode(jwtToken); // Decode token
+      const userId = decoded._id; // Extract user ID
+  
+      console.log("Decoded Token:", decoded);
+      console.log("User ID:", userId);
+  
       setToken(jwtToken);
       setUser(name, email);
-      setUserId(userId);
-      // console.log(jwtToken);
-      localStorage.setItem("token", jwtToken); // Store JWT token
-      return { token: jwtToken, user: { name, email } };
+      setUserId(userId); // Set userId
+      localStorage.setItem("user", name);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("token", jwtToken); // Store token
+  
+      return { token: jwtToken, user: { name, email, userId } };
     } catch (error) {
       console.error("Error during login:", error.message);
       throw error;
     }
   };
+  
 
   // Logout function
   const logout = () => {

@@ -1,20 +1,75 @@
-import React from 'react';
-import { X, Users, Clock, Calendar } from 'lucide-react';
-import { Rating } from '../ui/Rating';
-import { LoadingSpinner } from '../ui/LoadingSpinner';
-import { useRegistrationStore } from '../../constants/useRegistrationStore';
+import { useState, useEffect } from "react";
+import { X, Users, Clock, Calendar } from "lucide-react";
+import { Rating } from "../ui/Rating";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
+import { useRegistrationStore } from "../../constants/useRegistrationStore";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAuth } from "@/context/AuthContext";
 
 export function EventModal({ event, onClose, onRegister }) {
-  const { isPending, setPending } = useRegistrationStore();
-  const isEventPending = isPending(event.id);
+  const { setPending, isPending } = useRegistrationStore();
+  const navigate = useNavigate();
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [buttonText, setButtonText] = useState("Register for Event");
+  const { backendUrl } = useAuth();
 
-  const handleRegister = () => {
+  const user = localStorage.getItem("user");
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (!token) return;
+
+    // Update button text based on user's registration status
+    if (user === event.mentorName) {
+      setButtonText("You are Host");
+    } else if (event.participantsID.includes(userId)) {
+      setButtonText("Registered");
+    } else if (event.requests && event.requests.includes(userId)) {
+      setButtonText("Requested to Join");
+    } else {
+      setButtonText("Register for Event");
+    }
+  }, [event, token, user, userId]);
+
+  const handleRegister = async () => {
+    if (!token) {
+      toast.error("Please log in to register for the event.");
+      navigate("/login");
+      return;
+    }
     setPending(event.id);
-    onRegister();
+
+    try {
+      const response = await fetch(
+        `${backendUrl}/api/events/${event.id}/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        setIsRegistered(true);
+        toast.success("Successfully registered for the event!");
+      } else {
+        const error = await response.json();
+        toast.error(`Failed to register: ${error.message}`);
+      }
+    } catch (error) {
+      console.error("Error registering for event:", error);
+      toast.error("An error occurred while registering. Please try again.");
+    } finally {
+      setPending(null);
+    }
   };
 
   const handleProfileClick = () => {
-    console.log(`Navigate to profile: ${event.mentorId}`);
+    navigate(`/profile/${event.mentorId}`);
   };
 
   return (
@@ -30,14 +85,11 @@ export function EventModal({ event, onClose, onRegister }) {
             <X className="w-6 h-6" />
           </button>
         </div>
-        
+
         <div className="p-6">
           {/* Mentor profile section */}
           <div className="flex items-center space-x-3 mb-6">
-            <button
-              onClick={handleProfileClick}
-              className="relative group"
-            >
+            <button onClick={handleProfileClick} className="relative group">
               <img
                 src={event.mentorImage}
                 alt={event.mentorName}
@@ -50,17 +102,23 @@ export function EventModal({ event, onClose, onRegister }) {
               <Rating value={event.rating} />
             </div>
           </div>
-          
+
           <div className="space-y-4">
             {/* Event description */}
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">About This Event</h4>
-              <p className="text-gray-600 whitespace-pre-line">{event.description}</p>
+              <h4 className="font-semibold text-gray-900 mb-2">
+                About This Event
+              </h4>
+              <p className="text-gray-600 whitespace-pre-line">
+                {event.description}
+              </p>
             </div>
-            
+
             {/* Skills section */}
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Skills Offered</h4>
+              <h4 className="font-semibold text-gray-900 mb-2">
+                Skills Offered
+              </h4>
               <div className="flex flex-wrap gap-2">
                 {event.skills.map((skill, index) => (
                   <span
@@ -72,7 +130,7 @@ export function EventModal({ event, onClose, onRegister }) {
                 ))}
               </div>
             </div>
-            
+
             {/* Event details grid */}
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center space-x-2 text-gray-600">
@@ -81,34 +139,50 @@ export function EventModal({ event, onClose, onRegister }) {
               </div>
               <div className="flex items-center space-x-2 text-gray-600">
                 <Clock className="w-5 h-5" />
-                <span>{event.time}</span>
+                <span>
+                  {new Date(event.start_time).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}{" "}
+                  -{" "}
+                  {new Date(event.end_time).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
               </div>
               <div className="flex items-center space-x-2 text-gray-600">
                 <Users className="w-5 h-5" />
-                <span>{event.enrolled} / {event.capacity} participants</span>
+                <span>{event.max_participants} / {event.participants.length} participants</span>
               </div>
             </div>
           </div>
-          
           {/* Registration button */}
-          <button
-            onClick={handleRegister}
-            disabled={isEventPending}
-            className={`w-full mt-6 px-6 py-3 rounded-lg font-semibold transition-all ${
-              isEventPending
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 text-white'
-            }`}
-          >
-            {isEventPending ? (
-              <span className="flex items-center justify-center">
-                <LoadingSpinner />
-                Pending...
-              </span>
-            ) : (
-              'Register for Event'
-            )}
-          </button>
+          {isRegistered ? (
+            <div className="w-full mt-6 px-6 py-3 rounded-lg font-semibold bg-green-600 text-white text-center">
+              Registered
+            </div>
+          ) : (
+            <button
+              onClick={handleRegister}
+              disabled={isPending(event.id) || buttonText !== "Register for Event"}
+              className={`w-full mt-6 px-6 py-3 rounded-lg font-semibold transition-all ${
+                isPending(event.id) || buttonText !== "Register for Event"
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700 text-white"
+              }`}
+            >
+              {" "}
+              {isPending(event.id) ? (
+                <span className="flex items-center justify-center">
+                  {" "}
+                  <LoadingSpinner /> Pending...{" "}
+                </span>
+              ) : (
+                buttonText
+              )}{" "}
+            </button>
+          )}
         </div>
       </div>
     </div>

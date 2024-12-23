@@ -9,11 +9,12 @@ export const getAllEvents = async (req, res) => {
   try {
     const events = await Event.find(
       {},
-      "title description date start_time end_time status"
+      "title description date start_time end_time status max_participants"
     )
       .populate("skills_id", "name")
-      .populate("participants", "name email")
-      .populate("created_by", "name");
+      .populate("participants", "name email _id")
+      .populate("created_by", "name rating")
+      .populate("requests", "_id");
 
     res.status(200).json(events);
   } catch (error) {
