@@ -1,8 +1,8 @@
-import React from 'react';
 import { Calendar, MapPin } from 'lucide-react';
 
 export const CreatedEventCard = ({ event, status }) => {
-  const { title, description, date, location } = event;
+  const { title, description, date } = event;
+  const formattedDate = new Date(date).toLocaleDateString();
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
@@ -13,11 +13,11 @@ export const CreatedEventCard = ({ event, status }) => {
         <div className="space-y-2">
           <div className="flex items-center text-gray-600">
             <Calendar className="w-4 h-4 mr-2" />
-            <span className="text-sm">{date}</span>
+            <span className="text-sm">{formattedDate}</span>
           </div>
           <div className="flex items-center text-gray-600">
             <MapPin className="w-4 h-4 mr-2" />
-            <span className="text-sm">{location}</span>
+            <span className="text-sm">Online</span>
           </div>
         </div>
 
@@ -27,8 +27,8 @@ export const CreatedEventCard = ({ event, status }) => {
           </button>
         ) : (
           <div className={`mt-4 py-2 px-4 rounded-md text-center ${
-            status === 'canceled' 
-              ? 'bg-red-100 text-red-800' 
+            status === 'canceled'
+              ? 'bg-red-100 text-red-800'
               : 'bg-green-100 text-green-800'
           }`}>
             {status === 'canceled' ? 'Event Canceled' : 'Event Completed'}

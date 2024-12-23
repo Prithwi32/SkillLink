@@ -4,11 +4,11 @@ import Skill from "../models/skill.js";
 import User from "../models/user.js";
 import { validateEvent } from "../middlewares/eventValidator.js";
 
-// Get all events
+// Get all events (Upcoming)
 export const getAllEvents = async (req, res) => {
   try {
     const events = await Event.find(
-      {},
+      { status: "Upcoming" },
       "title description date start_time end_time status max_participants"
     )
       .populate("skills_id", "name")
@@ -516,7 +516,7 @@ export const getUserParticipatingEvents = async (req, res) => {
       .populate("skills_id", "name")
       .sort({ date: 1, start_time: 1 });
 
-    console.log("Fetched events before mapping:", events);
+    // console.log("Fetched events before mapping:", events);
 
     if (status === "Completed" || status === "Cancelled") {
       if (events.length === 0) {

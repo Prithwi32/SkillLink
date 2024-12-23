@@ -1,6 +1,4 @@
-import React from 'react';
 import { EventSection } from '../components/EventSection';
-import { mockEvents } from '../constants/mockEvents';
 import { Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,10 +21,10 @@ function EventPage() {
             Create Event
           </button>
         </div>
-        
+
         <div className="space-y-12">
-          <EventSection title="Created Events" events={mockEvents.created} type="created" />
-          <EventSection title="Enrolled Events" events={mockEvents.enrolled} type="enrolled" />
+          <EventSection title="Created Events" type="created" />
+          <EventSection title="Enrolled Events" type="enrolled" />
         </div>
       </div>
     </div>
