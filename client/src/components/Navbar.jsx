@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { UserCircle } from "lucide-react";
+import EventListPage from "@/pages/EventListPage.jsx";
 
 const Navbar = () => {
   const { user, token } = useAuth();
