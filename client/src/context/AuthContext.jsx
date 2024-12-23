@@ -1,6 +1,7 @@
 // AuthContext.jsx
-import { createContext, useContext, useState } from 'react';
-import axios from 'axios';
+import { createContext, useContext, useState } from "react";
+import axios from "axios";
+import {jwtDecode }from "jwt-decode";
 
 axios.defaults.withCredentials = true;
 
@@ -12,6 +13,7 @@ export const AuthProvider = ({ children }) => {
   const backendUrl = "http://localhost:5000";
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [userId, setUserId] = useState(null);
 
   // Signup function
   const signup = async (formData) => {
@@ -39,11 +41,19 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify(formData),
       });
       if (!response.ok) throw new Error("Login failed");
-      const { token, user } = await response.json();
-      setToken(token);
-      setUser(user);
-      localStorage.setItem("token", token); // Store JWT token
-      return { token, user };
+      const { name, email, jwtToken } = await response.json();
+
+      // Decode the JWT token to extract the user ID
+      const decoded = jwtDecode(jwtToken);
+      const userId = decoded._id;
+      // console.log(userId);
+
+      setToken(jwtToken);
+      setUser(name, email);
+      setUserId(userId);
+      // console.log(jwtToken);
+      localStorage.setItem("token", jwtToken); // Store JWT token
+      return { token: jwtToken, user: { name, email } };
     } catch (error) {
       console.error("Error during login:", error.message);
       throw error;
@@ -54,11 +64,14 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setToken(null);
+    setUserId(null);
     localStorage.removeItem("token");
   };
 
   return (
-    <AuthContext.Provider value={{ backendUrl, user, token, signup, login, logout }}>
+    <AuthContext.Provider
+      value={{ backendUrl, user, userId, token, signup, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

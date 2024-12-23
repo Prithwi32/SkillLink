@@ -12,7 +12,7 @@ const ensureAuthenticated = async (req, res, next) => {
   const token = auth.split(" ")[1];
 
   try {
-      console.log("Extracted Token: ", token);
+      // console.log("Extracted Token: ", token);
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       if (!decoded || !decoded._id) {
       return res.status(403).json({ message: 'Invalid token payload' });
