@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Sidebar from '../components/Profile/Sidebar';
 import ProfileSection from '../components/Profile/ProfileSection';
 import SessionPage from './SessionPage';

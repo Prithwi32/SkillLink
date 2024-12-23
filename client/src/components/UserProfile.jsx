@@ -32,7 +32,7 @@ const UserProfile = () => {
         setUser(data.user); // Set the user data from the API response
       } catch (err) {
         console.error(err);
-        navigate('/users'); // Redirect to users page on error
+        navigate('/login'); // Redirect to users page on error
       } finally {
         setIsLoading(false);
       }

@@ -8,12 +8,13 @@ import EventCreationForm from "../src/components/HelperComponents/EventCreation"
 import { AuthProvider } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ProtectedRoute from "./components/ProtectedRoutes";
-import MyUserProfilePage from "./pages/MyUserProfilePage"
+import ProtectedRoute from "./pages/ProtectedRoutes";
+import MyUserProfilePage from "./pages/MyUserProfilePage";
 import LandingPage from "./pages/LandingPage";
 import UsersPage from "./components/AllUsersPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import EventListPage from "./pages/EventListPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 // axios.defaults.baseURL = "http://localhost:5000";
 // axios.defaults.withCredentials = true;
@@ -23,39 +24,25 @@ function App() {
     <AuthProvider>
       <Routes>
         <Route path="/" element={<AppLayout />}>
-          <Route
-            index
-            element={
-              // <div className="flex flex-col mx-auto my-auto justify-center items-center w-full gap-10">
-              //   <h1 className="text-3xl text-blue-800">Sample Heading</h1>
-              //   <Button className="text-base">Click here</Button>
-              // </div>
-              <LandingPage/>
-            }
-          />
+          <Route index element={ <LandingPage /> }/>
 
           {/* Public routes */}
           <Route path="signup" element={<SignupCard />} />
           <Route path="login" element={<LoginCard />} />
-          <Route path="reportuser" element={<ReportUserForm />} />
+          <Route path="events" element={<EventListPage />} />
           <Route path="users" element={<UsersPage />} />
-          <Route path="/events" element={<EventListPage/>}/>
-          <Route path="/users/:userId" element={<UserProfilePage/>}/>
 
-          {/* Protected routes */}
-          {/* <Route
-            path="createEvent"
-            element={<ProtectedRoute element={<EventCreationForm />} />}
-          /> */}
-          <Route
-            path="createEvent"
-            element={<EventCreationForm />}
-          />
-      </Route>
-        <Route
-            path="userDashboard"
-            element={<MyUserProfilePage />}
-          />
+        {/* Protected routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/users/:userId" element={<UserProfilePage />} />
+          <Route path="reportuser" element={<ReportUserForm />} />
+          <Route path="createEvent" element={<EventCreationForm />} />
+          <Route path="userDashboard" element={<MyUserProfilePage />} />
+        </Route>
+
+        {/* 404 Page for undefined routes */}
+        <Route path="*" element={<NotFoundPage/>} />
+        </Route>
       </Routes>
       <ToastContainer />
     </AuthProvider>
@@ -63,4 +50,3 @@ function App() {
 }
 
 export default App;
-
