@@ -4,18 +4,21 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
+import ReviewPopup from "../Cards/ReviewPopUp"; // Import the ReviewPopup component
 
 const Reviews = () => {
   const [hasMore, setHasMore] = useState(false);
   const { backendUrl } = useContext(AuthContext);
   const { userId } = useParams();
   const [reviews, setReviews] = useState(null);
-  const [showReviewCount, setShowReivewCount]=useState(3);
+  const [showReviewCount, setShowReivewCount] = useState(3);
+  const [selectedReview, setSelectedReview] = useState(null); // Track the selected review for editing
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // Track if the popup is open
 
   const getReviews = async () => {
     try {
       const { data } = await axios.get(
-        backendUrl + `/api/reviews/user/${userId}`,
+        backendUrl + `/api/reviews/user/${userId}`
       );
 
       if (data.success) {
@@ -34,34 +37,23 @@ const Reviews = () => {
     getReviews();
   }, []);
 
-  // const reviews = [
-  //   {
-  //     id: '1',
-  //     reviewerImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200&h=200',
-  //     reviewerName: 'Michael Chen',
-  //     givenSkill: 'React',
-  //     receivedSkill: 'Python',
-  //     text: 'Sarah is an excellent teacher! She explained React concepts clearly and helped me understand complex patterns. Highly recommended!',
-  //     rating: 5,
-  //     date: '2 days ago',
-  //   },
-  //   {
-  //     id: '2',
-  //     reviewerImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=200&h=200',
-  //     reviewerName: 'Emma Wilson',
-  //     givenSkill: 'Node.js',
-  //     receivedSkill: 'React',
-  //     text: 'Great experience working with Sarah. She has deep knowledge of Node.js and made the learning process enjoyable.',
-  //     rating: 4.5,
-  //     date: '1 week ago',
-  //   },
-  // ];
-
-
   const handleLoadMore = () => {
-    // Backend integration will go here
     setShowReivewCount(reviews.length);
     setHasMore(false);
+  };
+
+  const handleEdit = (review) => {
+    setSelectedReview(review); // Set the review to be edited
+    setIsPopupOpen(true); // Open the popup
+  };
+
+  const handlePopupClose = () => {
+    setIsPopupOpen(false); // Close the popup
+  };
+
+  const handlePopupSubmit = (updatedReview) => {
+    console.log("Updated review:", updatedReview);
+    setIsPopupOpen(false); // Close the popup after submission
   };
 
   return (
@@ -72,17 +64,10 @@ const Reviews = () => {
         {reviews &&
           reviews.length > 0 &&
           reviews.slice(0, showReviewCount).map((review) => (
-            <div
-              key={review._id}
-              className="cursor-pointer"
-            >
-              <ReviewCard review={review} />
-            </div>
+            <ReviewCard key={review._id} review={review} onEdit={handleEdit} />
           ))}
         {reviews && reviews.length === 0 && (
-          <p className="text-center font-semibold text-slate-400">
-            No reviews yet
-          </p>
+          <p className="text-center font-semibold text-slate-400">No reviews yet</p>
         )}
       </div>
 
@@ -95,6 +80,16 @@ const Reviews = () => {
             View More
           </button>
         </div>
+      )}
+
+      {/* Show the ReviewPopup if isPopupOpen is true */}
+      {isPopupOpen && (
+        <ReviewPopup
+          isOpen={isPopupOpen}
+          onClose={handlePopupClose}
+          onSubmit={handlePopupSubmit}
+          initialReview={selectedReview}
+        />
       )}
     </div>
   );
