@@ -31,7 +31,7 @@ function App() {
           <Route path="login" element={<LoginCard />} />
           <Route path="events" element={<EventListPage />} />
           <Route path="users" element={<UsersPage />} />
-
+          </Route>
         {/* Protected routes */}
         <Route element={<ProtectedRoute />}>
           <Route path="/users/:userId" element={<UserProfilePage />} />
@@ -42,7 +42,7 @@ function App() {
 
         {/* 404 Page for undefined routes */}
         <Route path="*" element={<NotFoundPage/>} />
-        </Route>
+
       </Routes>
       <ToastContainer />
     </AuthProvider>
