@@ -1,21 +1,48 @@
-import React, { useState } from 'react';
-import { X } from 'lucide-react';
+import React, { useContext, useState } from "react";
+import { X } from "lucide-react";
+import { AuthContext } from "@/context/AuthContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
-export default function ReviewPopup({ isOpen, onClose, onSubmit, initialReview }) {
-  const [review, setReview] = useState(initialReview.text);
+export default function ReviewPopup({
+  isOpen,
+  onClose,
+  initialReview,
+  getReviews,
+}) {
+  const [review, setReview] = useState(initialReview.comment);
   const [rating, setRating] = useState(initialReview.rating);
+
+  const { backendUrl } = useContext(AuthContext);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // TODO: Integrate with backend API
-    onSubmit({ text: review, rating });
-    onClose();
+    try {
+      const { data } = await axios.put(
+        backendUrl + `/api/reviews/edit/${initialReview._id}`,
+        { comment: review, rating },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        },
+      );
+      if (data.success) {
+        toast.success(data.message);
+        getReviews();
+        onClose();
+      } else {
+        toast.error(data.message || "Failed to update review");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to update review");
+    }
   };
 
   return (
-    <div className="fixed inset-0 p-0 m-0 bg-red-300 bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 p-0 m-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md transform transition-all duration-300 ease-in-out scale-100 opacity-100">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-gray-800">Edit Review</h2>
@@ -29,7 +56,10 @@ export default function ReviewPopup({ isOpen, onClose, onSubmit, initialReview }
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="rating" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="rating"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Rating
             </label>
             <select
@@ -40,14 +70,17 @@ export default function ReviewPopup({ isOpen, onClose, onSubmit, initialReview }
             >
               {[1, 2, 3, 4, 5].map((value) => (
                 <option key={value} value={value}>
-                  {value} Star{value !== 1 ? 's' : ''}
+                  {value} Star{value !== 1 ? "s" : ""}
                 </option>
               ))}
             </select>
           </div>
 
           <div>
-            <label htmlFor="review" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="review"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Review
             </label>
             <textarea
