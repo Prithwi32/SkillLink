@@ -1,158 +1,96 @@
-import React from 'react'
-import { MoreHorizontal, ArrowUpDown } from 'lucide-react'
+import { Mail, Calendar } from 'lucide-react'
+import { useState } from 'react'
+import ReportedUserReason from './reported-reason-form'
 import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-  getSortedRowModel,
-} from "@tanstack/react-table"
-import { useState } from "react"
-
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 
-const data = [
+const requestedUsers = [
   {
     id: "1",
-    name: "John Doe",
-    email: "john@example.com",
-    blockedDate: "2023-12-01",
-    reason: "Violation of community guidelines",
+    name: "William",
+    email: "william@example.com",
+    requestDate: "2023-12-04",
+    skills: ["JavaScript", "React", "Node.js"],
+    status: "pending",
+    reason: "Inappropriate behavior",
+    description: "User has been reported for using offensive language in the community forum.",
   },
   {
     id: "2",
-    name: "Jane Smith",
-    email: "jane@example.com",
-    blockedDate: "2023-11-28",
-    reason: "Spam activities",
+    name: "john",
+    email: "john@example.com",
+    requestDate: "2023-12-03",
+    skills: ["Python", "Data Analysis", "Machine Learning"],
+    status: "pending",
+    reason: "Spam content",
+    description: "User has been reported for posting excessive promotional content.",
   },
   // Add more sample data as needed
 ]
 
-export function BlockedUsersTable() {
-  const [sorting, setSorting] = useState([])
+export function BlockedUsers() {
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [isReasonFormOpen, setIsReasonFormOpen] = useState(false)
 
-  const columns = [
-    {
-      accessorKey: "name",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Name
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
-    },
-    {
-      accessorKey: "email",
-      header: "Email",
-    },
-    {
-      accessorKey: "blockedDate",
-      header: "Blocked Date",
-    },
-    {
-      accessorKey: "reason",
-      header: "Reason",
-    },
-    {
-      id: "actions",
-      cell: ({ row }) => {
-        const user = row.original
+  const handleReasonClick = (user) => {
+    setSelectedUser(user)
+    setIsReasonFormOpen(true)
+  }
 
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => console.log(`Unblock user: ${user.id}`)}>
-                Unblock User
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => console.log(`View details: ${user.id}`)}>
-                View Details
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )
-      },
-    },
-  ]
-
-  const table = useReactTable({
-    data,
-    columns,
-    state: {
-      sorting,
-    },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-  })
+  const handleCloseReasonForm = () => {
+    setIsReasonFormOpen(false)
+    setSelectedUser(null)
+  }
 
   return (
-    <div className="rounded-md border bg-gray-100">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No blocked users.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
+    <>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {requestedUsers.map((user) => (
+          <Card key={user.id}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+              <CardTitle className="text-sm font-bold mb-3">
+                {user.name}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>              
+                <div className="flex items-center space-x-2 mt-5">
+                  <Mail className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground text-gray-700">
+                    {user.email}
+                  </span>               
+               </div>
+               </CardContent> 
+               <CardFooter>
+                {user.status === "pending" && (
+                  <div className="flex-1 justify-between mt-4">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="pl-5 pr-5 w-[48%] bg-purple-600 text-white hover:text-white rounded-md hover:bg-blue-700 transition-colors duration-200"
+                      onClick={() => handleReasonClick(user)}
+                    >
+                      View Reason
+                    </Button>
+                  </div>
+                )}
+              </CardFooter>
+              
+          </Card>
+        ))}
+      </div>
+      {isReasonFormOpen && selectedUser && (
+        <ReportedUserReason
+          user={selectedUser}
+          onClose={handleCloseReasonForm}
+        />
+      )}
+    </>
   )
 }
 
