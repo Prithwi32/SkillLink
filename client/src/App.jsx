@@ -31,11 +31,16 @@ function App() {
           <Route path="login" element={<LoginCard />} />
           <Route path="events" element={<EventListPage />} />
           <Route path="users" element={<UsersPage />} />
-          </Route>
-        {/* Protected routes */}
-        <Route element={<ProtectedRoute />}>
+
+          {/*Protected routes with AppLayout */}
+          <Route element={<ProtectedRoute />}>
           <Route path="/users/:userId" element={<UserProfilePage />} />
           <Route path="reportuser" element={<ReportUserForm />} />
+          </Route>
+        </Route>
+
+        {/* Protected routes with no AppLayout*/}
+        <Route element={<ProtectedRoute />}>
           <Route path="createEvent" element={<EventCreationForm />} />
           <Route path="userDashboard" element={<MyUserProfilePage />} />
         </Route>
