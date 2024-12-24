@@ -18,12 +18,13 @@ const Reviews = () => {
   const getReviews = async () => {
     try {
       const { data } = await axios.get(
-        backendUrl + `/api/reviews/user/${userId}`
+        backendUrl + `/api/reviews/user/${userId}`,
       );
 
       if (data.success) {
         setReviews(data.reviews);
         if (data.reviews.length > showReviewCount) setHasMore(true);
+        else setHasMore(false);
       } else {
         toast.error("Couldn't load reviews");
       }
@@ -51,11 +52,6 @@ const Reviews = () => {
     setIsPopupOpen(false); // Close the popup
   };
 
-  const handlePopupSubmit = (updatedReview) => {
-    console.log("Updated review:", updatedReview);
-    setIsPopupOpen(false); // Close the popup after submission
-  };
-
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-900">Reviews</h2>
@@ -63,11 +59,20 @@ const Reviews = () => {
       <div className="space-y-4">
         {reviews &&
           reviews.length > 0 &&
-          reviews.slice(0, showReviewCount).map((review) => (
-            <ReviewCard key={review._id} review={review} onEdit={handleEdit} />
-          ))}
+          reviews
+            .slice(0, showReviewCount)
+            .map((review) => (
+              <ReviewCard
+                key={review._id}
+                review={review}
+                onEdit={handleEdit}
+                getReviews={getReviews}
+              />
+            ))}
         {reviews && reviews.length === 0 && (
-          <p className="text-center font-semibold text-slate-400">No reviews yet</p>
+          <p className="text-center font-semibold text-slate-400">
+            No reviews yet
+          </p>
         )}
       </div>
 
@@ -87,8 +92,8 @@ const Reviews = () => {
         <ReviewPopup
           isOpen={isPopupOpen}
           onClose={handlePopupClose}
-          onSubmit={handlePopupSubmit}
           initialReview={selectedReview}
+          getReviews={getReviews}
         />
       )}
     </div>

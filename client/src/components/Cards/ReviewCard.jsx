@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Star, MoreVertical } from "lucide-react";
+import { AuthContext } from "@/context/AuthContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
-const ReviewCard = ({ review, onEdit }) => {
+//3-dot along with edit and delete
+
+const ReviewCard = ({ review, onEdit, getReviews }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const userId = localStorage.getItem("userId");
+  const { backendUrl } = useContext(AuthContext);
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
@@ -13,12 +20,31 @@ const ReviewCard = ({ review, onEdit }) => {
     setMenuOpen(false);
   };
 
-  const handleDelete = () => {
-    const isConfirmed = window.confirm("Are you sure you want to delete this review?");
+  const handleDelete = async () => {
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this review?",
+    );
     if (isConfirmed) {
-      console.log("Delete confirmed");
-    } else {
-      console.log("Delete canceled");
+      try {
+        const { data } = await axios.delete(
+          backendUrl + `/api/reviews/remove/${review._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          },
+        );
+
+        if (data.success) {
+          getReviews();
+          toast.success(data.message);
+        } else {
+          toast.error(data.message || "Failed to delete review");
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Failed to delete review");
+      }
     }
     setMenuOpen(false);
   };
@@ -38,16 +64,23 @@ const ReviewCard = ({ review, onEdit }) => {
         <div className="flex-1">
           <div className="flex justify-between items-start mb-4">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-gray-900">{review.reviewedBy.name}</h3>
+              <h3 className="font-semibold text-gray-900">
+                {review.reviewedBy.name}
+              </h3>
               <div className="flex items-center gap-1">
                 <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                 <span className="font-medium">{review.rating}</span>
               </div>
             </div>
             <div>
-              <button onClick={toggleMenu} className="p-2 hover:bg-gray-100 rounded-full">
-                <MoreVertical className="w-5 h-5 text-gray-600" />
-              </button>
+              {userId === review.reviewedBy._id && (
+                <button
+                  onClick={toggleMenu}
+                  className="p-2 hover:bg-gray-100 rounded-full"
+                >
+                  <MoreVertical className="w-5 h-5 text-gray-600" />
+                </button>
+              )}
               {menuOpen && (
                 <div className="absolute right-0 mt-2 w-32 bg-white border rounded shadow-md">
                   <button
@@ -85,4 +118,3 @@ const ReviewCard = ({ review, onEdit }) => {
 };
 
 export default ReviewCard;
-
