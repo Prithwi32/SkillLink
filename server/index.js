@@ -4,6 +4,8 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
+import http from 'http'; 
+import { Server } from 'socket.io';
 
 import AuthRouter from './routes/AuthRouter.js'
 import ProtectedRouter from './routes/ProtectedRoute.js'
@@ -13,9 +15,18 @@ import eventRoutes from './routes/eventRoutes.js'
 import reviewRouter from './routes/reviewRoutes.js'
 import sessionRouter from './routes/sessionRoutes.js'
 import ReportedUserRouter from './routes/reportedUserRoutes.js'
+import skillRouter from './routes/skillRoutes.js'
 dotenv.config();
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: ['http://localhost:5174', 'http://localhost:5173'],
+        methods: ['GET', 'POST'],
+        credentials: true,
+    }
+});
 const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
@@ -80,7 +91,15 @@ app.use('/api/report-user', ReportedUserRouter);
 // custom routes
 app.use('/api/user', userRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/skills', skillRouter);
 
-app.listen(PORT, ()=>{
+io.on('connection', (socket) => {
+    console.log('New client connected');
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
+});
+
+server.listen(PORT, ()=>{
     console.log(`Server is running on port ${PORT}`);
 })
