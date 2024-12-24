@@ -2,13 +2,35 @@ import { useState, useEffect } from "react";
 import { X, Users, Clock, Calendar } from "lucide-react";
 import { Rating } from "../ui/Rating";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
-import { useRegistrationStore } from "../../constants/useRegistrationStore";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthContext";
 
+const usePendingRegistrations = () => {
+  const [pendingRegistrations, setPendingRegistrations] = useState({});
+
+  const setPending = (eventId) => {
+    setPendingRegistrations((prevState) => ({
+      ...prevState,
+      [eventId]: true,
+    }));
+  };
+
+  const clearPending = (eventId) => {
+    setPendingRegistrations((prevState) => {
+      const updatedState = { ...prevState };
+      delete updatedState[eventId];
+      return updatedState;
+    });
+  };
+
+  const isPending = (eventId) => !!pendingRegistrations[eventId];
+
+  return { setPending, clearPending, isPending };
+};
+
 export function EventModal({ event, onClose, onRegister }) {
-  const { setPending, isPending } = useRegistrationStore();
+  const { setPending, clearPending, isPending } = usePendingRegistrations();
   const navigate = useNavigate();
   const [isRegistered, setIsRegistered] = useState(false);
   const [buttonText, setButtonText] = useState("Register for Event");
@@ -39,6 +61,7 @@ export function EventModal({ event, onClose, onRegister }) {
       navigate("/login");
       return;
     }
+
     setPending(event.id);
 
     try {
@@ -56,6 +79,7 @@ export function EventModal({ event, onClose, onRegister }) {
       if (response.ok) {
         setIsRegistered(true);
         toast.success("Successfully registered for the event!");
+        onRegister?.();
       } else {
         const error = await response.json();
         toast.error(`Failed to register: ${error.message}`);
@@ -64,7 +88,7 @@ export function EventModal({ event, onClose, onRegister }) {
       console.error("Error registering for event:", error);
       toast.error("An error occurred while registering. Please try again.");
     } finally {
-      setPending(null);
+      clearPending(event.id);
     }
   };
 
@@ -75,7 +99,6 @@ export function EventModal({ event, onClose, onRegister }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-        {/* Modal header */}
         <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-gray-900">{event.title}</h2>
           <button
@@ -87,7 +110,6 @@ export function EventModal({ event, onClose, onRegister }) {
         </div>
 
         <div className="p-6">
-          {/* Mentor profile section */}
           <div className="flex items-center space-x-3 mb-6">
             <button onClick={handleProfileClick} className="relative group">
               <img
@@ -104,7 +126,6 @@ export function EventModal({ event, onClose, onRegister }) {
           </div>
 
           <div className="space-y-4">
-            {/* Event description */}
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">
                 About This Event
@@ -114,7 +135,6 @@ export function EventModal({ event, onClose, onRegister }) {
               </p>
             </div>
 
-            {/* Skills section */}
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">
                 Skills Offered
@@ -131,7 +151,6 @@ export function EventModal({ event, onClose, onRegister }) {
               </div>
             </div>
 
-            {/* Event details grid */}
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center space-x-2 text-gray-600">
                 <Calendar className="w-5 h-5" />
@@ -153,11 +172,14 @@ export function EventModal({ event, onClose, onRegister }) {
               </div>
               <div className="flex items-center space-x-2 text-gray-600">
                 <Users className="w-5 h-5" />
-                <span>{event.max_participants} / {event.participants.length} participants</span>
+                <span>
+                  {event.max_participants} / {event.participants.length}{" "}
+                  participants
+                </span>
               </div>
             </div>
           </div>
-          {/* Registration button */}
+
           {isRegistered ? (
             <div className="w-full mt-6 px-6 py-3 rounded-lg font-semibold bg-green-600 text-white text-center">
               Registered
@@ -172,15 +194,13 @@ export function EventModal({ event, onClose, onRegister }) {
                   : "bg-blue-600 hover:bg-blue-700 text-white"
               }`}
             >
-              {" "}
               {isPending(event.id) ? (
                 <span className="flex items-center justify-center">
-                  {" "}
-                  <LoadingSpinner /> Pending...{" "}
+                  <LoadingSpinner /> Pending...
                 </span>
               ) : (
                 buttonText
-              )}{" "}
+              )}
             </button>
           )}
         </div>

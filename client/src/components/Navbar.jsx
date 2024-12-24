@@ -27,23 +27,7 @@ const Navbar = () => {
             HobbeyVerse
           </Link>
         </div>
-        {/* Center Section */}
-          {isUserDashboard ? (
-            <div className="md:flex space-x-6 ml-auto">
-              <Link
-                to="/events"
-                className="hover:text-blue-300 hover:underline transition duration-300"
-              >
-                Events
-              </Link>
-              <Link
-                to="/users"
-                className="hover:text-blue-300 hover:underline transition duration-300"
-              >
-                Users
-              </Link>
-            </div>
-          ) : (
+        {/* Center Section */}      
             <div className="hidden md:flex space-x-6">
               <Link
                 to="/"
@@ -76,12 +60,11 @@ const Navbar = () => {
                 Users
               </Link>
             </div>
-          )}
 
         {/* Right Section */}{" "}
         <div className="hidden md:flex items-center space-x-4">
           {" "}
-          {token && !isUserDashboard ? (
+          {token ? (
             <>
               {" "}
               <Link
@@ -106,9 +89,6 @@ const Navbar = () => {
           )}{" "}
         </div>
         {/* Hamburger Menu for Mobile */}
-        {isUserDashboard ? (
-          <></>
-        ) : (
           <div className="md:hidden">
             <button
               className="text-white focus:outline-none"
@@ -133,7 +113,6 @@ const Navbar = () => {
               </svg>
             </button>
           </div>
-        )}
       </div>
     </nav>
   );
