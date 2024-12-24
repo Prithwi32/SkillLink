@@ -1,13 +1,12 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { CalendarIcon, UserIcon } from 'lucide-react'
 
 export default function EventCard({ title, date, status, host, description, location }) {
   const statusColors = {
-    upcoming: 'bg-blue-100 text-blue-700',
-    past: 'bg-green-100 text-green-700',
-    canceled: 'bg-red-100 text-red-700'
+    upcoming: 'text-blue-100 bg-blue-700',
+    past: 'text-green-100 bg-green-700',
+    canceled: 'text-red-100 bg-red-700'
   }
 
   return (
@@ -29,9 +28,7 @@ export default function EventCard({ title, date, status, host, description, loca
          </div>
             </CardDescription>
           </div>
-          <Badge className={`${statusColors[status]} font-semibold uppercase text-xs px-2 py-1 rounded-full`}>
-            {status}
-          </Badge>
+         
         </div>
       </CardHeader>
       <CardContent className="p-4">
