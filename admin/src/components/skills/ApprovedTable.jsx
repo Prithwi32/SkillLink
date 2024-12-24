@@ -1,5 +1,3 @@
-import React from "react";
-
 const ApprovedSkillsTable = ({ skills, isLoading }) => {
   if (isLoading) {
     return <div className="flex items-center justify-center">Loading...</div>;
@@ -44,23 +42,6 @@ const ApprovedSkillsTable = ({ skills, isLoading }) => {
                   </td>
                 </tr>
               )}
-//               {skills.length > 0 &&
-//                 skills.map((skill) => (
-//                   <tr
-//                     key={skill._id}
-//                     className="border-b border-gray-200 hover:bg-gray-100"
-//                   >
-//                     <td className="w-full sm:w-1/3 text-left py-3 px-4">
-//                       <span className="font-medium">{skill.name}</span>
-//                       <p className="sm:hidden text-gray-500 text-sm mt-1">
-//                         {skill.desc}
-//                       </p>
-//                     </td>
-//                     <td className="w-full sm:w-2/3 text-left py-3 px-4 hidden sm:table-cell">
-//                       {skill.desc}
-//                     </td>
-//                   </tr>
-//                 ))}
             </tbody>
           </table>
       
