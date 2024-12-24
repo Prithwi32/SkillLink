@@ -1,6 +1,7 @@
 import React from 'react';
 import { InstructorCard } from "./InstructorCard";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export function InstructorCardGrid({ instructors }) {
   // Determine the number of instructors to display based on screen size
@@ -25,6 +26,12 @@ export function InstructorCardGrid({ instructors }) {
     return () => window.removeEventListener('resize', handleResize);
   }, [instructors]);
 
+  const navigate = useNavigate(); // Initialize navigate function
+
+  const handleExploreClick = () => {
+    navigate('/allSuggestedLearning'); // Redirect to home page
+  };
+
   return (
     <div className="w-full mx-auto px-10 py-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-between">
@@ -35,7 +42,7 @@ export function InstructorCardGrid({ instructors }) {
         ))}
       </div>
       <div className="mt-8 text-center">
-        <Button variant="default" size="lg">Explore</Button>
+        <Button variant="default" size="lg" onClick={handleExploreClick}>Explore</Button>
       </div>
     </div>
   );
