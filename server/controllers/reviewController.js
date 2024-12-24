@@ -28,9 +28,10 @@ export const createReview = async (req, res) => {
     const skill = await Skill.findById({ _id: skillId, status: "Approved" });
 
     if (!skill) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Either Skill not found or is not approved by admin" });
+      return res.status(404).json({
+        success: false,
+        message: "Either Skill not found or is not approved by admin",
+      });
     }
 
     // check whether session exists
@@ -44,7 +45,11 @@ export const createReview = async (req, res) => {
     }
 
     // check whether user is one the user in session
-    if (!(session.userOne.toString() === _id || session.userTwo.toString() === _id)) {
+    if (
+      !(
+        session.userOne.toString() === _id || session.userTwo.toString() === _id
+      )
+    ) {
       return res.status(403).json({
         success: false,
         message: "You are not a part of this session",
@@ -53,7 +58,8 @@ export const createReview = async (req, res) => {
 
     // check whether user has already reviewed the user in the session
     if (
-      (session.userOne.toString() == _id && session.isReviewProvidedByUserOne) ||
+      (session.userOne.toString() == _id &&
+        session.isReviewProvidedByUserOne) ||
       (session.userTwo.toString() == _id && session.isReviewProvidedByUserTwo)
     ) {
       return res.status(400).json({
@@ -104,7 +110,15 @@ export const getReviews = async (req, res) => {
 
     const reviews = await Review.find({ userId: id })
       .populate("skillId")
-      .populate("reviewedBy", "name _id");
+      .populate("reviewedBy", "name _id")
+      .populate({
+        path: "sessionId",
+        select: "skillTaughtByUserOne skillTaughtByUserTwo",
+        populate: [
+          { path: "skillTaughtByUserOne" },
+          { path: "skillTaughtByUserTwo" },
+        ],
+      });
     return res.status(200).json({ success: true, reviews });
   } catch (error) {
     console.log(error);
