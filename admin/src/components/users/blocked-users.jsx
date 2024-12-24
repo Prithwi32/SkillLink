@@ -10,14 +10,14 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
-const requestedUsers = [
+const blockedUsers = [
   {
     id: "1",
     name: "William",
     email: "william@example.com",
     requestDate: "2023-12-04",
     skills: ["JavaScript", "React", "Node.js"],
-    status: "pending",
+    status: "blocked",
     reason: "Inappropriate behavior",
     description: "User has been reported for using offensive language in the community forum.",
   },
@@ -27,7 +27,7 @@ const requestedUsers = [
     email: "john@example.com",
     requestDate: "2023-12-03",
     skills: ["Python", "Data Analysis", "Machine Learning"],
-    status: "pending",
+    status: "blocked",
     reason: "Spam content",
     description: "User has been reported for posting excessive promotional content.",
   },
@@ -51,7 +51,7 @@ export function BlockedUsers() {
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {requestedUsers.map((user) => (
+        {blockedUsers.map((user) => (
           <Card key={user.id}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white">
               <CardTitle className="text-sm font-bold mb-3">
@@ -67,7 +67,7 @@ export function BlockedUsers() {
                </div>
                </CardContent> 
                <CardFooter>
-                {user.status === "pending" && (
+                {user.status === "blocked" && (
                   <div className="flex-1 justify-between mt-4">
                     <Button
                       size="sm"
@@ -88,6 +88,7 @@ export function BlockedUsers() {
         <ReportedUserReason
           user={selectedUser}
           onClose={handleCloseReasonForm}
+          
         />
       )}
     </>
