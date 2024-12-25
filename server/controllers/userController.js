@@ -5,7 +5,7 @@ import Skill from "../models/skill.js";
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({ isBanned: false })
-      .select("name skillsOffered rating photo")
+      .select("name skillsOffered rating photo _id")
       .lean();
 
     res.status(200).json({

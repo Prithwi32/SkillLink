@@ -13,7 +13,7 @@ const AdminContextProvider = ({ children }) => {
   const checkAuth = async () => {
     setIsLoading(true);
     setIsLoggedIn(false);
-    // setIsLoggedIn(true);     // for frontend working without authentication
+    
     try {
       const { data } = await axios.get(
         backendUrl + "/api/admin/auth/check-auth"

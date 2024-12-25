@@ -3,9 +3,9 @@ import { Calendar, Ban, CheckCircle } from 'lucide-react';
 
 export default function SessionFilter({ activeFilter, onFilterChange }) {
   const filters = [
-    { status: 'upcoming', label: 'Upcoming', icon: <Calendar size={18} /> },
-    { status: 'completed', label: 'Completed', icon: <CheckCircle size={18} /> },
-    { status: 'canceled', label: 'Canceled', icon: <Ban size={18} /> },
+    { status: "Scheduled", label: 'Upcoming', icon: <Calendar size={18} /> },
+    { status: 'Completed', label: 'Completed', icon: <CheckCircle size={18} /> },
+    { status: 'Cancelled', label: 'Canceled', icon: <Ban size={18} /> },
   ];
 
   return (
