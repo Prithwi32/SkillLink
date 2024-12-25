@@ -16,7 +16,7 @@ export default function SessionList({
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredSessions.map(session => (
           <SessionCard
-            key={session.id}
+            key={session._id}
             session={session}
             status={status}
             onStatusChange={onStatusChange}
