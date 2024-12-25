@@ -48,7 +48,7 @@ export function ProfilePage({
       <div className="max-w-4xl mx-auto p-6">
         <div className="bg-white rounded-xl shadow-xl p-8 space-y-8 animate-scale-in hover:shadow-2xl transition-all duration-500">
           {/* Header Section */}
-          <div className="flex items-start gap-8">
+          <div className="flex flex-col sm:flex-row items-start sm:gap-8">
             <Avatar src={editedUser.avatar} alt={editedUser.name} />
             <div className="flex-1 space-y-4">
               <EditableField
@@ -103,7 +103,7 @@ export function ProfilePage({
             )}
             {isAddingSkill && (
               <div>
-                <SkillSuggest  isMultiple={true} />
+                <SkillSuggest isMultiple={true} />
               </div>
             )}
           </div>
@@ -136,14 +136,14 @@ export function ProfilePage({
               </div>
             )}
             {isAddingInterestedSkill && (
-              <div >
+              <div>
                 <SkillSuggest isMultiple={true} />
               </div>
             )}
           </div>
 
           {/* Edit, Save, Cancel Buttons */}
-          <div className="flex justify-end gap-4">
+          <div className="flex justify-end gap-4 flex-wrap sm:flex-nowrap">
             {!isEditing ? (
               <button
                 onClick={() => handleEditToggle(true)}
