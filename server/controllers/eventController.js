@@ -218,19 +218,14 @@ export const getEventsByStatus = async (req, res) => {
       return res.status(400).json({ message: "Invalid status" });
     }
     const events = await Event.find({ status })
-      .populate("created_by", "name")
-      .select("title description date _id")
-      .sort({ date: 1 });
+    .populate("skills_id", "name")
+    .populate("participants", "name email _id")
+    .populate("created_by", "name rating")
+    .populate("requests", "_id")
+    .select("title description date start_time end_time status max_participants");
 
-    const response = events.map((event) => ({
-      title: event.title,
-      description: event.description,
-      host_name: event.created_by.name,
-      date: event.date,
-      event_id: event._id,
-    }));
+    res.status(200).json(events);
 
-    res.status(200).json(response);
   } catch (error) {
     console.error("Error fetching events by status:", error);
     res.status(500).json({ message: "Internal server error" });
