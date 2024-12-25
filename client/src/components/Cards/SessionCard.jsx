@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Edit2, Ban, CheckCircle, ExternalLink, Star } from 'lucide-react';
 import { HOBBY_SUGGESTIONS } from '../../constants/hobby-suggestions';
 import FeedbackForm from '../Forms/FeedbackForm';  // Import the FeedbackForm component
+import SkillSuggest from '../HelperComponents/SkillSuggestionInputField';
 
 export default function SessionCard({ session, status, onStatusChange, onEdit }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -115,7 +116,7 @@ export default function SessionCard({ session, status, onStatusChange, onEdit })
               />
     
               {/* Skills Offered */}
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Skills Offered
                 </label>
@@ -146,10 +147,11 @@ export default function SessionCard({ session, status, onStatusChange, onEdit })
                       </option>
                     ))}
                 </select>
-              </div>
-    
+              </div> */}
+              <SkillSuggest feildName={"Skill Offered"} isMultiple={false}/>
+              <SkillSuggest feildName={"Skills Acquiring"} isMultiple={false}/>
               {/* Skills Acquiring */}
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Skills Acquiring
                 </label>
@@ -180,7 +182,7 @@ export default function SessionCard({ session, status, onStatusChange, onEdit })
                       </option>
                     ))}
                 </select>
-              </div>
+              </div> */}
     
               <input
                 type="url"

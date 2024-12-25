@@ -83,6 +83,8 @@ export const adminLogin = (req, res) => {
     expiresIn: "1d",
   });
 
+  // console.log("Generated token" + token);
+
   res
     .cookie("token", token, {
       httpOnly: true,
