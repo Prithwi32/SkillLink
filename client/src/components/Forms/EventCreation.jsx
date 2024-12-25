@@ -217,8 +217,8 @@ export function EventCreationForm() {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Skills Offered
             </label>
-            <SkillSuggest onSkillSelect={handleSkillSelect} />
-            <div className="mt-2 flex flex-wrap gap-2">
+            <SkillSuggest onSkillSelect={handleSkillSelect}  isMultiple={true}/>
+            {/* <div className="mt-2 flex flex-wrap gap-2">
               {eventDetails.skillsRequired.map((skill, index) => (
                 <span
                   key={index}
@@ -227,7 +227,7 @@ export function EventCreationForm() {
                   {skill}
                 </span>
               ))}
-            </div>
+            </div> */}
           </div>
           <button
             type="submit"
