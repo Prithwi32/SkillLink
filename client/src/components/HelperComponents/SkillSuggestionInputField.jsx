@@ -1,20 +1,29 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import debounce from 'lodash.debounce';
-import { useAuth } from '@/context/AuthContext';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import debounce from "lodash.debounce";
+import { useAuth } from "@/context/AuthContext";
 
-const SkillSuggest = ({ onSkillSelect, feildName, isMultiple }) => {
-  const [input, setInput] = useState('');
+const SkillSuggest = ({
+  onSkillSelect,
+  feildName,
+  isMultiple,
+  isFromSessionPage,
+  formData,
+  setFormData,
+}) => {
+  const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]); // Supports single/multiple selections
   const { backendUrl } = useAuth();
 
   const fetchSkills = async (query) => {
     try {
-      const response = await axios.get(`${backendUrl}/api/skills?query=${query}`);
+      const response = await axios.get(
+        `${backendUrl}/api/skills?query=${query}`,
+      );
       setSuggestions(response.data);
     } catch (error) {
-      console.error('Error fetching skills:', error);
+      console.error("Error fetching skills:", error);
     }
   };
 
@@ -38,6 +47,18 @@ const SkillSuggest = ({ onSkillSelect, feildName, isMultiple }) => {
   };
 
   const handleSuggestionClick = (suggestion) => {
+    if (isFromSessionPage && feildName == "Skills Offered") {
+      setFormData({
+        ...formData,
+        skillsOffered: suggestion, 
+      });
+    }else if (isFromSessionPage && feildName == "Skills Acquiring") {
+      setFormData({
+        ...formData,
+        skillsAcquiring: suggestion, 
+      });
+    }
+
     if (isMultiple) {
       if (!selectedSkills.includes(suggestion.name)) {
         const updatedSkills = [...selectedSkills, suggestion.name];
@@ -48,13 +69,26 @@ const SkillSuggest = ({ onSkillSelect, feildName, isMultiple }) => {
       setSelectedSkills(updatedSkills);
     }
 
-    setInput('');
+    setInput("");
     setSuggestions([]);
   };
 
   const handleSkillRemove = (skill) => {
+    if (isFromSessionPage && feildName == "Skills Offered") {
+      setFormData({
+        ...formData,
+        skillsOffered: '', 
+      });
+    }else if (isFromSessionPage && feildName == "Skills Acquiring") {
+      setFormData({
+        ...formData,
+        skillsAcquiring: '',
+      });
+    }
+
     const updatedSkills = selectedSkills.filter((s) => s !== skill);
     setSelectedSkills(updatedSkills);
+    if(!isFromSessionPage)
     onSkillSelect(updatedSkills); // Notify parent
   };
 

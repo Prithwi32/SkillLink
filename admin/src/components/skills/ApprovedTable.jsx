@@ -25,7 +25,7 @@ const ApprovedSkillsTable = ({ skills, isLoading }) => {
             <tbody className="text-gray-700">
               {skills && skills.length > 0 ? (
                 skills.map((skill) => (
-                  <tr key={skill.id} className="border-b border-gray-200 hover:bg-gray-50">
+                  <tr key={skill._id} className="border-b border-gray-200 hover:bg-gray-50">
                     <td className="w-full sm:w-1/3 text-left py-3 px-4">
                       <span className="font-medium">{skill.name}</span>
                       <p className="sm:hidden text-gray-500 text-sm mt-1">{skill.desc}</p>

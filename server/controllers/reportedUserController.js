@@ -156,7 +156,7 @@ const getAllReasonsForReportedUser = async (req, res) => {
     const reportedUser = userId;
 
     // check if the reportedUser exists in the user collection
-    const user = await User.findOne({ _id: reportedUser, isBanned: false });
+    const user = await User.findOne({ _id: reportedUser });
 
     if (!user) {
       return res
@@ -177,7 +177,7 @@ const getAllReasonsForReportedUser = async (req, res) => {
 
     // get all reasons for the reported user
     const reasons = await ReportedUser.find({ reportedUser })
-      .populate("reportedBy", "name _id")
+      .populate("reportedBy", "name _id photo")
       .select("reportedBy reason dateReported");
 
     return res.json({ success: true, reasons });

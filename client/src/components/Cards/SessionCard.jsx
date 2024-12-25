@@ -39,7 +39,7 @@ export default function SessionCard({ session, status, onStatusChange, onEdit })
   };
 
   const renderActions = () => {
-    if (status === 'upcoming') {
+    if (status === 'Scheduled') {
       return (
         <>
           <a
@@ -215,30 +215,24 @@ export default function SessionCard({ session, status, onStatusChange, onEdit })
     <div className="bg-white rounded-lg shadow-lg p-6 transition-all hover:shadow-xl">
       <div className="flex items-start gap-4">
         <div className="flex-1">
-          <h3 className="text-xl font-semibold">{session.mentorName}</h3>
+          <h3 className="text-xl font-semibold">{session.userTwo.name}</h3>
           <div className="mt-2 space-y-2">
             <p className="text-sm text-gray-600">
               <strong>Date:</strong> {new Date(session.date).toLocaleDateString()}
             </p>
             <div className="flex flex-wrap gap-2">
-              {session.skillsOffered.map((skill, index) => (
                 <span
-                  key={index}
                   className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
                 >
-                  {skill}
+                  {session.skillTaughtByUserOne.name}
                 </span>
-              ))}
             </div>
             <div className="flex flex-wrap gap-2">
-              {session.skillsAcquiring.map((skill, index) => (
-                <span
-                  key={index}
-                  className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm"
+            <span
+                  className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
                 >
-                  {skill}
+                  {session.skillTaughtByUserTwo.name}
                 </span>
-              ))}
             </div>
           </div>
         </div>

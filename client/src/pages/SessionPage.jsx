@@ -1,48 +1,76 @@
-import React, { useState } from 'react';
-import { PlusCircle } from 'lucide-react';
-import SessionList from '../components/HelperComponents/SessionList';
-import SessionForm from '../components/Forms/SessionForm';
-import SessionFilter from '../components/HelperComponents/SessionFilter';
+import React, { useEffect, useState } from "react";
+import { PlusCircle } from "lucide-react";
+import SessionList from "../components/HelperComponents/SessionList";
+import SessionForm from "../components/Forms/SessionForm";
+import SessionFilter from "../components/HelperComponents/SessionFilter";
+import { useAuth } from "@/context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function SessionPage() {
   const [showForm, setShowForm] = useState(false);
   const [sessions, setSessions] = useState([]);
-  const [activeFilter, setActiveFilter] = useState('upcoming');
+  const [activeFilter, setActiveFilter] = useState("Scheduled");
+  const [loading, setLoading] = useState(false);
 
-  const handleAddSession = (formData) => {
-    const newSession = {
-      id: crypto.randomUUID(),
-      ...formData,
-      reviewed: false,
-      status: 'upcoming',
-    };
-    
-    setSessions([...sessions, newSession]);
+  const { backendUrl } = useAuth();
+  const token = localStorage.getItem("token");
+
+  const getAllSessions = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(
+        backendUrl + "/api/sessions/my-sessions",
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      if (data.success) {
+        setSessions(data.sessions);
+      }
+    } catch (error) {
+      console.error("Error fetching sessions:", error);
+      toast.error("Unable to fetch sessions");
+    }finally{
+      setLoading(false);
+    }
+  };
+
+  // Fetch sessions on component mount
+  useEffect(() => {
+    getAllSessions();
+  }, []);
+
+  
+  const handleAddSession = () => {
     setShowForm(false);
   };
 
   const handleStatusChange = (sessionId, newStatus) => {
-    setSessions(sessions.map(session => 
-      session.id === sessionId ? { ...session, status: newStatus } : session
-    ));
+    setSessions(
+      sessions.map((session) =>
+        session.id === sessionId ? { ...session, status: newStatus } : session,
+      ),
+    );
   };
 
   const handleEditSession = (id, updates) => {
-    setSessions(sessions.map(session => 
-      session.id === id ? { ...session, ...updates } : session
-    ));
+    setSessions(
+      sessions.map((session) =>
+        session.id === id ? { ...session, ...updates } : session,
+      ),
+    );
   };
 
   const getFilterTitle = (status) => {
     switch (status) {
-      case 'upcoming':
-        return 'Upcoming Sessions';
-      case 'completed':
-        return 'Completed Sessions';
-      case 'canceled':
-        return 'Canceled Sessions';
+      case "upcoming":
+        return "Scheduled Sessions"
+      case "completed":
+        return "Completed Sessions";
+      case "canceled":
+        return "Canceled Sessions";
       default:
-        return '';
+        return "";
     }
   };
 
@@ -50,7 +78,9 @@ function SessionPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Session Management</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Session Management
+          </h1>
           <button
             onClick={() => setShowForm(true)}
             className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -73,8 +103,8 @@ function SessionPage() {
               activeFilter={activeFilter}
               onFilterChange={setActiveFilter}
             />
-            
-            <div className="transition-all duration-300">
+
+           {!loading && <div className="transition-all duration-300">
               <SessionList
                 title={getFilterTitle(activeFilter)}
                 sessions={sessions}
@@ -82,7 +112,7 @@ function SessionPage() {
                 onStatusChange={handleStatusChange}
                 onEdit={handleEditSession}
               />
-            </div>
+            </div>}
           </>
         )}
       </div>
