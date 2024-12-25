@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { HOBBY_SUGGESTIONS } from '../../constants/hobby-suggestions';
+import SkillSuggest from '../HelperComponents/SkillSuggestionInputField';
+
+// Placeholder mentor names for suggestions
+const MENTOR_NAMES = ['John Doe', 'Jane Smith', 'Alice Johnson', 'Bob Brown', 'Charlie Davis'];
 
 export default function SessionForm({ onSubmit, onCancel }) {
   const [formData, setFormData] = useState({
@@ -9,7 +13,9 @@ export default function SessionForm({ onSubmit, onCancel }) {
     date: '',
     link: '',
   });
-
+  
+  const [filteredMentors, setFilteredMentors] = useState([]);
+  
   const allSkills = [...HOBBY_SUGGESTIONS, ...HOBBY_SUGGESTIONS];
 
   const handleSubmit = (e) => {
@@ -31,6 +37,31 @@ export default function SessionForm({ onSubmit, onCancel }) {
     });
   };
 
+  const handleMentorChange = (e) => {
+    const query = e.target.value;
+    setFormData({
+      ...formData,
+      mentorName: query,
+    });
+    
+    if (query) {
+      const suggestions = MENTOR_NAMES.filter((mentor) =>
+        mentor.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredMentors(suggestions);
+    } else {
+      setFilteredMentors([]);
+    }
+  };
+
+  const handleMentorSelect = (mentor) => {
+    setFormData({
+      ...formData,
+      mentorName: mentor,
+    });
+    setFilteredMentors([]);
+  };
+
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Add New Session</h2>
@@ -44,72 +75,27 @@ export default function SessionForm({ onSubmit, onCancel }) {
             type="text"
             required
             value={formData.mentorName}
-            onChange={(e) => setFormData({ ...formData, mentorName: e.target.value })}
+            onChange={handleMentorChange}
             className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
+          {/* Render Mentor Suggestions */}
+          {filteredMentors.length > 0 && (
+            <ul className="border border-t-0 mt-2 max-h-60 overflow-y-auto">
+              {filteredMentors.map((mentor, index) => (
+                <li
+                  key={index}
+                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => handleMentorSelect(mentor)}
+                >
+                  {mentor}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
-        {/* Skills Offered */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Skills Offered
-          </label>
-          <div className="flex flex-wrap gap-2 mb-2">
-            {formData.skillsOffered.length > 0 && (
-              <span
-                className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm cursor-pointer"
-                onClick={() => handleRemoveSkill('skillsOffered')}
-              >
-                {formData.skillsOffered[0]} &times;
-              </span>
-            )}
-          </div>
-          <select
-            onChange={(e) => handleAddSkill('skillsOffered', e.target.value)}
-            className="w-full p-2 border rounded"
-            value={formData.skillsOffered[0] || ""}
-          >
-            <option value="">Select a skill</option>
-            {allSkills
-              .filter((skill) => formData.skillsOffered.indexOf(skill) === -1) // Exclude the selected skill
-              .map((skill, index) => (
-                <option key={index} value={skill}>
-                  {skill}
-                </option>
-              ))}
-          </select>
-        </div>
-
-        {/* Skills Acquiring */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Skills Acquiring
-          </label>
-          <div className="flex flex-wrap gap-2 mb-2">
-            {formData.skillsAcquiring.length > 0 && (
-              <span
-                className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm cursor-pointer"
-                onClick={() => handleRemoveSkill('skillsAcquiring')}
-              >
-                {formData.skillsAcquiring[0]} &times;
-              </span>
-            )}
-          </div>
-          <select
-            onChange={(e) => handleAddSkill('skillsAcquiring', e.target.value)}
-            className="w-full p-2 border rounded"
-            value={formData.skillsAcquiring[0] || ""}
-          >
-            <option value="">Select a skill</option>
-            {allSkills
-              .filter((skill) => formData.skillsAcquiring.indexOf(skill) === -1) // Exclude the selected skill
-              .map((skill, index) => (
-                <option key={index} value={skill}>
-                  {skill}
-                </option>
-              ))}
-          </select>
-        </div>
+        <SkillSuggest feildName={"Skills Offered"} isMultiple={false}/>
+        <SkillSuggest feildName={"Skills Acquiring"} isMultiple={false}/>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
