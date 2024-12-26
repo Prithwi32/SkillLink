@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { InputField } from "../HelperComponents/InputField";
-import SkillSuggest from "../HelperComponents/SkillSuggestionInputField.jsx";
+import SkillSuggest from "../HelperComponents/SkillSuggestionForEventCreation";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 
@@ -14,7 +14,7 @@ export function EventCreationForm() {
     endTime: "",
     meetLink: "",
     maxParticipants: "",
-    skillsRequired: [],
+    skills: [],
   });
   const { token, backendUrl } = useAuth();
 
@@ -23,14 +23,10 @@ export function EventCreationForm() {
     setEventDetails({ ...eventDetails, [name]: value });
   };
 
-  const handleSkillSelect = (skill) => {
-    if (!eventDetails.skillsRequired.includes(skill)) {
-      setEventDetails((prevDetails) => ({
-        ...prevDetails,
-        skillsRequired: [...prevDetails.skillsRequired, skill],
-      }));
-    }
-  };
+  const handleSkillSelect = (skills) => {
+     setEventDetails((prevDetails) => ({
+       ...prevDetails,
+       skills: skills, })); };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,7 +74,7 @@ export function EventCreationForm() {
       const eventData = {
         title: eventDetails.title,
         description: eventDetails.description,
-        skills: eventDetails.skillsRequired,
+        skills: eventDetails.skills,
         date: eventDetails.date,
         start_time: startTime,
         end_time: endTime,
@@ -217,9 +213,9 @@ export function EventCreationForm() {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Skills Offered
             </label>
-            <SkillSuggest onSkillSelect={handleSkillSelect}  isMultiple={true}/>
+            <SkillSuggest onSkillSelect={handleSkillSelect} isMultiple={true}/>
             {/* <div className="mt-2 flex flex-wrap gap-2">
-              {eventDetails.skillsRequired.map((skill, index) => (
+              {eventDetails.skills.map((skill, index) => (
                 <span
                   key={index}
                   className="px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded-full"
@@ -242,3 +238,4 @@ export function EventCreationForm() {
 }
 
 export default EventCreationForm;
+
