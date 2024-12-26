@@ -95,6 +95,7 @@ function SessionPage() {
             <SessionForm
               onSubmit={handleAddSession}
               onCancel={() => setShowForm(false)}
+              getAllSessions={getAllSessions}
             />
           </div>
         ) : (

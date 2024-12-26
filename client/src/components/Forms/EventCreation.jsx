@@ -35,75 +35,77 @@ export function EventCreationForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!eventDetails.date) {
-      toast.error("Please select a valid date.");
-      return;
-    }
+    console.log(eventDetails);
 
-    if (!eventDetails.startTime || !eventDetails.endTime) {
-      toast.error("Please provide valid start and end times.");
-      return;
-    }
+    // if (!eventDetails.date) {
+    //   toast.error("Please select a valid date.");
+    //   return;
+    // }
 
-    const formatTime = (date, time, period) => {
-      const [hours, minutes] = time.split(":").map(Number);
-      const adjustedHours =
-        period === "PM" && hours !== 12
-          ? hours + 12
-          : period === "AM" && hours === 12
-            ? 0
-            : hours;
-      return new Date(
-        `${date}T${String(adjustedHours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00Z`,
-      ).toISOString();
-    };
+    // if (!eventDetails.startTime || !eventDetails.endTime) {
+    //   toast.error("Please provide valid start and end times.");
+    //   return;
+    // }
 
-    try {
-      const startTime = formatTime(
-        eventDetails.date,
-        eventDetails.startTime,
-        eventDetails.startPeriod,
-      );
-      const endTime = formatTime(
-        eventDetails.date,
-        eventDetails.endTime,
-        eventDetails.endPeriod,
-      );
+    // const formatTime = (date, time, period) => {
+    //   const [hours, minutes] = time.split(":").map(Number);
+    //   const adjustedHours =
+    //     period === "PM" && hours !== 12
+    //       ? hours + 12
+    //       : period === "AM" && hours === 12
+    //         ? 0
+    //         : hours;
+    //   return new Date(
+    //     `${date}T${String(adjustedHours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00Z`,
+    //   ).toISOString();
+    // };
 
-      if (new Date(startTime) >= new Date(endTime)) {
-        toast.error("Start time must be earlier than end time.");
-        return;
-      }
+    // try {
+    //   const startTime = formatTime(
+    //     eventDetails.date,
+    //     eventDetails.startTime,
+    //     eventDetails.startPeriod,
+    //   );
+    //   const endTime = formatTime(
+    //     eventDetails.date,
+    //     eventDetails.endTime,
+    //     eventDetails.endPeriod,
+    //   );
 
-      const eventData = {
-        title: eventDetails.title,
-        description: eventDetails.description,
-        skills: eventDetails.skillsRequired,
-        date: eventDetails.date,
-        start_time: startTime,
-        end_time: endTime,
-        link: eventDetails.meetLink,
-        max_participants: parseInt(eventDetails.maxParticipants, 10),
-      };
+    //   if (new Date(startTime) >= new Date(endTime)) {
+    //     toast.error("Start time must be earlier than end time.");
+    //     return;
+    //   }
 
-      const response = await axios.post(
-        `${backendUrl}/api/events/create`,
-        eventData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        },
-      );
-      toast.success("Event created successfully!");
-      console.log("Event created successfully:", response.data);
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "An unexpected error occurred.";
-      toast.error(errorMessage);
-      console.error("Error creating event:", errorMessage);
-    }
+    //   const eventData = {
+    //     title: eventDetails.title,
+    //     description: eventDetails.description,
+    //     skills: eventDetails.skillsRequired,
+    //     date: eventDetails.date,
+    //     start_time: startTime,
+    //     end_time: endTime,
+    //     link: eventDetails.meetLink,
+    //     max_participants: parseInt(eventDetails.maxParticipants, 10),
+    //   };
+
+    //   const response = await axios.post(
+    //     `${backendUrl}/api/events/create`,
+    //     eventData,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //         "Content-Type": "application/json",
+    //       },
+    //     },
+    //   );
+    //   toast.success("Event created successfully!");
+    //   console.log("Event created successfully:", response.data);
+    // } catch (error) {
+    //   const errorMessage =
+    //     error.response?.data?.message || "An unexpected error occurred.";
+    //   toast.error(errorMessage);
+    //   console.error("Error creating event:", errorMessage);
+    // }
   };
 
   return (
