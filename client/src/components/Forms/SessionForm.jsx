@@ -5,7 +5,7 @@ import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-export default function SessionForm({ onSubmit, onCancel }) {
+export default function SessionForm({ onSubmit, onCancel,getAllSessions }) {
   const [formData, setFormData] = useState({
     mentor: { name: "" },
     skillsOffered: {},
@@ -63,6 +63,7 @@ export default function SessionForm({ onSubmit, onCancel }) {
 
       if (data.sucess) {
         toast.success("Session created successfully");
+        getAllSessions();
         onSubmit();
       } else {
         toast.error("Unable to create session");

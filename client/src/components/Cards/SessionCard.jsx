@@ -1,16 +1,92 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Calendar, ExternalLink, Star, Edit2, Ban, X } from "lucide-react";
+import SkillSuggest from "../HelperComponents/SkillSuggestionInputField";
+import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-toastify";
 
-export function SessionCard({ session, onStatusChange, onEdit, onReview }) {
+export function SessionCard({
+  session,
+  onStatusChange,
+  onEdit,
+  onReview,
+  getAllSessions,
+}) {
   const [isEditing, setIsEditing] = useState(false);
   const [isReviewing, setIsReviewing] = useState(false);
   const [editData, setEditData] = useState(session);
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
 
-  const handleSave = () => {
-    onEdit(session.id, editData);
-    setIsEditing(false);
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+  const { backendUrl } = useAuth();
+
+  const handleSave = async () => {
+    try {
+      const body = {
+        link: editData.link,
+        date: editData.date,
+        skillTaughtByUserOne:
+          userId === editData.userOne._id
+            ? editData.skillTaughtByUserOne._id
+            : editData.skillTaughtByUserTwo._id,
+        skillTaughtByUserTwo:
+          userId === editData.userOne._id
+            ? editData.skillTaughtByUserTwo._id
+            : editData.skillTaughtByUserOne._id,
+      };
+
+      const { data } = await axios.put(
+        backendUrl + `/api/sessions/edit/${editData._id}`,
+        body,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (data.success) {
+        toast.success("Session updated successfully");
+        getAllSessions();
+        setIsEditing(false);
+      }
+    } catch (error) {
+      console.error("Error updating session:", error);
+      toast.error("Error updating session");
+    }
+  };
+
+  const cancelSession = async (sessionId) => {
+    try {
+      const isConfirmed = confirm(
+        "Are you sure you want to cancel this session?",
+      );
+
+      if (isConfirmed) {
+        console.log(sessionId);
+        const { data } = await axios.put(
+          backendUrl + `/api/sessions/${sessionId}/cancel`,{},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+
+        if (data.success) {
+          toast.success("Session canceled successfully");
+          getAllSessions();
+        }else{
+          toast.error(data.message || "Failed to cancel session");
+        }
+      }
+    } catch (error) {
+      console.error("Failed to cancel session:", error);
+      toast.error("Failed to cancel session. Please try again later.");
+    }
   };
 
   const handleSubmitReview = () => {
@@ -21,7 +97,7 @@ export function SessionCard({ session, onStatusChange, onEdit, onReview }) {
   const renderScheduledActions = () => (
     <div className="mt-4 flex flex-wrap gap-2">
       <a
-        href={session.sessionLink}
+        href={session.link}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
@@ -37,7 +113,7 @@ export function SessionCard({ session, onStatusChange, onEdit, onReview }) {
         Edit
       </button>
       <button
-        onClick={() => onStatusChange(session.id, "canceled")}
+        onClick={() => cancelSession(session._id)}
         className="inline-flex items-center px-3 py-1.5 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors"
       >
         <Ban size={16} className="mr-1" />
@@ -84,25 +160,37 @@ export function SessionCard({ session, onStatusChange, onEdit, onReview }) {
               Date
             </label>
             <input
-              type="datetime-local"
-              value={editData.sessionDate}
+              type="date"
+              value={editData.date}
               onChange={(e) =>
-                setEditData({ ...editData, sessionDate: e.target.value })
+                setEditData({ ...editData, date: e.target.value })
               }
               className="w-full p-2 border rounded"
             />
           </div>
-          <SkillSuggest feildName={"Skill Offered"} isMultiple={false} />
-          <SkillSuggest feildName={"Skills Acquiring"} isMultiple={false} />
+          <SkillSuggest
+            feildName={"Skills Offered"}
+            isMultiple={false}
+            setEditData={setEditData}
+            editData={editData}
+            isFromSessionCard={true}
+          />
+          <SkillSuggest
+            feildName={"Skills Acquiring"}
+            isMultiple={false}
+            setEditData={setEditData}
+            editData={editData}
+            isFromSessionCard={true}
+          />
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Session Link
             </label>
             <input
               type="url"
-              value={editData.sessionLink}
+              value={editData.link}
               onChange={(e) =>
-                setEditData({ ...editData, sessionLink: e.target.value })
+                setEditData({ ...editData, link: e.target.value })
               }
               className="w-full p-2 border rounded"
             />
@@ -125,7 +213,6 @@ export function SessionCard({ session, onStatusChange, onEdit, onReview }) {
       </div>
     );
   }
-
 
   if (isReviewing) {
     return (
@@ -180,24 +267,28 @@ export function SessionCard({ session, onStatusChange, onEdit, onReview }) {
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 transition-all hover:shadow-xl">
       <div className="flex justify-between items-start">
-        <h3 className="font-medium text-lg">{session.instructorName}</h3>
+        <h3 className="font-medium text-lg">
+          {session.userOne._id == userId
+            ? session.userTwo.name
+            : session.userOne.name}
+        </h3>
         <div className="flex items-center text-sm text-gray-600">
           <Calendar className="w-4 h-4 mr-1" />
-          {new Date(session.sessionDate).toLocaleDateString()}
+          {new Date(session.date).toLocaleDateString()}
         </div>
       </div>
       <div className="my-3 flex items-center gap-2 text-sm">
         <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded">
-          {session.skillsOffered}
+          {session.skillTaughtByUserOne.name}
         </span>
         <span className="text-gray-400">⇄</span>
         <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded">
-          {session.skillsAcquiring}
+          {session.skillTaughtByUserTwo.name}
         </span>
       </div>
-      {session.status === "scheduled" && renderScheduledActions()}
-      {session.status === "completed" && renderCompletedActions()}
-      {session.status === "canceled" && (
+      {session.status === "Scheduled" && renderScheduledActions()}
+      {session.status === "Completed" && renderCompletedActions()}
+      {session.status === "Cancelled" && (
         <div className="mt-4 text-red-600 font-medium">Session Canceled</div>
       )}
     </div>

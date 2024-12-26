@@ -1,13 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PlusCircle } from "lucide-react";
 import { SessionList } from "../components/HelperComponents/SessionList";
 import { TabNavigation } from "../components/HelperComponents/TabNavigation";
 import SessionForm from "@/components/Forms/SessionForm";
+import { useAuth } from "@/context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { use } from "react";
 
 export default function SessionPage() {
-  const [activeTab, setActiveTab] = useState("scheduled");
+  const [activeTab, setActiveTab] = useState("Scheduled");
   const [sessions, setSessions] = useState([]);
   const [showForm, setShowForm] = useState(false);
+
+  const { backendUrl } = useAuth();
+  const token = localStorage.getItem("token");
+  const [isLaoading, setIsLoading] = useState(true);
+
+  const getAllSessions = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await axios.get(
+        backendUrl + "/api/sessions/my-sessions",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (data.success) {
+        // console.log(data.sessions);
+        setSessions(data.sessions);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error getting sessions");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getAllSessions();
+  }, []);
 
   const filteredSessions = sessions.filter(
     (session) => session.status === activeTab,
@@ -20,7 +56,7 @@ export default function SessionPage() {
       status: "scheduled",
     };
     setSessions([...sessions, newSession]);
-    setShowForm(false)
+    setShowForm(false);
   };
 
   const handleStatusChange = (id, status) => {
@@ -43,7 +79,7 @@ export default function SessionPage() {
     setSessions(
       sessions.map((session) =>
         session.id === id
-          ? { ...session, review: { rating, text }, status: "completed" }
+          ? { ...session, review: { rating, text }, status: "Completed" }
           : session,
       ),
     );
@@ -67,20 +103,24 @@ export default function SessionPage() {
 
         <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
 
-        {showForm? (<div className="mb-8">
-             <SessionForm
+        {showForm ? (
+          <div className="mb-8">
+            <SessionForm
               onSubmit={handleAddSession}
               onCancel={() => setShowForm(false)}
+              getAllSessions={getAllSessions}
             />
-          </div>) : (
-            <SessionList
+          </div>
+        ) : (
+         !isLaoading && <SessionList
             sessions={filteredSessions}
             onStatusChange={handleStatusChange}
             onEdit={handleEdit}
             onReview={handleReview}
+            getAllSessions={getAllSessions}
           />
-          )
-      }
+        )}
+        {isLaoading && <p className="flex items-center justify-center font-semibold text-slate-400">Loading...</p>} 
       </div>
     </div>
   );

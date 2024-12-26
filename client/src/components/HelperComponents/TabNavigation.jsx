@@ -2,7 +2,7 @@ import React from 'react';
 import { Calendar, Ban, CheckCircle } from 'lucide-react';
 
 export function TabNavigation({ activeTab, onTabChange }) {
-  const tabs = ['scheduled', 'completed', 'canceled'];
+  const tabs = ['Scheduled', 'Completed', 'Cancelled'];
 
   return (
       <div className="flex gap-4 mb-6">
@@ -17,8 +17,8 @@ export function TabNavigation({ activeTab, onTabChange }) {
             }`}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            {tab === 'scheduled' ? <Calendar size={18} /> : 
-              tab === 'completed' ? <CheckCircle size={18} /> :
+            {tab === 'Scheduled' ? <Calendar size={18} /> : 
+              tab === 'Completed' ? <CheckCircle size={18} /> :
               <Ban size={18} />
             }
 
