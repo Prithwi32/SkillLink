@@ -10,6 +10,9 @@ const SkillSuggest = ({
   isFromSessionPage,
   formData,
   setFormData,
+  setEditData,
+  editData,
+  isFromSessionCard,
 }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -58,6 +61,19 @@ const SkillSuggest = ({
         skillsAcquiring: suggestion, 
       });
     }
+    
+    if (isFromSessionCard && feildName == "Skills Offered") {
+      setEditData({
+        ...editData,
+        skillTaughtByUserOne: suggestion, 
+      });
+    }else if (isFromSessionCard && feildName == "Skills Acquiring") {
+      setEditData({
+        ...editData,
+        skillTaughtByUserTwo: suggestion, 
+      });
+    }
+
 
     if (isMultiple) {
       if (!selectedSkills.includes(suggestion.name)) {
@@ -86,9 +102,22 @@ const SkillSuggest = ({
       });
     }
 
+
+    if (isFromSessionCard && feildName == "Skills Offered") {
+      setEditData({
+        ...editData,
+        skillTaughtByUserOne: {}, 
+      });
+    }else if (isFromSessionCard && feildName == "Skills Acquiring") {
+      setEditData({
+        ...editData,
+        skillTaughtByUserTwo: {}, 
+      });
+    }
+
     const updatedSkills = selectedSkills.filter((s) => s !== skill);
     setSelectedSkills(updatedSkills);
-    if(!isFromSessionPage)
+    if(!isFromSessionPage && !isFromSessionCard)
     onSkillSelect(updatedSkills); // Notify parent
   };
 
