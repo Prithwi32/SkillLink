@@ -31,47 +31,45 @@ export function EventCreationForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(eventDetails);
+    if (!eventDetails.date) {
+      toast.error("Please select a valid date.");
+      return;
+    }
 
-    // if (!eventDetails.date) {
-    //   toast.error("Please select a valid date.");
-    //   return;
-    // }
+    if (!eventDetails.startTime || !eventDetails.endTime) {
+      toast.error("Please provide valid start and end times.");
+      return;
+    }
 
-    // if (!eventDetails.startTime || !eventDetails.endTime) {
-    //   toast.error("Please provide valid start and end times.");
-    //   return;
-    // }
+    const formatTime = (date, time, period) => {
+      const [hours, minutes] = time.split(":").map(Number);
+      const adjustedHours =
+        period === "PM" && hours !== 12
+          ? hours + 12
+          : period === "AM" && hours === 12
+            ? 0
+            : hours;
+      return new Date(
+        `${date}T${String(adjustedHours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00Z`,
+      ).toISOString();
+    };
 
-    // const formatTime = (date, time, period) => {
-    //   const [hours, minutes] = time.split(":").map(Number);
-    //   const adjustedHours =
-    //     period === "PM" && hours !== 12
-    //       ? hours + 12
-    //       : period === "AM" && hours === 12
-    //         ? 0
-    //         : hours;
-    //   return new Date(
-    //     `${date}T${String(adjustedHours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00Z`,
-    //   ).toISOString();
-    // };
+    try {
+      const startTime = formatTime(
+        eventDetails.date,
+        eventDetails.startTime,
+        eventDetails.startPeriod,
+      );
+      const endTime = formatTime(
+        eventDetails.date,
+        eventDetails.endTime,
+        eventDetails.endPeriod,
+      );
 
-    // try {
-    //   const startTime = formatTime(
-    //     eventDetails.date,
-    //     eventDetails.startTime,
-    //     eventDetails.startPeriod,
-    //   );
-    //   const endTime = formatTime(
-    //     eventDetails.date,
-    //     eventDetails.endTime,
-    //     eventDetails.endPeriod,
-    //   );
-
-    //   if (new Date(startTime) >= new Date(endTime)) {
-    //     toast.error("Start time must be earlier than end time.");
-    //     return;
-    //   }
+      if (new Date(startTime) >= new Date(endTime)) {
+        toast.error("Start time must be earlier than end time.");
+        return;
+      }
 
       const eventData = {
         title: eventDetails.title,
@@ -84,24 +82,24 @@ export function EventCreationForm() {
         max_participants: parseInt(eventDetails.maxParticipants, 10),
       };
 
-    //   const response = await axios.post(
-    //     `${backendUrl}/api/events/create`,
-    //     eventData,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //         "Content-Type": "application/json",
-    //       },
-    //     },
-    //   );
-    //   toast.success("Event created successfully!");
-    //   console.log("Event created successfully:", response.data);
-    // } catch (error) {
-    //   const errorMessage =
-    //     error.response?.data?.message || "An unexpected error occurred.";
-    //   toast.error(errorMessage);
-    //   console.error("Error creating event:", errorMessage);
-    // }
+      const response = await axios.post(
+        `${backendUrl}/api/events/create`,
+        eventData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      toast.success("Event created successfully!");
+      console.log("Event created successfully:", response.data);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "An unexpected error occurred.";
+      toast.error(errorMessage);
+      console.error("Error creating event:", errorMessage);
+    }
   };
 
   return (
