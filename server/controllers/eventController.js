@@ -577,6 +577,8 @@ export const getEventsBasedOnSkillsRequested = async (req, res) => {
     })
       .select("title description date start_time end_time skills_id")
       .populate("skills_id", "name")
+      .populate("created_by", "name rating")
+      .populate("participants", "name email _id")
       .lean();
 
     res.status(200).json({

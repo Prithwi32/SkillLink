@@ -1,59 +1,73 @@
 import React, { useEffect, useState } from "react";
 import { PlusCircle } from "lucide-react";
-import SessionList from "../components/HelperComponents/SessionList";
-import SessionForm from "../components/Forms/SessionForm";
-import SessionFilter from "../components/HelperComponents/SessionFilter";
+import { SessionList } from "../components/HelperComponents/SessionList";
+import { TabNavigation } from "../components/HelperComponents/TabNavigation";
+import SessionForm from "@/components/Forms/SessionForm";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { use } from "react";
 
-function SessionPage() {
-  const [showForm, setShowForm] = useState(false);
+export default function SessionPage() {
+  const [activeTab, setActiveTab] = useState("Scheduled");
   const [sessions, setSessions] = useState([]);
-  const [activeFilter, setActiveFilter] = useState("Scheduled");
-  const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   const { backendUrl } = useAuth();
   const token = localStorage.getItem("token");
+  const [isLaoading, setIsLoading] = useState(true);
 
   const getAllSessions = async () => {
     try {
-      setLoading(true);
+      setIsLoading(true);
       const { data } = await axios.get(
         backendUrl + "/api/sessions/my-sessions",
-        { headers: { Authorization: `Bearer ${token}` } },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       if (data.success) {
+        // console.log(data.sessions);
         setSessions(data.sessions);
       }
     } catch (error) {
-      console.error("Error fetching sessions:", error);
-      toast.error("Unable to fetch sessions");
-    }finally{
-      setLoading(false);
+      console.log(error);
+      toast.error("Error getting sessions");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Fetch sessions on component mount
   useEffect(() => {
     getAllSessions();
   }, []);
 
-  
-  const handleAddSession = () => {
+  const filteredSessions = sessions.filter(
+    (session) => session.status === activeTab,
+  );
+
+  const handleAddSession = (formData) => {
+    const newSession = {
+      ...formData,
+      id: Date.now().toString(),
+      status: "scheduled",
+    };
+    setSessions([...sessions, newSession]);
     setShowForm(false);
   };
 
-  const handleStatusChange = (sessionId, newStatus) => {
+  const handleStatusChange = (id, status) => {
     setSessions(
       sessions.map((session) =>
-        session.id === sessionId ? { ...session, status: newStatus } : session,
+        session.id === id ? { ...session, status } : session,
       ),
     );
   };
 
-  const handleEditSession = (id, updates) => {
+  const handleEdit = (id, updates) => {
     setSessions(
       sessions.map((session) =>
         session.id === id ? { ...session, ...updates } : session,
@@ -61,17 +75,14 @@ function SessionPage() {
     );
   };
 
-  const getFilterTitle = (status) => {
-    switch (status) {
-      case "upcoming":
-        return "Scheduled Sessions"
-      case "completed":
-        return "Completed Sessions";
-      case "canceled":
-        return "Canceled Sessions";
-      default:
-        return "";
-    }
+  const handleReview = (id, rating, text) => {
+    setSessions(
+      sessions.map((session) =>
+        session.id === id
+          ? { ...session, review: { rating, text }, status: "Completed" }
+          : session,
+      ),
+    );
   };
 
   return (
@@ -90,34 +101,27 @@ function SessionPage() {
           </button>
         </div>
 
+        <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+
         {showForm ? (
           <div className="mb-8">
             <SessionForm
               onSubmit={handleAddSession}
               onCancel={() => setShowForm(false)}
+              getAllSessions={getAllSessions}
             />
           </div>
         ) : (
-          <>
-            <SessionFilter
-              activeFilter={activeFilter}
-              onFilterChange={setActiveFilter}
-            />
-
-           {!loading && <div className="transition-all duration-300">
-              <SessionList
-                title={getFilterTitle(activeFilter)}
-                sessions={sessions}
-                status={activeFilter}
-                onStatusChange={handleStatusChange}
-                onEdit={handleEditSession}
-              />
-            </div>}
-          </>
+         !isLaoading && <SessionList
+            sessions={filteredSessions}
+            onStatusChange={handleStatusChange}
+            onEdit={handleEdit}
+            onReview={handleReview}
+            getAllSessions={getAllSessions}
+          />
         )}
+        {isLaoading && <p className="flex items-center justify-center font-semibold text-slate-400">Loading...</p>} 
       </div>
     </div>
   );
 }
-
-export default SessionPage;
