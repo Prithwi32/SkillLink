@@ -1,5 +1,3 @@
-import React from "react";
-
 export function EditableField({ value, onChange, isEditing, type = "input", label }) {
   return (
     <div className="space-y-2">

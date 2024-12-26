@@ -1,6 +1,77 @@
 import mongoose from "mongoose";
 import User from "../models/user.js";
 import Skill from "../models/skill.js";
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary.js";
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "profile_pics",
+    allowed_formats: ["jpg", "png", "avif", "jpeg"],
+  },
+});
+
+const upload = multer({ storage: storage });
+
+export const uploadAvatar = upload.single("photo");
+
+export const editProfile = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { name, about, skillsOffered, skillsRequested } = req.body;
+
+    let avatarUrl = req.user?.photo || "";
+
+    if (req.file) {
+      avatarUrl = req.file.path;
+    }
+
+    let parsedSkillsOffered, parsedSkillsRequested;
+    try {
+      parsedSkillsOffered = JSON.parse(skillsOffered);
+      parsedSkillsRequested = JSON.parse(skillsRequested);
+    } catch (parseError) {
+      console.error("Error parsing skills data:", parseError.message);
+      return res
+        .status(400)
+        .json({
+          error: "Error parsing skills data",
+          details: parseError.message,
+        });
+    }
+
+    // Fetch the user to ensure the photo URL is not overwritten
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Update the user with the new data
+    user.name = name || user.name;
+    user.about = about || user.about;
+    user.skillsOffered = parsedSkillsOffered || user.skillsOffered;
+    user.skillsRequested = parsedSkillsRequested || user.skillsRequested;
+    user.photo = avatarUrl || user.photo;
+
+    // Save the updated user back to the database
+    const updatedUser = await user.save();
+
+    res.status(200).json({ user: updatedUser });
+  } catch (error) {
+    console.error("Error updating profile:", JSON.stringify(error, null, 2));
+    res
+      .status(500)
+      .json({
+        error: "Error updating profile",
+        details: error.message,
+        stack: error.stack,
+      });
+  }
+};
+
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -23,7 +94,7 @@ export const getAllUsers = async (req, res) => {
 };
 
 export const getUserById = async (req, res) => {
-  const isuserBanned = (user) => user && user.isBanned;
+  const isUserBanned = (user) => user && user.isBanned;
   try {
     const { userId } = req.params;
 
@@ -40,7 +111,7 @@ export const getUserById = async (req, res) => {
       )
       .lean();
 
-    if (!user || isuserBanned(user)) {
+    if (!user || isUserBanned(user)) {
       return res.status(404).json({
         success: false,
         message: "User not found or is banned",
@@ -132,12 +203,10 @@ export const getUsersForSpecificSkill = async (req, res) => {
     res.status(200).json({ success: true, users });
   } catch (err) {
     console.error("Error fetching users for specific skill:", err);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Internal server error",
-        error: err.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: err.message,
+    });
   }
 };
