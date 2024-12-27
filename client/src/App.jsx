@@ -16,6 +16,7 @@ import UserProfilePage from "./pages/UserProfilePage";
 import EventListPage from "./pages/EventListPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import AllSuggestedLearningPage from "./pages/AllSuggestedLearningPage";
+import EventDetailsPage from "./pages/EventDetailsPage";
 
 // axios.defaults.baseURL = "http://localhost:5000";
 // axios.defaults.withCredentials = true;
@@ -32,6 +33,7 @@ function App() {
           <Route path="login" element={<LoginCard />} />
           <Route path="events" element={<EventListPage />} />
           <Route path="users" element={<UsersPage />} />
+          <Route path="eventDetails" element={<EventDetailsPage/>}/>
           <Route
             path="allSuggestedLearning"
             element={<AllSuggestedLearningPage />}
