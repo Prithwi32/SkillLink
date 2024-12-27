@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Check, X } from 'lucide-react';
 
 function ParticipantRow({ participant, status, onApprove, onDecline }) {
   return (
     <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm">
       <img
-        src={participant.imageUrl}
+        src={participant.photo || "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"}
         alt={participant.name}
         className="w-12 h-12 rounded-full object-cover"
       />

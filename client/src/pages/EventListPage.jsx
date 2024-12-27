@@ -18,7 +18,7 @@ function EventListPage() {
         if (!response.ok) throw new Error("Failed to fetch events.");
         const data = await response.json();
         const formattedEvents = data.map((event) => ({
-          id: event._id,
+          _id: event._id,
           title: event.title,
           description: event.description,
           date: new Date(event.date).toLocaleDateString(),
@@ -34,7 +34,6 @@ function EventListPage() {
           end_time: event.end_time,
           mentorId: event.created_by._id,
         }));
-        
         setEvents(formattedEvents);
         setIsLoading(false);
       } catch (err) {
@@ -67,7 +66,7 @@ function EventListPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => (
             <AllEventCard
-              key={event.id}
+              key={event._id}
               event={event}
               onShowMore={() => handleShowMore(event)}
             />

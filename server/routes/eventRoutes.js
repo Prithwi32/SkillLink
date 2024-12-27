@@ -13,6 +13,7 @@ import {
   registerForEvent,
   getEventRequests,
   handleEventRequest,
+  getEventParticipants,
   getUserParticipatingEvents,
   getEventsBasedOnSkillsRequested,
   getEventsForSpecificSkill
@@ -52,6 +53,9 @@ router.get("/:eventId/requests", ensureAuthenticated, getEventRequests);
 
 // Route to Approve or reject user request
 router.post("/:eventId/handle-request", ensureAuthenticated, handleEventRequest);
+
+// Route to get all participants for an event
+router.get('/:eventId/participants', ensureAuthenticated, getEventParticipants);
 
 // Route to get events which is registered by specific user
 router.get("/get-participating-events", ensureAuthenticated, getUserParticipatingEvents);

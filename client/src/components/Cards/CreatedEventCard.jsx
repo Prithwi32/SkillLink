@@ -1,8 +1,10 @@
 import { Calendar, MapPin } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export const CreatedEventCard = ({ event, status }) => {
-  const { title, description, date } = event;
+  const { title, description, date, event_id } = event;
   const formattedDate = new Date(date).toLocaleDateString();
+  const navigate = useNavigate();
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
@@ -22,7 +24,9 @@ export const CreatedEventCard = ({ event, status }) => {
         </div>
 
         {status === 'scheduled' ? (
-          <button className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-300">
+          <button className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-300"
+          onClick={() => navigate(`/userDashboard/${event_id}`)}
+          >
             View Details
           </button>
         ) : (

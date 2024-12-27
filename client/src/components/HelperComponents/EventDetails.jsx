@@ -1,7 +1,20 @@
-import React, { useState } from 'react';
-import { Calendar, Clock, Users, Link as LinkIcon, Edit2, Save, X } from 'lucide-react';
+import { useState } from "react";
+import {
+  Calendar,
+  Clock,
+  Users,
+  Link as LinkIcon,
+  Edit2,
+  Save,
+  X,
+} from "lucide-react";
+import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function EventDetails({
+  eventId,
   date,
   startTime: initialStartTime,
   endTime: initialEndTime,
@@ -10,15 +23,57 @@ export function EventDetails({
   enrolledCount,
   onSave,
 }) {
+  const { backendUrl, token } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [startTime, setStartTime] = useState(initialStartTime);
   const [endTime, setEndTime] = useState(initialEndTime);
   const [link, setLink] = useState(initialLink);
-  const [maxParticipants, setMaxParticipants] = useState(initialMaxParticipants);
+  const [maxParticipants, setMaxParticipants] = useState(
+    initialMaxParticipants,
+  );
 
-  const handleSave = () => {
-    onSave({ startTime, endTime, link, maxParticipants });
-    setIsEditing(false);
+  const convertToISO = (time) => {
+    try {
+      const today = new Date();
+      const [hour, minute] = time.split(":");
+      today.setHours(parseInt(hour, 10), parseInt(minute, 10), 0, 0);
+      return today.toISOString();
+    } catch (error) {
+      console.error("Invalid time format:", error);
+      return null;
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      if (!startTime || !endTime) {
+        toast.error("Start and end times are required.");
+        return;
+      }
+
+      const formattedStartTime = convertToISO(startTime);
+      const formattedEndTime = convertToISO(endTime);
+
+      const payload = {
+        start_time: formattedStartTime,
+        end_time: formattedEndTime,
+        link,
+        max_participants: maxParticipants,
+      };
+
+      // console.log("Payload:", payload);
+
+      await axios.put(`${backendUrl}/api/events/update/${eventId}`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      toast.success("Event updated successfully!");
+      onSave(payload);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error updating event details:", error.message);
+      toast.error("Failed to update event details. Please try again.");
+    }
   };
 
   const handleCancel = () => {
@@ -69,7 +124,9 @@ export function EventDetails({
               />
             </div>
           ) : (
-            <span className="text-gray-600">{startTime} - {endTime}</span>
+            <span className="text-gray-600">
+              {startTime} - {endTime}
+            </span>
           )}
         </div>
 
@@ -84,7 +141,9 @@ export function EventDetails({
               placeholder="Meeting link"
             />
           ) : (
-            <a href={link} className="text-blue-600 hover:underline">{link}</a>
+            <a href={link} className="text-blue-600 hover:underline">
+              {link}
+            </a>
           )}
         </div>
 
@@ -102,7 +161,9 @@ export function EventDetails({
               <span className="text-gray-600">max participants</span>
             </div>
           ) : (
-            <span className="text-gray-600">{enrolledCount} / {maxParticipants} participants</span>
+            <span className="text-gray-600">
+              {enrolledCount} / {maxParticipants} participants
+            </span>
           )}
         </div>
       </div>
@@ -113,7 +174,7 @@ export function EventDetails({
             onClick={handleCancel}
             className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:text-white hover:bg-red-500 bg-gray-50 text-black"
           >
-            <X size={16}  />
+            <X size={16} />
             Cancel
           </button>
           <button

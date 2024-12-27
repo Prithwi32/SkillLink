@@ -24,9 +24,7 @@
 //   );
 // }
 
-import React from 'react';
-
-export function EventHeader({ title, description, instructor, skill }) {
+export function EventHeader({ title, description, instructor, skills = [] }) {
   return (
     <div className="space-y-6">
       <h1 className="text-4xl font-bold text-gray-900">{title}</h1>
@@ -39,9 +37,15 @@ export function EventHeader({ title, description, instructor, skill }) {
           </div>
           <div className="flex items-center gap-3">
             <span className="font-semibold text-gray-700">Skill:</span>
-            <span className="text-blue-600 bg-blue-50 px-4 py-2 rounded-full text-sm font-medium">
-              {skill}
-            </span>
+            {skills.map((skill, index) => (
+              <span
+                key={index}
+                className="text-blue-600 bg-blue-50 px-4 py-2 rounded-full text-sm font-medium"
+              >
+                {" "}
+                {skill}{" "}
+              </span>
+            ))}
           </div>
         </div>
       </div>

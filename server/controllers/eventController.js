@@ -199,6 +199,7 @@ export const getEventById = async (req, res) => {
       current_participants_count: event.participants.length,
       skills: event.skills_id.map((skill) => skill.name),
       status: event.status,
+      link: event.link,
     };
 
     res.status(200).json(response);
@@ -351,7 +352,7 @@ export const getEventRequests = async (req, res) => {
 
     const event = await Event.findById(eventId).populate(
       "requests",
-      "name email"
+      "name about photo"
     );
 
     if (!event) {
@@ -475,6 +476,32 @@ export const handleEventRequest = async (req, res) => {
       message: "Something went wrong while handling the request.",
       error: error.message,
     });
+  }
+};
+
+// Get all participants for an event
+export const getEventParticipants = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+
+    const event = await Event.findById(eventId).populate(
+      "participants",
+      "name about photo"
+    );
+
+    if (!event) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Event not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      participants: event.participants,
+    });
+  } catch (error) {
+    console.error("Error fetching event participants:", error);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 

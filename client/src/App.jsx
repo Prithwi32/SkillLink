@@ -33,7 +33,6 @@ function App() {
           <Route path="login" element={<LoginCard />} />
           <Route path="events" element={<EventListPage />} />
           <Route path="users" element={<UsersPage />} />
-          <Route path="eventDetails" element={<EventDetailsPage/>}/>
           <Route
             path="allSuggestedLearning"
             element={<AllSuggestedLearningPage />}
@@ -43,6 +42,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/users/:userId" element={<UserProfilePage />} />
             <Route path="reportuser" element={<ReportUserForm />} />
+            <Route path="/userDashboard/:eventId" element={<EventDetailsPage/>}/>
           </Route>
         </Route>
 
