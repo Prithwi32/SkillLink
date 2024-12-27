@@ -5,13 +5,7 @@ import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 
-export function SessionCard({
-  session,
-  onStatusChange,
-  onEdit,
-  onReview,
-  getAllSessions,
-}) {
+export function SessionCard({ session, getAllSessions }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isReviewing, setIsReviewing] = useState(false);
   const [editData, setEditData] = useState(session);
@@ -67,19 +61,19 @@ export function SessionCard({
       if (isConfirmed) {
         console.log(sessionId);
         const { data } = await axios.put(
-          backendUrl + `/api/sessions/${sessionId}/cancel`,{},
+          backendUrl + `/api/sessions/${sessionId}/cancel`,
+          {},
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
-
 
         if (data.success) {
           toast.success("Session canceled successfully");
           getAllSessions();
-        }else{
+        } else {
           toast.error(data.message || "Failed to cancel session");
         }
       }
@@ -89,9 +83,37 @@ export function SessionCard({
     }
   };
 
-  const handleSubmitReview = () => {
-    onReview(session.id, rating, reviewText);
-    setIsReviewing(false);
+  const handleSubmitReview = async (session) => {
+    try {
+      const body = {
+        rating: rating,
+        comment: reviewText,
+        reviewedTo:
+          userId === session.userOne._id
+            ? session.userTwo._id
+            : session.userOne._id,
+        sessionId: session._id,
+        skillId:
+          userId === session.userOne._id
+            ? session.skillTaughtByUserTwo._id
+            : session.skillTaughtByUserOne._id,
+      };
+
+      const { data } = await axios.post(backendUrl + "/api/reviews/new", body, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (data.success) {
+        toast.success("Review submitted successfully");
+        getAllSessions();
+        setIsReviewing(false);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Unable to submit review. Try again...");
+    }
   };
 
   const renderScheduledActions = () => (
@@ -124,30 +146,22 @@ export function SessionCard({
 
   const renderCompletedActions = () => (
     <div className="mt-4">
-      {session.review ? (
+      {(session.userOne._id === userId && session.isReviewProvidedByUserOne) ||
+      (session.userTwo._id === userId && session.isReviewProvidedByUserTwo) ? (
         <div className="text-sm text-gray-600">
-          <div className="flex items-center">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`w-4 h-4 ${
-                  i < (session.review?.rating || 0)
-                    ? "text-yellow-400 fill-current"
-                    : "text-gray-300"
-                }`}
-              />
-            ))}
-          </div>
-          <p className="mt-2">{session.review.text}</p>
+          <button className="inline-flex items-center px-3 py-1.5 text-xs font-semibold bg-green-100 text-text-700 rounded hover:bg-green-200 transition-colors">
+            Review Submitted
+          </button>
         </div>
       ) : (
         <button
           onClick={() => setIsReviewing(true)}
-          className="inline-flex items-center px-3 py-1.5 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors"
+          className="inline-flex items-center px-3 py-1.5 text-xs font-semibold bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors"
         >
           Review Session
         </button>
       )}
+       <button className="mt-4 text-violet-800 bg-violet-100 rounded-md w-full py-2 font-semibold">Session Completed</button>
     </div>
   );
 
@@ -218,7 +232,10 @@ export function SessionCard({
     return (
       <div className="bg-white rounded-lg shadow-lg p-6 transition-all hover:shadow-xl">
         <h3 className="font-medium text-lg mb-4">
-          Review Session with {session.instructorName}
+          Review Session with{" "}
+          {session.userOne._id === userId
+            ? session.userTwo.name
+            : session.userOne.name}
         </h3>
         <div className="space-y-4">
           <div className="flex items-center gap-2">
@@ -246,7 +263,7 @@ export function SessionCard({
           />
           <div className="flex gap-2">
             <button
-              onClick={handleSubmitReview}
+              onClick={() => handleSubmitReview(session)}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
               disabled={!rating || !reviewText.trim()}
             >
@@ -289,7 +306,7 @@ export function SessionCard({
       {session.status === "Scheduled" && renderScheduledActions()}
       {session.status === "Completed" && renderCompletedActions()}
       {session.status === "Cancelled" && (
-        <div className="mt-4 text-red-600 font-medium">Session Canceled</div>
+        <button className="mt-4 text-red-600 bg-red-100 rounded-md w-full py-2 font-semibold text-opacity-80">Session Canceled</button>
       )}
     </div>
   );
