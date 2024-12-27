@@ -72,7 +72,6 @@ export const editProfile = async (req, res) => {
   }
 };
 
-
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({ isBanned: false })

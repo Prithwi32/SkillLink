@@ -6,7 +6,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { Calendar, ChevronRight, User, Clock, Users } from "lucide-react";
+import { Calendar, ChevronRight, Clock, Users } from "lucide-react";
 
 const EnhancedEventCard = ({
   title,
@@ -16,11 +16,6 @@ const EnhancedEventCard = ({
   mentorName,
   rating = 0,
   skills = [],
-  participantsCount,
-  maxParticipants,
-  startTime,
-  endTime,
-  status,
   onShowMore,
 }) => {
   return (
@@ -65,7 +60,7 @@ const EnhancedEventCard = ({
             </div>
           </div>
         </div>
-        <p className="text-sm text-gray-600 mb-4 line-clamp-2">{description}</p>
+        <p className="text-sm text-gray-600 mb-4 line-clamp-2 text-justify">{description}</p>
         <div className="mb-4">
           <div className="flex flex-wrap gap-2">
             {skills.map((skill, index) => (
@@ -77,16 +72,6 @@ const EnhancedEventCard = ({
               </span>
             ))}
           </div>
-        </div>
-        <div className="flex items-center justify-between text-sm text-gray-600">
-          <span className="flex items-center">
-            <Clock className="w-4 h-4 mr-1" />
-            {startTime} - {endTime}
-          </span>
-          <span className="flex items-center">
-            <Users className="w-4 h-4 mr-1" />
-            {participantsCount}/{maxParticipants}
-          </span>
         </div>
       </CardContent>
       <CardFooter className="p-4 bg-white flex justify-center">
