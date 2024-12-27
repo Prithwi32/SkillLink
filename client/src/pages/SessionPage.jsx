@@ -6,7 +6,6 @@ import SessionForm from "@/components/Forms/SessionForm";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { use } from "react";
 
 export default function SessionPage() {
   const [activeTab, setActiveTab] = useState("Scheduled");
@@ -30,7 +29,6 @@ export default function SessionPage() {
       );
 
       if (data.success) {
-        // console.log(data.sessions);
         setSessions(data.sessions);
       }
     } catch (error) {
@@ -48,42 +46,6 @@ export default function SessionPage() {
   const filteredSessions = sessions.filter(
     (session) => session.status === activeTab,
   );
-
-  const handleAddSession = (formData) => {
-    const newSession = {
-      ...formData,
-      id: Date.now().toString(),
-      status: "scheduled",
-    };
-    setSessions([...sessions, newSession]);
-    setShowForm(false);
-  };
-
-  const handleStatusChange = (id, status) => {
-    setSessions(
-      sessions.map((session) =>
-        session.id === id ? { ...session, status } : session,
-      ),
-    );
-  };
-
-  const handleEdit = (id, updates) => {
-    setSessions(
-      sessions.map((session) =>
-        session.id === id ? { ...session, ...updates } : session,
-      ),
-    );
-  };
-
-  const handleReview = (id, rating, text) => {
-    setSessions(
-      sessions.map((session) =>
-        session.id === id
-          ? { ...session, review: { rating, text }, status: "Completed" }
-          : session,
-      ),
-    );
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -106,7 +68,7 @@ export default function SessionPage() {
         {showForm ? (
           <div className="mb-8">
             <SessionForm
-              onSubmit={handleAddSession}
+              setShowForm={setShowForm}
               onCancel={() => setShowForm(false)}
               getAllSessions={getAllSessions}
             />
@@ -114,9 +76,6 @@ export default function SessionPage() {
         ) : (
          !isLaoading && <SessionList
             sessions={filteredSessions}
-            onStatusChange={handleStatusChange}
-            onEdit={handleEdit}
-            onReview={handleReview}
             getAllSessions={getAllSessions}
           />
         )}

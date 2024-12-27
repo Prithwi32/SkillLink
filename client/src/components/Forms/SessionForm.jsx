@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { HOBBY_SUGGESTIONS } from "../../constants/hobby-suggestions";
 import SkillSuggest from "../HelperComponents/SkillSuggestionInputField";
 import { AuthContext } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-export default function SessionForm({ onSubmit, onCancel,getAllSessions }) {
+export default function SessionForm({ setShowForm, onCancel,getAllSessions }) {
   const [formData, setFormData] = useState({
     mentor: { name: "" },
     skillsOffered: {},
@@ -14,7 +13,6 @@ export default function SessionForm({ onSubmit, onCancel,getAllSessions }) {
     link: "",
   });
 
-  // const allSkills = [...HOBBY_SUGGESTIONS, ...HOBBY_SUGGESTIONS];
 
   const token = localStorage.getItem("token");
   const { backendUrl } = useContext(AuthContext);
@@ -64,7 +62,7 @@ export default function SessionForm({ onSubmit, onCancel,getAllSessions }) {
       if (data.sucess) {
         toast.success("Session created successfully");
         getAllSessions();
-        onSubmit();
+        setShowForm(false);
       } else {
         toast.error("Unable to create session");
       }
@@ -73,21 +71,6 @@ export default function SessionForm({ onSubmit, onCancel,getAllSessions }) {
       toast.error("Unable to create session");
     }
   };
-
-  // const handleAddSkill = (type, skill) => {
-  //   console.log(skill, type);
-  //   setFormData({
-  //     ...formData,
-  //     [type]: [skill], // Replace the array with the new skill
-  //   });
-  // };
-
-  // const handleRemoveSkill = (type) => {
-  //   setFormData({
-  //     ...formData,
-  //     [type]: [], // Clear the skill from the array
-  //   });
-  // };
 
   const handleMentorChange = (e) => {
     const query = e.target.value;

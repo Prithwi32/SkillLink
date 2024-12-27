@@ -203,7 +203,10 @@ export const markSessionCancelled = async (req, res) => {
   const { _id } = req.user;
 
   try {
-    const session = await Session.findOne({ _id: sessionId, userOne: _id });
+    const session = await Session.findOne({
+      _id: sessionId,
+      $or: [{ userOne: _id }, { userTwo: _id }],
+    });
 
     if (!session) {
       return res
