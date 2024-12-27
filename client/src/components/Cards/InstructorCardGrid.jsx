@@ -28,22 +28,25 @@ export function InstructorCardGrid({ instructors }) {
 
   const navigate = useNavigate(); // Initialize navigate function
 
+  const token=localStorage.getItem('token');
+
   const handleExploreClick = () => {
+    if(token)
     navigate('/allSuggestedLearning'); // Redirect to home page
+    else 
+    navigate('/users'); 
   };
 
   return (
     <div className="w-full mx-auto px-10 py-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-between">
         {visibleInstructors.map((instructor, index) => (
-          <div key={index} className="h-full">
-            <InstructorCard {...instructor} />
-          </div>
+            <InstructorCard {...instructor} key={index}/>
         ))}
       </div>
-      <div className="mt-8 text-center">
+      {instructors.length>3 && <div className="mt-8 text-center">
         <Button variant="default" size="lg" onClick={handleExploreClick}>Explore</Button>
-      </div>
+      </div>}
     </div>
   );
 }

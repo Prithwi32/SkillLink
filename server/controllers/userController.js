@@ -76,7 +76,7 @@ export const editProfile = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({ isBanned: false })
-      .select("name skillsOffered rating photo _id")
+      .select("name skillsOffered rating about photo _id")
       .lean();
 
     res.status(200).json({
@@ -157,7 +157,7 @@ export const getUsersBasedOnSkills = async (req, res) => {
       isBanned: false,
       _id: { $ne: userId },
     })
-      .select("name skillsOffered rating photo")
+      .select("name skillsOffered rating photo about")
       .lean();
     console.log("Matching users:", users);
 
