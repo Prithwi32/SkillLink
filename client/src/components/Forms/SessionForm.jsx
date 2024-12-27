@@ -1,38 +1,124 @@
-import React, { useState } from 'react';
-import { HOBBY_SUGGESTIONS } from '../../constants/hobby-suggestions';
+import React, { useContext, useEffect, useState } from "react";
+import { HOBBY_SUGGESTIONS } from "../../constants/hobby-suggestions";
+import SkillSuggest from "../HelperComponents/SkillSuggestionInputField";
+import { AuthContext } from "@/context/AuthContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
-export default function SessionForm({ onSubmit, onCancel }) {
+export default function SessionForm({ onSubmit, onCancel,getAllSessions }) {
   const [formData, setFormData] = useState({
-    mentorName: '',
-    skillsOffered: [],
-    skillsAcquiring: [],
-    date: '',
-    link: '',
+    mentor: { name: "" },
+    skillsOffered: {},
+    skillsAcquiring: {},
+    date: "",
+    link: "",
   });
 
-  const allSkills = [...HOBBY_SUGGESTIONS, ...HOBBY_SUGGESTIONS];
+  // const allSkills = [...HOBBY_SUGGESTIONS, ...HOBBY_SUGGESTIONS];
 
-  const handleSubmit = (e) => {
+  const token = localStorage.getItem("token");
+  const { backendUrl } = useContext(AuthContext);
+
+  const [allUser, setAllUsers] = useState([]);
+  const [filteredMentors, setFilteredMentors] = useState(allUser);
+
+  const getAllUsers = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/api/user/getAll`);
+
+      if (data.success) {
+        setAllUsers(data.users);
+      } else {
+        toast.error("Unable to fetch all users");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Unable to fetch all users");
+    }
+  };
+
+  useEffect(() => {
+    getAllUsers();
+  }, []);
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    onSubmit(formData);
+
+    try {
+      const {data} = await axios.post(
+        `${backendUrl}/api/sessions/new`,
+        {
+          date: formData.date,
+          userTwo: formData.mentor._id,
+          skillTaughtByUserOne: formData.skillsOffered._id,
+          skillTaughtByUserTwo: formData.skillsAcquiring._id,
+          link: formData.link,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (data.sucess) {
+        toast.success("Session created successfully");
+        getAllSessions();
+        onSubmit();
+      } else {
+        toast.error("Unable to create session");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Unable to create session");
+    }
   };
 
-  const handleAddSkill = (type, skill) => {
+  // const handleAddSkill = (type, skill) => {
+  //   console.log(skill, type);
+  //   setFormData({
+  //     ...formData,
+  //     [type]: [skill], // Replace the array with the new skill
+  //   });
+  // };
+
+  // const handleRemoveSkill = (type) => {
+  //   setFormData({
+  //     ...formData,
+  //     [type]: [], // Clear the skill from the array
+  //   });
+  // };
+
+  const handleMentorChange = (e) => {
+    const query = e.target.value;
     setFormData({
       ...formData,
-      [type]: [skill], // Replace the array with the new skill
+      mentor: { name: query },
     });
+
+    if (query) {
+      const suggestions = allUser.filter((mentor) =>
+        mentor.name.toLowerCase().includes(query.toLowerCase()),
+      );
+      setFilteredMentors(suggestions);
+    } else {
+      setFilteredMentors([]);
+    }
   };
 
-  const handleRemoveSkill = (type) => {
+  const handleMentorSelect = (mentorDetails) => {
     setFormData({
       ...formData,
-      [type]: [], // Clear the skill from the array
+      mentor: { ...mentorDetails },
     });
+    setFilteredMentors([]);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white rounded-lg shadow-lg p-6 max-w-2xl mx-auto"
+    >
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Add New Session</h2>
 
       <div className="space-y-6">
@@ -43,73 +129,40 @@ export default function SessionForm({ onSubmit, onCancel }) {
           <input
             type="text"
             required
-            value={formData.mentorName}
-            onChange={(e) => setFormData({ ...formData, mentorName: e.target.value })}
+            value={formData.mentor.name}
+            onChange={handleMentorChange}
             className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
+          {/* Render Mentor Suggestions */}
+          {filteredMentors.length > 0 && (
+            <ul className="border border-t-0 mt-2 max-h-60 overflow-y-auto">
+              {filteredMentors.map((mentor, index) => (
+                <li
+                  key={index}
+                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => handleMentorSelect(mentor)}
+                >
+                  {mentor.name}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
-        {/* Skills Offered */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Skills Offered
-          </label>
-          <div className="flex flex-wrap gap-2 mb-2">
-            {formData.skillsOffered.length > 0 && (
-              <span
-                className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm cursor-pointer"
-                onClick={() => handleRemoveSkill('skillsOffered')}
-              >
-                {formData.skillsOffered[0]} &times;
-              </span>
-            )}
-          </div>
-          <select
-            onChange={(e) => handleAddSkill('skillsOffered', e.target.value)}
-            className="w-full p-2 border rounded"
-            value={formData.skillsOffered[0] || ""}
-          >
-            <option value="">Select a skill</option>
-            {allSkills
-              .filter((skill) => formData.skillsOffered.indexOf(skill) === -1) // Exclude the selected skill
-              .map((skill, index) => (
-                <option key={index} value={skill}>
-                  {skill}
-                </option>
-              ))}
-          </select>
-        </div>
-
-        {/* Skills Acquiring */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Skills Acquiring
-          </label>
-          <div className="flex flex-wrap gap-2 mb-2">
-            {formData.skillsAcquiring.length > 0 && (
-              <span
-                className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm cursor-pointer"
-                onClick={() => handleRemoveSkill('skillsAcquiring')}
-              >
-                {formData.skillsAcquiring[0]} &times;
-              </span>
-            )}
-          </div>
-          <select
-            onChange={(e) => handleAddSkill('skillsAcquiring', e.target.value)}
-            className="w-full p-2 border rounded"
-            value={formData.skillsAcquiring[0] || ""}
-          >
-            <option value="">Select a skill</option>
-            {allSkills
-              .filter((skill) => formData.skillsAcquiring.indexOf(skill) === -1) // Exclude the selected skill
-              .map((skill, index) => (
-                <option key={index} value={skill}>
-                  {skill}
-                </option>
-              ))}
-          </select>
-        </div>
+        <SkillSuggest
+          feildName={"Skills Offered"}
+          isFromSessionPage={true}
+          formData={formData}
+          setFormData={setFormData}
+          isMultiple={false}
+        />
+        <SkillSuggest
+          feildName={"Skills Acquiring"}
+          isFromSessionPage={true}
+          formData={formData}
+          setFormData={setFormData}
+          isMultiple={false}
+        />
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -142,6 +195,7 @@ export default function SessionForm({ onSubmit, onCancel }) {
           <button
             type="submit"
             className="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
+            onClick={handleSubmit}
           >
             Add Session
           </button>

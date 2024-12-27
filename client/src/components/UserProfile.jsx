@@ -2,21 +2,21 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Flag, Star } from "lucide-react";
-import ReportUserForm from "../components/Forms/ReportUserForm"; // Assuming ReportDialog is in the same directory
+import ReportUserForm from "../components/Forms/ReportUserForm";
 
 const UserProfile = () => {
-  const [showReportDialog, setShowReportDialog] = useState(false); // State to control popup visibility
+  const [showReportDialog, setShowReportDialog] = useState(false);
   const { userId } = useParams();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { token } = useAuth();
+  const { token, backendUrl } = useAuth();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/user/get/${userId}`, {
+        const response = await fetch(`${backendUrl}/api/user/get/${userId}`, {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`,

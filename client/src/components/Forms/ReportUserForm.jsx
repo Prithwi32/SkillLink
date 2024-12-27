@@ -1,6 +1,3 @@
-"use client";
-
-import * as React from "react";
 import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,16 +10,45 @@ import {
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { useContext } from "react";
+import { AuthContext } from "@/context/AuthContext";
+import { useParams } from "react-router-dom";
+import React from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function ReportDialog({ onClose }) {
   const [reason, setReason] = React.useState("");
   const maxLength = 250;
 
-  const handleSubmit = (e) => {
+  const { backendUrl } = useContext(AuthContext);
+  const token = localStorage.getItem("token");
+  const { userId } = useParams();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Report submitted:", reason);
-    // Add logic for submission here
-    onClose(); // Close the popup after submission
+
+    try {
+      const { data } = await axios.post(
+        `${backendUrl}/api/report-user/new`,
+        { reason, reportedUser: userId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (data.success) {
+        toast.success("Report submitted successfully");
+        onClose(); // Close the popup after submission
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Failed to submit report:", error);
+      toast.error("Failed to submit report. Please try again later.");
+    }
   };
 
   return (
@@ -53,7 +79,10 @@ export default function ReportDialog({ onClose }) {
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4 pt-4 sm:pt-6 px-4 sm:px-6">
             <div className="space-y-2">
-              <Label htmlFor="reason" className="text-sm sm:text-base lg:text-lg">
+              <Label
+                htmlFor="reason"
+                className="text-sm sm:text-base lg:text-lg"
+              >
                 Reason for reporting
               </Label>
               <Textarea
@@ -71,7 +100,9 @@ export default function ReportDialog({ onClose }) {
                     <AlertCircle className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5 mr-1 text-destructive" />
                   )}
                   <span
-                    className={reason.length >= maxLength ? "text-destructive" : ""}
+                    className={
+                      reason.length >= maxLength ? "text-destructive" : ""
+                    }
                   >
                     {reason.length} / {maxLength} characters
                   </span>

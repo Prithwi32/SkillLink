@@ -4,7 +4,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
-import http from 'http'; 
+import http from 'http';
 import { Server } from 'socket.io';
 
 import AuthRouter from './routes/AuthRouter.js'

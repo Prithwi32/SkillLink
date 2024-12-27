@@ -46,17 +46,22 @@ const ResponsiveSkillsTable = ({ skills,getPendingSkills,isLoading }) => {
   }
 
   return (
-    <div className="container mx-auto px-2 sm:px-8">
-      <div className="py-8">
-        <div className="shadow overflow-hidden rounded-lg border-b border-gray-200">
-          <table className="min-w-full bg-white">
-            <thead className="bg-blue-700 text-white">
-              <tr>
+
+    <div className="container mx-auto px-4 sm:px-8">
+    <div className="py-8">
+      <div className="shadow rounded-lg border-b border-gray-200">
+        {/* Table wrapper with fixed height and scroll */}
+       
+          <table className="min-w-full bg-white relative max-h-[600px] overflow-auto">
+            {/* Sticky header */}
+            <thead className="bg-blue-700 text-white sticky top-0 z-10">
+            <tr>
                 <th className="w-full sm:w-1/4 text-left py-3 px-4 uppercase font-semibold text-sm">Skill Name</th>
                 <th className="w-full sm:w-1/2 text-left py-3 px-4 uppercase font-semibold text-sm hidden sm:table-cell">Description</th>
                 <th className="w-full sm:w-1/4 text-left py-3 px-4 uppercase font-semibold text-sm">Actions</th>
               </tr>
             </thead>
+            {/* Scrollable body */}
             <tbody className="text-gray-700">
               {skills.map((skill) => (
                 <tr key={skill._id} className="border-b border-gray-200 hover:bg-gray-100">
@@ -85,9 +90,22 @@ const ResponsiveSkillsTable = ({ skills,getPendingSkills,isLoading }) => {
               ))}
             </tbody>
           </table>
-        </div>
+      
       </div>
     </div>
+  </div>
+    // <div className="container mx-auto px-2 sm:px-8">
+    //   <div className="py-8">
+    //     <div className="shadow overflow-hidden rounded-lg border-b border-gray-200">
+    //       <table className="min-w-full bg-white">
+    //         <thead className="bg-blue-700 text-white">
+             
+    //         </thead>
+            
+    //       </table>
+    //     </div>
+    //   </div>
+    // </div>
   );
 };
 

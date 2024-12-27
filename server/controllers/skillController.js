@@ -1,11 +1,10 @@
-// controllers/skillsController.js
 import Skill from '../models/skill.js';
 
 // Fetch skills based on query
 export const getSkills = async (req, res) => {
   const query = req.query.query || '';
   try {
-    const skills = await Skill.find({ name: new RegExp(query, 'i') });
+    const skills = await Skill.find({ name: new RegExp(query, 'i'), status: 'Approved', });
     res.json(skills);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching skills', error: error.message });

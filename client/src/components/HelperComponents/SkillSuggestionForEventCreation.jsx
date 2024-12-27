@@ -3,27 +3,15 @@ import axios from "axios";
 import debounce from "lodash.debounce";
 import { useAuth } from "@/context/AuthContext";
 
-const SkillSuggest = ({
-  onSkillSelect,
-  feildName,
-  isMultiple,
-  isFromSessionPage,
-  formData,
-  setFormData,
-  setEditData,
-  editData,
-  isFromSessionCard,
-}) => {
+const SkillSuggest = ({ onSkillSelect, isMultiple }) => {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [selectedSkills, setSelectedSkills] = useState([]); // Supports single/multiple selections
+  const [selectedSkills, setSelectedSkills] = useState([]);
   const { backendUrl } = useAuth();
 
   const fetchSkills = async (query) => {
     try {
-      const response = await axios.get(
-        `${backendUrl}/api/skills?query=${query}`,
-      );
+      const response = await axios.get(`${backendUrl}/api/skills?query=${query}`);
       setSuggestions(response.data);
     } catch (error) {
       console.error("Error fetching skills:", error);
@@ -50,82 +38,30 @@ const SkillSuggest = ({
   };
 
   const handleSuggestionClick = (suggestion) => {
-    if (isFromSessionPage && feildName == "Skills Offered") {
-      setFormData({
-        ...formData,
-        skillsOffered: suggestion, 
-      });
-    }else if (isFromSessionPage && feildName == "Skills Acquiring") {
-      setFormData({
-        ...formData,
-        skillsAcquiring: suggestion, 
-      });
-    }
-    
-    if (isFromSessionCard && feildName == "Skills Offered") {
-      setEditData({
-        ...editData,
-        skillTaughtByUserOne: suggestion, 
-      });
-    }else if (isFromSessionCard && feildName == "Skills Acquiring") {
-      setEditData({
-        ...editData,
-        skillTaughtByUserTwo: suggestion, 
-      });
-    }
-
-
+    let updatedSkills;
     if (isMultiple) {
       if (!selectedSkills.includes(suggestion.name)) {
-        const updatedSkills = [...selectedSkills, suggestion.name];
+        updatedSkills = [...selectedSkills, suggestion.name];
         setSelectedSkills(updatedSkills);
       }
     } else {
-      const updatedSkills = [suggestion.name];
+      updatedSkills = [suggestion.name];
       setSelectedSkills(updatedSkills);
     }
+    onSkillSelect(updatedSkills); // Notify parent
 
     setInput("");
     setSuggestions([]);
   };
 
   const handleSkillRemove = (skill) => {
-    if (isFromSessionPage && feildName == "Skills Offered") {
-      setFormData({
-        ...formData,
-        skillsOffered: '', 
-      });
-    }else if (isFromSessionPage && feildName == "Skills Acquiring") {
-      setFormData({
-        ...formData,
-        skillsAcquiring: '',
-      });
-    }
-
-
-    if (isFromSessionCard && feildName == "Skills Offered") {
-      setEditData({
-        ...editData,
-        skillTaughtByUserOne: {}, 
-      });
-    }else if (isFromSessionCard && feildName == "Skills Acquiring") {
-      setEditData({
-        ...editData,
-        skillTaughtByUserTwo: {}, 
-      });
-    }
-
     const updatedSkills = selectedSkills.filter((s) => s !== skill);
     setSelectedSkills(updatedSkills);
-    if(!isFromSessionPage && !isFromSessionCard)
     onSkillSelect(updatedSkills); // Notify parent
   };
 
   return (
     <div className="w-full mt-4">
-      <label className="block text-sm font-medium text-gray-700 mb-1">
-        {feildName}
-      </label>
       <div className="flex flex-wrap gap-2 mb-2">
         {selectedSkills.map((skill, index) => (
           <span
@@ -164,3 +100,4 @@ const SkillSuggest = ({
 };
 
 export default SkillSuggest;
+

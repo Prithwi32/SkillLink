@@ -1,5 +1,5 @@
 import express from 'express';
-import {  getAllUsers, getUserById, getUsersBasedOnSkills, getUsersForSpecificSkill } from '../controllers/userController.js';
+import {  editProfile, getAllUsers, getUserById, getUsersBasedOnSkills, getUsersForSpecificSkill, uploadAvatar } from '../controllers/userController.js';
 import ensureAuthenticated from "../middlewares/Auth/Auth.js"
 
 const router = express.Router();
@@ -18,5 +18,8 @@ router.get("/userRecommend", ensureAuthenticated, getUsersBasedOnSkills);
 
 // Route to get users for a specific skill
 router.get("/:skillId", getUsersForSpecificSkill);
+
+// Route to update user profile
+router.put("/edit/:id", ensureAuthenticated, uploadAvatar, editProfile);
 
 export default router;
