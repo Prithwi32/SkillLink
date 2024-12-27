@@ -1,95 +1,3 @@
-/* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
-import axios from "axios";
-import debounce from "lodash.debounce";
-import { useAuth } from "@/context/AuthContext";
-import { Avatar } from "../components/HelperComponents/Avatar";
-import { EditableField } from "../components/HelperComponents/EditableField";
-import { Plus, X } from "lucide-react";
-
-const SkillSuggest = ({ onSkillSelect, isMultiple }) => {
-  const [input, setInput] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [selectedSkills, setSelectedSkills] = useState([]);
-  const { backendUrl } = useAuth();
-
-  const fetchSkills = async (query) => {
-    try {
-      const response = await axios.get(
-        `${backendUrl}/api/skills?query=${query}`,
-      );
-      setSuggestions(response.data);
-    } catch (error) {
-      console.error("Error fetching skills:", error);
-    }
-  };
-
-  const debouncedFetchSkills = debounce(fetchSkills, 300);
-
-  useEffect(() => {
-    return () => {
-      debouncedFetchSkills.cancel();
-    };
-  }, []);
-
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setInput(value);
-
-    if (value.length > 0) {
-      debouncedFetchSkills(value);
-    } else {
-      setSuggestions([]);
-    }
-  };
-
-  const handleSuggestionClick = (suggestion) => {
-    let updatedSkills;
-    if (isMultiple) {
-      if (!selectedSkills.includes(suggestion.name)) {
-        updatedSkills = [...selectedSkills, suggestion.name];
-        setSelectedSkills(updatedSkills);
-      }
-    } else {
-      updatedSkills = [suggestion.name];
-      setSelectedSkills(updatedSkills);
-    }
-    onSkillSelect(updatedSkills);
-
-    setInput("");
-    setSuggestions([]);
-  };
-
-  return (
-    <div className="w-full mt-4">
-      <div className="relative">
-        <input
-          type="text"
-          className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
-          placeholder="Type to search skills..."
-          value={input}
-          onChange={handleInputChange}
-        />
-        {suggestions.length > 0 && (
-          <ul className="absolute z-10 w-full bg-white border rounded shadow-md mt-1">
-            {suggestions.map((suggestion, index) => (
-              <li
-                key={index}
-                className="px-4 py-2 cursor-pointer hover:bg-blue-100"
-                onClick={() => handleSuggestionClick(suggestion)}
-              >
-                {suggestion.name}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default SkillSuggest;
-
 export function ProfilePage({ user, isEditing, onEditToggle, onSubmit }) {
   const [editedUser, setEditedUser] = useState({
     ...user,
@@ -162,6 +70,7 @@ export function ProfilePage({ user, isEditing, onEditToggle, onSubmit }) {
             <Avatar
               src={editedUser.photo}
               alt={editedUser.name}
+              isEditing={isEditing}
               onUpdate={(file) => {
                 console.log("Selected file:", file);
                 setSelectedFile(file);
@@ -225,7 +134,7 @@ export function ProfilePage({ user, isEditing, onEditToggle, onSubmit }) {
               </div>
             )}
             {isAddingSkill && (
-              <SkillSuggest
+              <SkillSuggestInputField 
                 isMultiple={true}
                 onSkillSelect={(skills) =>
                   handleSkillAdd(
@@ -233,6 +142,7 @@ export function ProfilePage({ user, isEditing, onEditToggle, onSubmit }) {
                     skills[skills.length - 1],
                   )
                 }
+                existingSkills={editedUser.skillsOffered}
               />
             )}
           </div>
@@ -269,7 +179,7 @@ export function ProfilePage({ user, isEditing, onEditToggle, onSubmit }) {
               </div>
             )}
             {isAddingInterestedSkill && (
-              <SkillSuggest
+              <SkillSuggestInputField
                 isMultiple={true}
                 onSkillSelect={(skills) =>
                   handleInterestedSkillAdd(
@@ -277,6 +187,7 @@ export function ProfilePage({ user, isEditing, onEditToggle, onSubmit }) {
                     skills[skills.length - 1],
                   )
                 }
+                existingSkills={editedUser.skillsRequested}
               />
             )}
           </div>

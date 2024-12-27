@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { HobbyInput } from "../HelperComponents/HobbyInput";
 import { InputField } from "../HelperComponents/InputField";
+import SkillSuggest from "@/components/HelperComponents/SkillSuggestionForEventCreation";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 
 export function SignupCard() {
-  const {backendUrl} = useAuth();
-  const navigate = useNavigate()
+  const { backendUrl } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -47,16 +47,16 @@ export function SignupCard() {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Ensure passwords match before proceeding
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Passwords do not match");
       return;
     }
-  
+
     // Log the form data to ensure it's structured correctly
     console.log('Form Data:', formData);
-  
+
     try {
       const response = await fetch(`${backendUrl}/auth/signup`, {
         method: 'POST',
@@ -71,7 +71,7 @@ export function SignupCard() {
           skillsRequested: Array.isArray(formData.skillsRequired) ? formData.skillsRequired : [formData.skillsRequired],
         }),
       });
-  
+
       const responseData = await response.json();
       if (!response.ok) {
         throw new Error(responseData.message || "Signup failed");
@@ -81,7 +81,7 @@ export function SignupCard() {
       console.log("Signup successful", responseData);
       // handle successful signup (e.g., redirect to login)
     } catch (error) {
-      toast.error("SignUp Failed!")
+      toast.error("Signup Failed!")
       console.error('Error during signup:', error);
       setErrorMessage(error.message || "Signup failed. Please try again later.");
     }
@@ -143,19 +143,17 @@ export function SignupCard() {
           )}
 
           {/* Skills Offered Input */}
-          <HobbyInput
-            selectedHobbies={formData.skillsOffered}
-            onChange={handleSkillsOfferedChange} // Handle change for skills offered
-            title={"Skills Offered"}
-            placeholderTitle={"Skills"}
+          <SkillSuggest
+            onSkillSelect={handleSkillsOfferedChange}
+            isMultiple={true}
+            existingSkills={formData.skillsOffered}
           />
 
           {/* Skills Requested Input */}
-          <HobbyInput
-            selectedHobbies={formData.skillsRequired}
-            onChange={handleSkillsRequiredChange} // Handle change for skills required
-            title={"Skills Requested"}
-            placeholderTitle={"Skills"}
+          <SkillSuggest
+            onSkillSelect={handleSkillsRequiredChange}
+            isMultiple={true}
+            existingSkills={formData.skillsRequired}
           />
 
           <button

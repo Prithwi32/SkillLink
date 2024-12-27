@@ -10,9 +10,6 @@ router.get('/getAll', getAllUsers);
 // Route to get user by ID
 router.get("/get/:userId", ensureAuthenticated, getUserById);
 
-// Route to update user profile
-// router.put("/:userId", ensureAuthenticated, updateUserProfile);
-
 // Route to get users based on skills requested (recommend mentors)
 router.get("/userRecommend", ensureAuthenticated, getUsersBasedOnSkills);
 

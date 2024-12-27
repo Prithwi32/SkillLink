@@ -1,14 +1,14 @@
 import { useRef } from "react";
 import { Camera } from "lucide-react";
 
-export function Avatar({ src, alt = "Avatar", onUpdate }) {
+export function Avatar({ src, alt = "Avatar", onUpdate, isEditing }) {
   const fileInputRef = useRef(null);
 
   // Handle file input changes
   const handleFileChange = (event) => {
     const file = event.target.files?.[0];
     if (file) {
-      onUpdate(file); // Trigger the onUpdate callback with the selected file
+      onUpdate(file);
     }
   };
 
@@ -27,6 +27,7 @@ export function Avatar({ src, alt = "Avatar", onUpdate }) {
       />
 
       {/* Upload button */}
+      {isEditing && (
       <button
         type="button"
         onClick={handleButtonClick}
@@ -34,6 +35,7 @@ export function Avatar({ src, alt = "Avatar", onUpdate }) {
       >
         <Camera className="w-5 h-5 text-blue-600" />
       </button>
+      )}
 
       {/* Hidden file input */}
       <input
