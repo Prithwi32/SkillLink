@@ -1,49 +1,89 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { InstructorCardGrid } from "@/components/Cards/InstructorCardGrid";
+import { useAuth } from "@/context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const instructors = [
   {
-    photo: "/placeholder.svg?height=100&width=100",
-    name: "John Doe",
-    skill: "Web Development",
-    description:
-      "Learn the fundamentals of web development with HTML, CSS, and JavaScript.",
-    date: "Starting June 1, 2024",
+    name: "Lelah Nichols",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&auto=format&fit=crop&q=80",
     rating: 4.5,
+    description: "Product designer with a passion for creating beautiful and functional user interfaces. Experienced in working with cross-functional teams and delivering high-quality designs.",
+    badges: ["clothes", "stem"]
   },
   {
-    photo: "/placeholder.svg?height=100&width=100",
-    name: "Jane Smith",
-    skill: "Data Science",
-    description: "Dive into the world of data analysis and machine learning.",
-    date: "Starting July 15, 2024",
-    rating: 3.5,
+    name: "Jesus Weiss",
+    avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=400&h=400&auto=format&fit=crop&q=80",
+    rating: 4.8,
+    description: "Tech enthusiast and gadget lover. Always exploring new technologies and sharing knowledge with the community.",
+    badges: ["headset", "gadget", "speed", "winter"]
   },
   {
-    photo: "/placeholder.svg?height=100&width=100",
-    name: "Mike Johnson",
-    skill: "UX Design",
-    description: "Learn to create user-centered designs for digital products.",
-    date: "Starting August 1, 2024",
-    rating: 4,
-  },
-  {
-    photo: "/placeholder.svg?height=100&width=100",
-    name: "Emily Brown",
-    skill: "Mobile App Development",
-    description: "Build cross-platform mobile apps using React Native.",
-    date: "Starting September 1, 2024",
-    rating: 5,
-  },
+    name: "Annie Rice",
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&auto=format&fit=crop&q=80",
+    rating: 4.2,
+    description: "Adventure seeker and nature photographer. Love exploring mountains and capturing beautiful moments.",
+    badges: ["road", "mountain", "trip", "earth", "nature"]
+  }
 ];
 
 export default function SuggestedCard() {
+
+  const {backendUrl}=useAuth();
+  const token=localStorage.getItem("token");
+  const [users,setUsers] = useState([]);
+  const [isLoading,setIsLoading]=useState(true);
+
+  const getAllUsers=async()=>{
+    try {
+      setIsLoading(true);
+      const {data} = await axios.get(`${backendUrl}/api/user/getAll`);
+      setUsers(data.users);
+    } catch (error) {
+      console.error(error);
+      toast.error("Unable to recommended users");
+    }finally{
+      setIsLoading(false);
+    }
+  }
+
+
+  const getUsersBasedOnProfile=async()=>{
+    try {
+      setIsLoading(true);
+      const {data} = await axios.get(`${backendUrl}/api/user/userRecommend`,{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      setUsers(data.users);
+    } catch (error) {
+      console.error(error);
+      toast.error("Unable to get recommended users");
+    }finally{
+      setIsLoading(false);
+    }
+  }
+
+
+  useEffect(()=>{
+    if(token){
+      getUsersBasedOnProfile();
+    }else{
+      getAllUsers();
+    }
+  },[]);
+
   return (
     <main className="flex flex-col items-center justify-center">
       <h1 className="text-3xl font-bold mb-8 text-center">
-        Suggested Learning
+        Recommanded Users
       </h1>
-      <InstructorCardGrid instructors={instructors} />
+      {!isLoading && <InstructorCardGrid instructors={users} />}
+      {isLoading && (
+        <p className="text-lg pb-2 font-semibold text-slate-400">Loading...</p>
+      )}
     </main>
   );
 }
