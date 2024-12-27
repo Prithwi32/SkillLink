@@ -1,3 +1,8 @@
+import { useState } from "react";
+import { Avatar } from "../components/HelperComponents/Avatar";
+import { EditableField } from "../components/HelperComponents/EditableField";
+import { Plus, X } from "lucide-react";
+
 export function ProfilePage({ user, isEditing, onEditToggle, onSubmit }) {
   const [editedUser, setEditedUser] = useState({
     ...user,
