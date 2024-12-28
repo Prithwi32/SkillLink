@@ -1,128 +1,90 @@
-import React, { useState, useEffect } from "react";
-import Autoplay from "embla-carousel-autoplay";
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "../ui/carousel";
-import { cards } from "@/constants/carousel-content";
-import { Button } from "../ui/button";
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../ui/hover-card";
+import { assets } from "../../assets/assets";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-const Card = ({ title, image, onClick }) => {
+const skills = [
+  {
+    name: "Active Listening",
+    description: "Mastering the art of listening attentively to understand and engage effectively in conversations.",
+    icon: assets.active_listening,
+  },
+  {
+    name: "Dancing",
+    description: "Expressing rhythm and creativity through various dance forms, from classical to modern styles.",
+    icon: assets.dancing,
+  },
+  {
+    name: "Cooking",
+    description: "Crafting delicious meals and exploring diverse cuisines to bring joy through food.",
+    icon: assets.cooking,
+  },
+  {
+    name: "Coding",
+    description: "Developing software solutions and enhancing problem-solving skills through programming.",
+    icon: assets.coding,
+  },
+  {
+    name: "Gardening",
+    description: "Nurturing plants and creating beautiful green spaces with sustainable gardening practices.",
+    icon: assets.gardening,
+  },
+  {
+    name: "Music",
+    description: "Playing, composing, and appreciating music to connect with emotions and inspire creativity.",
+    icon: assets.music,
+  },
+];
+
+
+const SkillCard = ({ name, icon }) => {
   return (
-    <div
-      onClick={onClick}
-      className="bg-white rounded-lg shadow-md cursor-pointer transform transition-transform duration-200 hover:scale-105"
-    >
-      {image && (
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-48 object-cover rounded-t-lg"
-        />
-      )}
-      <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-800 text-center">
-          {title}
-        </h3>
-      </div>
-    </div>
-  );
-};
-
-const Modal = ({ isOpen, onClose, children }) => {
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === "Escape") onClose();
-    };
-
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [onClose]);
-
-  if (!isOpen) return null;
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      onClick={onClose}
-    >
-      <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300" />
-      <div
-        className="bg-white rounded-lg shadow-xl w-full max-w-4xl m-4 z-50 relative flex flex-col md:flex-row max-h-[70vh]"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {children}
-      </div>
+    <div className="relative flex flex-col items-center hover:translate-y-[-10px] transition-all duration-500 cursor-pointer">
+      <Avatar className="size-24 shadow-xl">
+        <AvatarImage src={icon} />
+        <AvatarFallback>{name.slice(0, 2).toUpperCase()}</AvatarFallback>
+      </Avatar>
+      <span className="mt-3 text-sm text-center md:text-base font-medium text-gray-800">
+        {name}
+      </span>
     </div>
   );
 };
 
 const App = () => {
-  const [selectedCard, setSelectedCard] = useState(null);
-
-  const plugin = React.useRef(
-    Autoplay({ delay: 2000, loop:true}),
-  );
-
   return (
-    <div className="bg-gray-100 p-8 px-16">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
-          Top skills
-        </h1>
-        <Carousel
-          opts={{
-            align: "start",
-            loop: "true",
-          }}
-          plugins={[plugin.current]}
-          className="w-full"
-        >
-          <CarouselContent>
-            {cards.map((card) => (
-              <CarouselItem className="md:basis-1/2 lg:basis-1/3" key={card.id}>
-                <Card
-                  title={card.title}
-                  image={card.image}
-                  onClick={() => setSelectedCard(card)}
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselNext />
-          <CarouselPrevious />
-        </Carousel>
-      </div>
+    <div
+      className="flex flex-col items-center gap-4 py-16 text-gray-800 px-8"
+      id="skills"
+    >
+      <h1 className="text-2xl sm:text-3xl font-semibold">TOP <span className="text-blue-700">SKILLS</span></h1>
 
-      <Modal isOpen={!!selectedCard} onClose={() => setSelectedCard(null)}>
-        {selectedCard && (
-          <>
-            <div className="w-full md:w-1/2">
-              <img
-                src={selectedCard.image}
-                alt={selectedCard.title}
-                className="w-full h-full object-cover rounded-l-lg"
+      <p className="text-gray-600 sm:text-lg max-w-lg text-center">
+        Explore top skills that inspire learning, spark creativity, and bring
+        communities together. Find your passion or share your expertise today!
+      </p>
+
+      <div className="flex sm:justify-center gap-10 pt-5 w-full overflow-scroll">
+        {skills.map((skill,index) => (
+          <HoverCard key={index}>
+            <HoverCardTrigger>
+              <SkillCard
+                key={skill.name}
+                name={skill.name}
+                description={skill.description}
+                icon={skill.icon}
               />
-            </div>
-            <div className="p-6 w-full md:w-1/2 flex flex-col justify-between overflow-scroll">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                  {selectedCard.title}
-                </h2>
-                <p className="text-gray-600 leading-relaxed">
-                  {selectedCard.description}
-                </p>
-              </div>
-              <div className="mt-6 flex justify-end">
-                <Button onClick={() => setSelectedCard(null)}>Close</Button>
-              </div>
-            </div>
-          </>
-        )}
-      </Modal>
+            </HoverCardTrigger>
+            <HoverCardContent>
+              <h2 className="text-xl text-blue-800 font-medium mb-3">{skill.name}</h2>
+              <p className="text-zinc-500 text-sm">{skill.description}</p>
+            </HoverCardContent>
+          </HoverCard>
+        ))}
+      </div>
     </div>
   );
 };

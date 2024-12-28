@@ -86,8 +86,31 @@
   }
 }
 
+.active hr{
+  @apply block
+ }
+
+ @media (max-width:767px){
+    .active{
+        @apply bg-blue-100
+    }
+}
+
 .gradient-button {
   background: linear-gradient(270deg, #34d399, #3b82f6, #6366f1);
   background-size: 600% 600%;
   animation: gradient 8s ease infinite;
+}
+
+#root {
+  animation: fadeIn 3s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
