@@ -1,203 +1,63 @@
-// import { useEffect } from "react";
-// import { Link, useLocation } from "react-router-dom";
-// import { useAuth } from "../context/AuthContext.jsx";
-// import { UserCircle } from "lucide-react";
-
-// const Navbar = () => {
-//   const { user, token } = useAuth();
-//   const location = useLocation();
-
-//   useEffect(() => {
-//     // This effect will run whenever the token changes
-//     // It's here to force a re-render when the auth state changes
-//   }, [token]);
-
-//   const isUserDashboard = location.pathname === "/userDashboard";
-
-//   return (
-//     <nav className="bg-gradient-to-r from-blue-500 to-blue-700 text-white shadow-md sticky top-0 z-50">
-//       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-//         {/* Left Section */}
-//         <div>
-//           <Link
-//             to="/"
-//             className="text-2xl font-bold hover:text-blue-300 transition-colors"
-//           >
-//             HobbeyVerse
-//           </Link>
-//         </div>
-//         {/* Center Section */}      
-//             <div className="hidden md:flex space-x-6">
-//               <Link
-//                 to="/"
-//                 className="hover:text-blue-300 hover:underline transition duration-300"
-//               >
-//                 Home
-//               </Link>
-//               <Link
-//                 to="/about"
-//                 className="hover:text-blue-300 hover:underline transition duration-300"
-//               >
-//                 About Us
-//               </Link>
-//               <Link
-//                 to="/blogs"
-//                 className="hover:text-blue-300 hover:underline transition duration-300"
-//               >
-//                 Blogs
-//               </Link>
-//               <Link
-//                 to="/events"
-//                 className="hover:text-blue-300 hover:underline transition duration-300"
-//               >
-//                 Events
-//               </Link>
-//               <Link
-//                 to="/users"
-//                 className="hover:text-blue-300 hover:underline transition duration-300"
-//               >
-//                 Users
-//               </Link>
-//             </div>
-
-//         {/* Right Section */}{" "}
-//         <div className="hidden md:flex items-center space-x-4">
-//           {" "}
-//           {token ? (
-//             <>
-//               {" "}
-//               <Link
-//                 to="/userDashboard"
-//                 className="flex items-center space-x-2 hover:text-blue-300 transition duration-300"
-//               >
-//                 {" "}
-//                 <UserCircle size={24} />{" "}
-//                 <span>{user?.username || "Profile"}</span>{" "}
-//               </Link>{" "}
-//             </>
-//           ) : (
-//             !token && (
-//               <Link
-//                 to="/signup"
-//                 className="bg-blue-600 hover:bg-blue-800 hover:shadow-lg text-white px-4 py-2 rounded-lg transition-all"
-//               >
-//                 {" "}
-//                 Sign Up / Login{" "}
-//               </Link>
-//             )
-//           )}{" "}
-//         </div>
-//         {/* Hamburger Menu for Mobile */}
-//           <div className="md:hidden">
-//             <button
-//               className="text-white focus:outline-none"
-//               onClick={() => {
-//                 // Add toggle functionality for the mobile menu
-//                 alert("Implement mobile menu toggle");
-//               }}
-//             >
-//               <svg
-//                 xmlns="http://www.w3.org/2000/svg"
-//                 className="h-6 w-6"
-//                 fill="none"
-//                 viewBox="0 0 24 24"
-//                 stroke="currentColor"
-//               >
-//                 <path
-//                   strokeLinecap="round"
-//                   strokeLinejoin="round"
-//                   strokeWidth={2}
-//                   d="M4 6h16M4 12h16m-7 6h7"
-//                 />
-//               </svg>
-//             </button>
-//           </div>
-//       </div>
-//     </nav>
-//   );
-// };
-
-// export default Navbar;
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
-import { UserCircle } from "lucide-react";
+import { UserCircle, X } from "lucide-react";
+import { Button } from "./ui/button.jsx";
 
 const Navbar = () => {
   const { user, token } = useAuth();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    // This effect will run whenever the token changes
-    // It's here to force a re-render when the auth state changes
-  }, [token]);
-
-  const isUserDashboard = location.pathname === "/userDashboard";
-
   return (
-    <nav className="bg-gradient-to-r from-blue-500 to-blue-700 text-white shadow-md sticky top-0 z-50">
+    <nav className="shadow-sm bg-white text-black sticky top-0 z-50 border-b border-b-gray-400">
       <div className="flex justify-between items-center px-4 py-3">
         {/* Left Section */}
         <div>
-          <Link
-            to="/"
-            className="text-2xl font-bold hover:text-blue-300 transition-colors"
-          >
-            HobbeyVerse
+          <Link to="/" className="text-2xl font-bold  hover:opacity-75">
+            Hobby<span className="text-blue-700">Verse</span>
           </Link>
         </div>
 
         {/* Center Section */}
-        <div className="hidden md:flex space-x-6">
-          <Link
-            to="/"
-            className="hover:text-blue-300 hover:underline transition duration-300"
-          >
-            Home
-          </Link>
-          <Link
-            to="/about"
-            className="hover:text-blue-300 hover:underline transition duration-300"
-          >
-            About Us
-          </Link>
-          <Link
-            to="/blogs"
-            className="hover:text-blue-300 hover:underline transition duration-300"
-          >
-            Blogs
-          </Link>
-          <Link
-            to="/events"
-            className="hover:text-blue-300 hover:underline transition duration-300"
-          >
-            Events
-          </Link>
-          <Link
-            to="/users"
-            className="hover:text-blue-300 hover:underline transition duration-300"
-          >
-            Users
-          </Link>
-        </div>
+        <ul className="hidden md:flex items-start gap-5 font-[400]">
+          <NavLink to="/" className="hover:opacity-75">
+            <li className="py-1">Home</li>
+            <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
+          </NavLink>
+          <NavLink to="/about" className="hover:opacity-75">
+            <li className="py-1">About Us</li>
+            <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
+          </NavLink>
+          <NavLink to="/blogs" className="hover:opacity-75">
+            <li className="py-1">Blogs</li>
+            <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
+          </NavLink>
+          <NavLink to="/events" className="hover:opacity-75">
+            <li className="py-1">Events</li>
+            <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
+          </NavLink>
+          <NavLink to="/users" className="hover:opacity-75">
+            <li className="py-1">Users</li>
+            <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
+          </NavLink>
+        </ul>
 
         {/* Right Section */}
         <div className="hidden md:flex items-center space-x-4">
           {token ? (
             <Link
               to="/userDashboard"
-              className="flex items-center space-x-2 hover:text-blue-300 transition duration-300"
+              className="flex items-center space-x-2 hover:opacity-75"
             >
               <UserCircle size={24} />
               <span>{user?.username || "Profile"}</span>
             </Link>
           ) : (
-            <Link
-              to="/signup"
-              className="bg-blue-600 hover:bg-blue-800 hover:shadow-lg text-white px-4 py-2 rounded-lg transition-all"
-            >
-              Sign Up / Login
+            <Link to="/login">
+              <Button className="bg-blue-700 text-white hover:bg-blue-800">
+                Login/SignUp
+              </Button>
             </Link>
           )}
         </div>
@@ -205,7 +65,7 @@ const Navbar = () => {
         {/* Hamburger Menu for Mobile */}
         <div className="md:hidden">
           <button
-            className="text-white focus:outline-none"
+            className="text-black focus:outline-none"
             onClick={() => setIsMobileMenuOpen((prev) => !prev)}
           >
             <svg
@@ -227,64 +87,77 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden">
-          <div className="flex flex-col space-y-2 px-4 py-2 bg-blue-600">
-            <Link
-              to="/"
-              className="hover:text-blue-300 hover:underline transition duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Home
+      <div
+        className={`${
+          isMobileMenuOpen ? "fixed w-full" : "h-0 w-0"
+        } md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}
+      >
+        <div className="flex items-center justify-between px-5 py-6">
+          <div>
+            <Link to="/" className="text-2xl font-bold  hover:opacity-75">
+              Hobby<span className="text-blue-700">Verse</span>
             </Link>
-            <Link
-              to="/about"
-              className="hover:text-blue-300 hover:underline transition duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              About Us
-            </Link>
-            <Link
-              to="/blogs"
-              className="hover:text-blue-300 hover:underline transition duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Blogs
-            </Link>
-            <Link
-              to="/events"
-              className="hover:text-blue-300 hover:underline transition duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Events
-            </Link>
-            <Link
-              to="/users"
-              className="hover:text-blue-300 hover:underline transition duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Users
-            </Link>
-            {token ? (
-              <Link
-                to="/userDashboard"
-                className="flex items-center space-x-2 hover:text-blue-300 transition duration-300"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <span>{user?.username || "Profile"}</span>
-              </Link>
-            ) : (
-              <Link
-                to="/signup"
-                className="bg-blue-600 hover:bg-blue-800 hover:shadow-lg text-white px-4 py-2 rounded-lg transition-all"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Sign Up / Login
-              </Link>
-            )}
           </div>
+          <X
+            className="size-7 hover:bg-gray-200 p-2 rounded-full"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
         </div>
-      )}
+        <ul className="flex flex-col items-center gap-2 mt-5 px-5 text-lg font-medium w-full">
+          <NavLink
+            className="w-full text-center py-2 rounded-full hover:bg-gray-200"
+            onClick={() => setIsMobileMenuOpen(false)}
+            to="/"
+          >
+            Home
+          </NavLink>
+          <NavLink
+            className="w-full text-center py-2 rounded-full hover:bg-gray-200"
+            onClick={() => setIsMobileMenuOpen(false)}
+            to="/about"
+          >
+            About Us
+          </NavLink>
+          <NavLink
+            className="w-full text-center py-2 rounded-full hover:bg-gray-200"
+            onClick={() => setIsMobileMenuOpen(false)}
+            to="/blogs"
+          >
+            Blogs
+          </NavLink>
+          <NavLink
+            className="w-full text-center py-2 rounded-full hover:bg-gray-200"
+            onClick={() => setIsMobileMenuOpen(false)}
+            to="/events"
+          >
+            Events
+          </NavLink>
+          <NavLink
+            className="w-full text-center py-2 rounded-full hover:bg-gray-200"
+            onClick={() => setIsMobileMenuOpen(false)}
+            to="/users"
+          >
+            Users
+          </NavLink>
+          {!token ? (
+            <NavLink
+              className="w-full text-center py-2 rounded-full hover:bg-gray-200"
+              onClick={() => setIsMobileMenuOpen(false)}
+              to="/blogs"
+            >
+              Login/SignUp
+            </NavLink>
+          ) : (
+            <NavLink
+              className="w-full text-center py-2 rounded-full hover:bg-gray-200"
+              onClick={() => setIsMobileMenuOpen(false)}
+              to="/userDashboard"
+            >
+              My Profile
+            </NavLink>
+          )}
+        </ul>
+      </div>
     </nav>
   );
 };
