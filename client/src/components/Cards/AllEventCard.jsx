@@ -1,4 +1,3 @@
-import React from 'react';
 import { Calendar, ChevronRight } from 'lucide-react';
 
 export function AllEventCard({ event, onShowMore }) {

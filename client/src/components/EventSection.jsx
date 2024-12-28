@@ -49,6 +49,8 @@ export const EventSection = ({ title, type }) => {
     }
   }, [activeCategory]);
 
+  const handleDelete = (deletedEventId) => { setEvents((prevEvents) => prevEvents.filter(event => event.event_id !== deletedEventId)); };
+
   const CardComponent = type === 'created' ? CreatedEventCard : EnrolledEventCard;
 
   return (
@@ -83,6 +85,7 @@ export const EventSection = ({ title, type }) => {
               event={event}
               status={activeCategory}
               type={type}
+              onDelete={handleDelete}
             />
           ))}
         </div>

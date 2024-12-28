@@ -24,7 +24,7 @@ function EventListPage() {
           date: new Date(event.date).toLocaleDateString(),
           skills: event.skills_id.map((skill) => skill.name),
           mentorName: event.created_by.name,
-          mentorImage: "https://img.freepik.com/free-vector/user-blue-gradient_78370-4692.jpg?semt=ais_hybrid",
+          mentorImage: event.created_by.photo || "https://img.freepik.com/free-vector/user-blue-gradient_78370-4692.jpg?semt=ais_hybrid",
           rating: event.created_by.rating,
           participants: event.participants,
           max_participants: event.max_participants,

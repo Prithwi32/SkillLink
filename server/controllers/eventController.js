@@ -13,7 +13,7 @@ export const getAllEvents = async (req, res) => {
     )
       .populate("skills_id", "name")
       .populate("participants", "name email _id")
-      .populate("created_by", "name rating")
+      .populate("created_by", "name rating photo")
       .populate("requests", "_id");
 
     res.status(200).json(events);
@@ -244,15 +244,10 @@ export const getEventsByStatusAndUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid status" });
     }
 
-    let query = {};
-    if (status === "Upcoming") {
-      query = { status: "Upcoming" };
-    } else {
-      query = {
-        status: status,
-        created_by: userId,
-      };
-    }
+    const query = {
+      status: status,
+      created_by: userId, // Ensure only events created by the user are fetched
+    };
 
     const events = await Event.find(query)
       .populate("created_by", "name")
