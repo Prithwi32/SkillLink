@@ -23,7 +23,7 @@ export default function Event() {
         title: event.title,
         description: event.description,
         date: new Date(event.date).toLocaleDateString(),
-        skills: event.skills_id.map((skill) => skill.name),
+        badges: event.skills_id.map((skill) => skill.name),
         mentorName: event.created_by.name,
         mentorImage: event.created_by.photo ||
           "https://img.freepik.com/free-vector/user-blue-gradient_78370-4692.jpg?semt=ais_hybrid",
@@ -65,7 +65,7 @@ export default function Event() {
           title: event.title,
           description: event.description,
           date: new Date(event.date).toLocaleDateString(),
-          skills: event.skills_id.map((skill) => skill.name),
+          badges: event.skills_id.map((skill) => skill.name),
           mentorName: event.created_by.name,
           mentorImage: event.created_by.photo || "https://img.freepik.com/free-vector/user-blue-gradient_78370-4692.jpg?semt=ais_hybrid",
           rating: event.created_by.rating,
@@ -93,20 +93,23 @@ export default function Event() {
   }, []);
 
   return (
-    <main className="flex flex-col items-center justify-center p-10 px-14">
-      <h1 className="text-3xl sm:text-4xl font-bold mb-6 sm:mb-8 text-center">
-        Featured Events
+    <main className="flex flex-col items-center justify-center py-8 px-8 sm:px-14 bg-gradient-to-br  from-blue-50 to-sky-50">
+      <h1 className="text-3xl sm:text-4xl font-semibold mb-5 text-center">
+        Featured <span className="text-blue-800">Events</span>
       </h1>
+      <p className="text-gray-600 sm:text-lg max-w-lg text-center mb-6">
+      Explore our featured events, where ideas meet opportunities. Stay updated and join the journey!
+      </p>
       {!isLoading && <EventCarousel topEvents={topEvents} />}
       {isLoading && (
         <p className="text-lg font-semibold text-slate-400">Loading...</p>
       )}
-      <Button
+      {topEvents.length>3?<Button
           onClick={() => (token ? navigate("/events") : navigate("/login"))}
-          className="mt-8"
+          className="mt-8 bg-blue-900 hover:bg-blue-950"
         >
           Explore More
-        </Button>
+        </Button>:""}
     </main>
   );
 }

@@ -1,85 +1,88 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import EventCard from "../Cards/EventCard";
+import { Calendar, MapPinIcon, Star } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "../ui/badge";
 
 const EventCarousel = ({ topEvents }) => {
-  const [api, setApi] = useState();
-  const [isDesktop, setIsDesktop] = useState(false);
+  console.log(topEvents);
 
-  // console.log(topEvents);
-
-  useEffect(() => {
-    const checkIsDesktop = () => {
-      setIsDesktop(window.matchMedia("(min-width: 640px)").matches);
+  function formatDate(inputDate) {
+    // Split the input date into components
+    const [day, month, year] = inputDate.split("/").map(Number);
+    
+    // Create a new Date object
+    const date = new Date(year, month - 1, day); // Month is 0-indexed in JavaScript
+    
+    // Format the date
+    const options = {
+      weekday: "short", // Short day of the week (e.g., Wed)
+      month: "short",   // Short month name (e.g., Oct)
+      day: "2-digit",   // Two-digit day (e.g., 17)
+      year: "numeric",  // Full year (e.g., 2028)
     };
-
-    checkIsDesktop();
-    window.addEventListener("resize", checkIsDesktop);
-
-    return () => window.removeEventListener("resize", checkIsDesktop);
-  }, []);
-
-  useEffect(() => {
-    if (!api) {
-      return;
-    }
-
-    api.on("select", () => {
-      api.scrollTo(api.selectedScrollSnap(), {
-        duration: 400,
-      });
-    });
-  }, [api]);
-
-  const handleNextClick = () => {
-    if (api) {
-      const nextIndex = (api.selectedScrollSnap() + 1) % topEvents.length;
-      api.scrollTo(nextIndex);
-    }
-  };
-
-  const handlePrevClick = () => {
-    if (api) {
-      const prevIndex =
-        (api.selectedScrollSnap() - 1 + topEvents.length) % topEvents.length;
-      api.scrollTo(prevIndex);
-    }
-  };
+    
+    // Use Intl.DateTimeFormat for formatting
+    return new Intl.DateTimeFormat("en-US", options).format(date);
+  }
+  
 
   return (
-    <Carousel
-      setApi={setApi}
-      className="w-full max-w-sm md:max-w-2xl lg:max-w-4xl mx-auto"
-      opts={{
-        align: "start",
-        loop: true,
-      }}
-    >
-      <CarouselContent className="-ml-2 md:-ml-4">
-        {topEvents.map((event, index) => (
-          <CarouselItem
-            key={index}
-            className="pl-2 md:pl-4 w-full sm:basis-1/2"
-          >
-            <div className="p-1 h-full">
-              <EventCard {...event} />
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <div>
-        <CarouselPrevious onClick={handlePrevClick} />
-        <CarouselNext onClick={handleNextClick} />
-      </div>
-    </Carousel>
+    <div className="flex w-full flex-wrap items-center justify-center cursor-pointer gap-5">
+      {topEvents.slice(0, 3).map((event, index) => (
+          <Card key={index} className="p-6 white rounded-3xl shadow-blue-100 border border-blue-100 shadow-md lg:max-w-md w-full hover:shadow-lg hover:shadow-blue-200 hover:scale-[1.01] transition-all">
+           <CardContent className="p-0 space-y-3">
+              {/* Date and Time */}
+              <div className="text-sm text-gray-400 flex items-center gap-2">
+               <Calendar className="size-4"/> {formatDate(event.date)}
+              </div>
+
+              {/* Event Title and Description */}
+              <h2 className="text-2xl font-semibold line-clamp-2 text-blue-900">
+                {event.title}
+              </h2>
+              <div className="flex items-center gap-2 text-gray-500 line-clamp-3">
+                {event.description}
+              </div>
+
+              {/* skills taught */}
+              <div className="flex flex-wrap gap-2">
+                {event.badges.slice(0,3).map((badge) => (
+                <Badge
+                  key={badge}
+                  variant="secondary"
+                  className="rounded-full px-3 py-1 text-xs text-blue-900"
+                >
+                  {badge}
+                </Badge>
+              ))}
+
+              {event.badges.length>3 && <Badge
+                  variant="secondary"
+                  className="rounded-full px-3 py-1 text-xs text-blue-900"
+                >
+                  +{event.badge.length-3} more
+                </Badge>}
+              </div>
+
+              {/* owner Section */}
+                <div className="flex items-center gap-3 pt-3 border-t border-gray-200">
+                  <Avatar className="size-8">
+                    <AvatarImage src={event.mentorImage} className="object-cover" alt="GammaTester" />
+                    <AvatarFallback>GT</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h3 className="font-semibold text-sm text-zinc-700">{event.mentorName}</h3>
+                    <div className="flex text-yellow-400">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="size-3 fill-current" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+            </CardContent>
+          </Card>
+      ))}
+    </div>
   );
 };
 

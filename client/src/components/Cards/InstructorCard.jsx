@@ -18,28 +18,26 @@ export function InstructorCard({
   className,
 }) {
   // Show only first 3 skillsOffered if there are more
-  const displayBadges = skillsOffered.slice(0, 3);
-  const remainingBadges = skillsOffered.length - 3;
+  const displayBadges = skillsOffered.slice(0, 2);
+  const remainingBadges = skillsOffered.length - 2;
 
-  const bg=getRandomColor();
+  const bg = getRandomColor();
 
   const token = localStorage.getItem("token");
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
-
-  const handleViewMore=(userId)=>{
-      if(token)
-        navigate(`/users/${userId}`);
-      else{
-        toast.error("Login Required...");
-        navigate('/login');
-      }
-  }
+  const handleViewMore = (userId) => {
+    if (token) navigate(`/users/${userId}`);
+    else {
+      toast.error("Login Required...");
+      navigate("/login");
+    }
+  };
 
   return (
     <Card
       className={cn(
-        "w-full max-w-md transition-all hover:shadow-lg hover:scale-[1.01] cursor-pointer",
+        "w-full max-w-md transition-all hover:shadow-lg hover:scale-[1.01] cursor-pointer ",
         className,
       )}
     >
@@ -47,11 +45,13 @@ export function InstructorCard({
         <div className="flex items-start gap-4">
           <Avatar className="size-16">
             <AvatarImage src={photo} className="object-cover" alt={name} />
-            <AvatarFallback className={`${bg} text-white font-semibold`}>{name.slice(0, 2).toUpperCase()}</AvatarFallback>
+            <AvatarFallback className={`${bg} text-white font-semibold`}>
+              {name.slice(0, 2).toUpperCase()}
+            </AvatarFallback>
           </Avatar>
           <div className="flex-1 space-y-2">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold leading-none text-xl font">
+              <h3 className="font-semibold leading-none text-xl ">
                 {name}
               </h3>
               <div className="flex items-center">
@@ -61,23 +61,23 @@ export function InstructorCard({
                 </span>
               </div>
             </div>
-            <p className="line-clamp-2 text-sm text-muted-foreground">
+            <p className="line-clamp-2 text-sm text-gray-600 text-muted-foreground">
               {about}
             </p>
             <div className="flex flex-wrap gap-2">
               {displayBadges.map((badge) => (
                 <Badge
                   key={badge}
-                  variant="ouline"
-                  className="px-2 py-0.5 border-blue-400"
+                  variant="secondary"
+                  className="rounded-full px-3 py-1 text-xs text-blue-900"
                 >
                   {badge}
                 </Badge>
               ))}
               {remainingBadges > 0 && (
                 <Badge
-                  variant="outline"
-                  className="px-2 py-0.5 text-xs border-blue-400"
+                  variant="secondary"
+                  className="rounded-full px-3 py-1 text-xs text-blue-900"
                 >
                   +{remainingBadges} more
                 </Badge>
@@ -86,7 +86,9 @@ export function InstructorCard({
           </div>
         </div>
         <div className="mt-4 flex w-full justify-end">
-          <Button onClick={()=>handleViewMore(_id)} className="scale-90">View Profile</Button>
+          <Button onClick={() => handleViewMore(_id)} className="scale-90">
+            View
+          </Button>
         </div>
       </CardContent>
     </Card>

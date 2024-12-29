@@ -57,7 +57,7 @@ export default function ReportedUserReason({
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-1">
                     <img
-                      className="size-10"
+                      className="size-10 rounded-full object-cover"
                       src={
                         reason.reportedBy.photo ||
                         "https://e7.pngegg.com/pngimages/1008/377/png-clipart-computer-icons-avatar-user-profile-avatar-heroes-black-hair-thumbnail.png"

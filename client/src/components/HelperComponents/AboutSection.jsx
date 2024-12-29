@@ -16,7 +16,7 @@ export default function AnimatedAbout() {
           {/* Left Content */}
           <div className="flex-1 space-y-6 max-md:text-center md:p-16">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-blue-800 leading-tight">
-              Welcome to Our
+              Welcome to Our{" "}
               <br className="hidden md:block" />
               Platform
             </h1>
@@ -45,13 +45,13 @@ export default function AnimatedAbout() {
             <img
               src={landingPageImage}
               alt="Developer working"
-              className="w-full h-auto rounded-lg shadow- transform hover:scale-105 transition-transform duration-300 cursor-pointer"
+              className="w-full h-auto rounded-lg transform hover:scale-105 transition-transform duration-300 cursor-pointer"
             />
           </div>
         </div>
 
         {/* Features Section */}
-        <div id="features" className="grid md:grid-cols-3 gap-8 pt-40">
+        <div id="features" className="grid md:grid-cols-3 gap-8 pt-16">
           {/* Feature 1 */}
           <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
             <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
