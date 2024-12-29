@@ -76,10 +76,13 @@ export default function SuggestedCard() {
   },[]);
 
   return (
-    <main className="flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold mb-8 text-center">
-        Recommanded Users
+    <main className="flex flex-col items-center justify-center pt-10">
+      <h1 className="text-2xl sm:text-3xl font-semibold text-center">
+        Recommanded <span className="text-blue-700">Users</span>
       </h1>
+      <p className="text-gray-600 sm:text-lg max-w-lg text-center m-4">
+      Discover recommended users who align with your interests and goals. Connect and grow together!
+      </p>
       {!isLoading && <InstructorCardGrid instructors={users} />}
       {isLoading && (
         <p className="text-lg pb-2 font-semibold text-slate-400">Loading...</p>

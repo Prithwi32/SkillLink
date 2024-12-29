@@ -3,6 +3,7 @@ import { Avatar } from "../components/HelperComponents/Avatar";
 import { EditableField } from "../components/HelperComponents/EditableField";
 import { Plus, X } from "lucide-react";
 import SkillSuggestInputField from "@/components/HelperComponents/SkillSuggestCommon";
+import SkillRequestForm from "@/components/Forms/SkillRequestForm";
 
 export function ProfilePage({ user, isEditing, onEditToggle, onSubmit }) {
   const [editedUser, setEditedUser] = useState({
@@ -140,7 +141,7 @@ export function ProfilePage({ user, isEditing, onEditToggle, onSubmit }) {
               </div>
             )}
             {isAddingSkill && (
-              <SkillSuggestInputField 
+              <SkillSuggestInputField
                 isMultiple={true}
                 onSkillSelect={(skills) =>
                   handleSkillAdd(
@@ -200,12 +201,15 @@ export function ProfilePage({ user, isEditing, onEditToggle, onSubmit }) {
           {/* Edit, Save, Cancel Buttons */}
           <div className="flex justify-end gap-4 flex-wrap sm:flex-nowrap">
             {!isEditing ? (
-              <button
-                onClick={() => handleEditToggle(true)}
-                className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors duration-300"
-              >
-                Edit
-              </button>
+              <>
+                <button
+                  onClick={() => handleEditToggle(true)}
+                  className="px-4 py-1 text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors duration-300"
+                >
+                  Edit
+                </button>
+                <SkillRequestForm />
+              </>
             ) : (
               <>
                 <button

@@ -45,7 +45,7 @@ export function InstructorCardGrid({ instructors }) {
         ))}
       </div>
       {instructors.length>3 && <div className="mt-8 text-center">
-        <Button variant="default" size="lg" onClick={handleExploreClick}>Explore</Button>
+        <Button variant="default" size="lg"  onClick={handleExploreClick}>Explore</Button>
       </div>}
     </div>
   );
