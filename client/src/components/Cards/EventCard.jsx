@@ -1,8 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Star, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import { StarRating } from "../ui/StarRating";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
 
 const EventCard = ({
   title,
@@ -12,8 +9,6 @@ const EventCard = ({
   mentorName,
   mentorImage,
 }) => {
-  const navigate = useNavigate();
-  const { token } = useAuth();
 
   return (
     <div className="bg-card text-card-foreground rounded-lg shadow-md p-6 flex flex-col h-[300px]">
@@ -35,11 +30,11 @@ const EventCard = ({
       </p>
       {/* <Button size="sm" className="mt-auto">Enroll</Button> */}
       <div className="flex justify-center">
-        <Button
+        {/* <Button
           onClick={() => (token ? navigate("/events") : navigate("/login"))}
         >
           Enroll
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

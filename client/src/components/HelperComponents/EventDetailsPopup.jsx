@@ -22,8 +22,22 @@ const EventDetailsPopup = ({ event, onClose, open }) => {
   } = event;
 
   const formattedDate = new Date(date).toLocaleDateString();
-  const defaultHostImage =
-    "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid";
+  const defaultHostImage = host_img || "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid";
+
+  const convertToLocalTime = (isoTime) => {
+    try {
+      const date = new Date(isoTime);
+      return date.toLocaleString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+        timeZone: 'UTC'
+      });
+    } catch (error) {
+      console.error("Invalid ISO format:", error);
+      return "";
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -38,7 +52,7 @@ const EventDetailsPopup = ({ event, onClose, open }) => {
             <CardContent className="p-4">
               <div className="flex items-center space-x-4">
                 <Avatar className="w-16 h-16">
-                  <AvatarImage src={host_img || defaultHostImage} alt={host_name} />
+                  <AvatarImage src={defaultHostImage} alt={host_name} />
                   <AvatarFallback>{host_name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
@@ -75,15 +89,7 @@ const EventDetailsPopup = ({ event, onClose, open }) => {
               <div className="flex items-center space-x-2 text-gray-700">
                 <Clock className="w-6 h-6 flex-shrink-0" />
                 <span>
-                  {new Date(start_time).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}{" "}
-                  -{" "}
-                  {new Date(end_time).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                  {convertToLocalTime(start_time)} - {convertToLocalTime(end_time)}
                 </span>
               </div>
               <div className="flex items-center space-x-2 text-gray-700">

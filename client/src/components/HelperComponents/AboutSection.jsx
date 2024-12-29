@@ -14,13 +14,13 @@ export default function AnimatedAbout() {
       <div className="px-8">
         <div className="flex flex-col py-6 md:py-2 md:flex-row items-center justify-around gap-6">
           {/* Left Content */}
-          <div className="flex-1 space-y-6 max-md:text-center">
+          <div className="flex-1 space-y-6 max-md:text-center md:p-16">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-blue-800 leading-tight">
               Welcome to Our
               <br className="hidden md:block" />
               Platform
             </h1>
-            <p className="text-gray-600 text-lg max-w-lg">
+            <p className="text-gray-600 text-lg w-full">
               Discover a platform where skills are shared, communities connect,
               and growth is a collaborative journey. Learn, teach, and thrive
               together.
@@ -51,7 +51,7 @@ export default function AnimatedAbout() {
         </div>
 
         {/* Features Section */}
-        <div id="features" className="grid md:grid-cols-3 gap-8 mt-20">
+        <div id="features" className="grid md:grid-cols-3 gap-8 pt-40">
           {/* Feature 1 */}
           <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer">
             <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center mb-6">

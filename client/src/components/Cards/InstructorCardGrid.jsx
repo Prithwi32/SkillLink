@@ -32,7 +32,7 @@ export function InstructorCardGrid({ instructors }) {
 
   const handleExploreClick = () => {
     if(token)
-    navigate('/allSuggestedLearning'); // Redirect to home page
+    navigate('/allRecommendUsers'); // Redirect to home page
     else 
     navigate('/users'); 
   };

@@ -29,6 +29,24 @@ const Navbar = () => {
             <li className="py-1">About Us</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
           </NavLink>
+          {/* <NavLink to="/" className="hover:opacity-75" onClick={handleHomeClick}>>
+            <li className="py-1">Home</li>
+            <hr
+              className={`border-none outline-none h-0.5 w-4/5 m-auto ${
+                location.pathname === "/" && location.hash === ""
+                  ? "bg-blue-700"
+                  : "bg-transparent"
+              }`}
+            />
+          </NavLink>
+          <NavLink to="/#features" className="hover:opacity-75">
+            <li className="py-1">About Us</li>
+            <hr
+              className={`border-none outline-none h-0.5 w-4/5 m-auto ${
+                location.hash === "#features" ? "bg-blue-700" : "bg-transparent"
+              }`}
+            />
+          </NavLink> */}
           <NavLink to="/blogs" className="hover:opacity-75">
             <li className="py-1">Blogs</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />

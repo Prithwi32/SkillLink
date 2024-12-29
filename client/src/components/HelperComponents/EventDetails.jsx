@@ -34,13 +34,36 @@ export function EventDetails({
 
   const convertToISO = (time) => {
     try {
-      const today = new Date();
+      if (!time) return null;
+  
       const [hour, minute] = time.split(":");
-      today.setHours(parseInt(hour, 10), parseInt(minute, 10), 0, 0);
-      return today.toISOString();
+      const date = new Date();
+  
+      // Set hours and minutes based on the provided time
+      date.setHours(parseInt(hour, 10), parseInt(minute, 10), 0, 0);
+  
+      // Adjust the date to UTC from IST (+5:30)
+      const utcDate = new Date(date.getTime() - 5.5 * 60 * 60 * 1000);
+  
+      return utcDate.toISOString(); // Convert adjusted UTC date to ISO string
     } catch (error) {
       console.error("Invalid time format:", error);
       return null;
+    }
+  };
+
+  const convertToLocalTime = (isoTime) => {
+    try {
+      const date = new Date(isoTime);
+      return date.toLocaleString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: "UTC"
+      });
+    } catch (error) {
+      console.error("Invalid ISO format:", error);
+      return "Invalid Date";
     }
   };
 
@@ -53,6 +76,8 @@ export function EventDetails({
 
       const formattedStartTime = convertToISO(startTime);
       const formattedEndTime = convertToISO(endTime);
+      console.log(formattedEndTime)
+      console.log(formattedStartTime)
 
       const payload = {
         start_time: formattedStartTime,
@@ -125,7 +150,7 @@ export function EventDetails({
             </div>
           ) : (
             <span className="text-gray-600">
-              {startTime} - {endTime}
+              {convertToLocalTime(initialStartTime)} - {convertToLocalTime(initialEndTime)}
             </span>
           )}
         </div>

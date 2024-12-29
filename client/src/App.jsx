@@ -17,6 +17,8 @@ import EventListPage from "./pages/EventListPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import AllSuggestedLearningPage from "./pages/AllSuggestedLearningPage";
 import EventDetailsPage from "./pages/EventDetailsPage";
+// import AboutPage from "./components/HelperComponents/AboutSection"
+import ScrollToHash from "./components/HelperComponents/ScrollToHash";
 
 // axios.defaults.baseURL = "http://localhost:5000";
 // axios.defaults.withCredentials = true;
@@ -24,6 +26,7 @@ import EventDetailsPage from "./pages/EventDetailsPage";
 function App() {
   return (
     <AuthProvider>
+      <ScrollToHash/>
       <Routes>
         <Route path="/" element={<AppLayout />}>
           <Route index element={<LandingPage />} />
@@ -31,18 +34,16 @@ function App() {
           {/* Public routes */}
           <Route path="signup" element={<SignupCard />} />
           <Route path="login" element={<LoginCard />} />
+          {/* <Route path="about" element={<AboutPage />} /> */}
           <Route path="events" element={<EventListPage />} />
           <Route path="users" element={<UsersPage />} />
-          <Route
-            path="allSuggestedLearning"
-            element={<AllSuggestedLearningPage />}
-          />
 
           {/*Protected routes with AppLayout */}
           <Route element={<ProtectedRoute />}>
             <Route path="/users/:userId" element={<UserProfilePage />} />
             <Route path="reportuser" element={<ReportUserForm />} />
             <Route path="/userDashboard/:eventId" element={<EventDetailsPage/>}/>
+            <Route path="allRecommendUsers" element={<AllSuggestedLearningPage />}/>
           </Route>
         </Route>
 

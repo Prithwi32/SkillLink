@@ -3,55 +3,12 @@ import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-
-// const events = [
-//   {
-//     skillName: "Web Development",
-//     rating: 4.5,
-//     participants: 1500,
-//     description:
-//       "Learn the fundamentals of web development, including HTML, CSS, and JavaScript.",
-//   },
-//   {
-//     skillName: "Data Science",
-//     rating: 4.8,
-//     participants: 1200,
-//     description:
-//       "Explore data analysis, machine learning, and statistical modeling techniques.",
-//   },
-//   {
-//     skillName: "UX Design",
-//     rating: 4.2,
-//     participants: 800,
-//     description:
-//       "Master the principles of user experience design and create intuitive interfaces.",
-//   },
-//   {
-//     skillName: "Digital Marketing",
-//     rating: 4.0,
-//     participants: 1000,
-//     description:
-//       "Discover strategies for online marketing, SEO, and social media campaigns.",
-//   },
-//   {
-//     skillName: "Mobile App Development",
-//     rating: 4.6,
-//     participants: 950,
-//     description:
-//       "Build native and cross-platform mobile applications for iOS and Android.",
-//   },
-//   {
-//     skillName: "Artificial Intelligence",
-//     rating: 4.9,
-//     participants: 750,
-//     description:
-//       "Dive into AI concepts, neural networks, and deep learning techniques.",
-//   },
-// ];
+import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 export default function Event() {
   const { backendUrl, token } = useAuth();
-
+  const navigate  = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [topEvents, setTopEvents] = useState([]);
 
@@ -68,7 +25,7 @@ export default function Event() {
         date: new Date(event.date).toLocaleDateString(),
         skills: event.skills_id.map((skill) => skill.name),
         mentorName: event.created_by.name,
-        mentorImage:
+        mentorImage: event.created_by.photo ||
           "https://img.freepik.com/free-vector/user-blue-gradient_78370-4692.jpg?semt=ais_hybrid",
         rating: event.created_by.rating,
         participants: event.participants,
@@ -110,8 +67,7 @@ export default function Event() {
           date: new Date(event.date).toLocaleDateString(),
           skills: event.skills_id.map((skill) => skill.name),
           mentorName: event.created_by.name,
-          mentorImage:
-            "https://img.freepik.com/free-vector/user-blue-gradient_78370-4692.jpg?semt=ais_hybrid",
+          mentorImage: event.created_by.photo || "https://img.freepik.com/free-vector/user-blue-gradient_78370-4692.jpg?semt=ais_hybrid",
           rating: event.created_by.rating,
           mentorId: event.created_by._id,
           participants: event.participants,
@@ -145,6 +101,12 @@ export default function Event() {
       {isLoading && (
         <p className="text-lg font-semibold text-slate-400">Loading...</p>
       )}
+      <Button
+          onClick={() => (token ? navigate("/events") : navigate("/login"))}
+          className="mt-8"
+        >
+          Explore More
+        </Button>
     </main>
   );
 }

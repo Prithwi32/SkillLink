@@ -42,8 +42,6 @@ export function EventModal({ event, onClose, onRegister }) {
 
   useEffect(() => {
     if (!token) return;
-
-    // Update button text based on user's registration status
     if (user === event.mentorName) {
       setButtonText("You are Host");
     } else if (event.participantsID.includes(userId)) {
@@ -62,24 +60,26 @@ export function EventModal({ event, onClose, onRegister }) {
       return;
     }
 
-    setPending(event.id);
+    setPending(event);
 
     try {
       const response = await fetch(
-        `${backendUrl}/api/events/${event.id}/register`,
+        `${backendUrl}/api/events/${event._id}/register`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.ok) {
+        setButtonText("Requested to Join");
         setIsRegistered(true);
-        toast.success("Successfully registered for the event!");
+        toast.success("Your request to join has been sent!");
         onRegister?.();
+        window.location.reload();
       } else {
         const error = await response.json();
         toast.error(`Failed to register: ${error.message}`);
@@ -88,12 +88,12 @@ export function EventModal({ event, onClose, onRegister }) {
       console.error("Error registering for event:", error);
       toast.error("An error occurred while registering. Please try again.");
     } finally {
-      clearPending(event.id);
+      clearPending(event);
     }
   };
 
   const handleProfileClick = () => {
-    navigate(`/profile/${event.mentorId}`);
+    navigate(`/users/${event.mentorId}`);
   };
 
   return (
@@ -158,22 +158,24 @@ export function EventModal({ event, onClose, onRegister }) {
               </div>
               <div className="flex items-center space-x-2 text-gray-600">
                 <Clock className="w-5 h-5" />
-                <span>
-                  {new Date(event.start_time).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}{" "}
-                  -{" "}
-                  {new Date(event.end_time).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </span>
+                  <span>
+                    {new Date(event.start_time).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      timeZone: "UTC",
+                    })}{" "}
+                    -{" "}
+                    {new Date(event.end_time).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      timeZone: "UTC",
+                    })}{" "}
+                  </span>
               </div>
               <div className="flex items-center space-x-2 text-gray-600">
                 <Users className="w-5 h-5" />
                 <span>
-                  {event.max_participants} / {event.participants.length}{" "}
+                  {event.participants.length} / {event.max_participants}{" "}
                   participants
                 </span>
               </div>
@@ -187,14 +189,14 @@ export function EventModal({ event, onClose, onRegister }) {
           ) : (
             <button
               onClick={handleRegister}
-              disabled={isPending(event.id) || buttonText !== "Register for Event"}
+              disabled={isPending(event) || buttonText !== "Register for Event"}
               className={`w-full mt-6 px-6 py-3 rounded-lg font-semibold transition-all ${
-                isPending(event.id) || buttonText !== "Register for Event"
+                isPending(event) || buttonText !== "Register for Event"
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-blue-600 hover:bg-blue-700 text-white"
               }`}
             >
-              {isPending(event.id) ? (
+              {isPending(event) ? (
                 <span className="flex items-center justify-center">
                   <LoadingSpinner /> Pending...
                 </span>

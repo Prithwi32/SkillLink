@@ -28,12 +28,6 @@ function EventDetailsPage() {
         eventData.date = new Date(eventData.date).toLocaleDateString([], {
           year: 'numeric', month: 'long', day: 'numeric',
         });
-        eventData.start_time = new Date(eventData.start_time).toLocaleTimeString([], {
-          hour: "2-digit", minute: "2-digit",
-        });
-        eventData.end_time = new Date(eventData.end_time).toLocaleTimeString([], {
-          hour: "2-digit", minute: "2-digit",
-        });
         setEvent(eventData);
 
         // Fetch event requests

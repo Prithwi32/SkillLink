@@ -529,7 +529,7 @@ export const getUserParticipatingEvents = async (req, res) => {
     console.log("Query:", query);
 
     const events = await Event.find(query)
-      .populate("created_by", "name")
+      .populate("created_by", "name photo")
       .populate("skills_id", "name")
       .sort({ date: 1, start_time: 1 });
 
@@ -547,6 +547,7 @@ export const getUserParticipatingEvents = async (req, res) => {
         title: event.title,
         description: event.description,
         host_name: event.created_by.name,
+        host_img: event.created_by.photo,
         date: event.date,
         start_time: event.start_time,
         end_time: event.end_time,
@@ -599,7 +600,7 @@ export const getEventsBasedOnSkillsRequested = async (req, res) => {
     })
       .select("title description date start_time end_time skills_id")
       .populate("skills_id", "name")
-      .populate("created_by", "name rating")
+      .populate("created_by", "name rating photo")
       .populate("participants", "name email _id")
       .lean();
 

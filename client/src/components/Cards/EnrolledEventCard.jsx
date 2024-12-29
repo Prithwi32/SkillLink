@@ -6,7 +6,7 @@ export const EnrolledEventCard = ({ event, status }) => {
   const [showPopup, setShowPopup] = useState(false);
   const { title, description, host_name, host_img, date, link } = event;
   const formattedDate = new Date(date).toLocaleDateString();
-  const defaultHostImage = "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid";
+  const defaultHostImage = host_img || "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid";
 
   const handleViewDetails = () => {
     setShowPopup(true);
