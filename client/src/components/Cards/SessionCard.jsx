@@ -149,7 +149,7 @@ export function SessionCard({ session, getAllSessions }) {
       {(session.userOne._id === userId && session.isReviewProvidedByUserOne) ||
       (session.userTwo._id === userId && session.isReviewProvidedByUserTwo) ? (
         <div className="text-sm text-gray-600">
-          <button className="inline-flex items-center px-3 py-1.5 text-xs font-semibold bg-green-100 text-text-700 rounded hover:bg-green-200 transition-colors">
+          <button className="p-6 py-2 px-4 rounded-md text-center bg-green-100 text-green-800">
             Review Submitted
           </button>
         </div>
@@ -306,7 +306,7 @@ export function SessionCard({ session, getAllSessions }) {
       {session.status === "Scheduled" && renderScheduledActions()}
       {session.status === "Completed" && renderCompletedActions()}
       {session.status === "Cancelled" && (
-        <button className="mt-4 text-red-600 bg-red-100 rounded-md w-full py-2 font-semibold text-opacity-80">Session Canceled</button>
+        <button className="mt-4 bg-red-100 text-red-800 rounded-md w-full py-2 font-semibold text-opacity-80">Session Canceled</button>
       )}
     </div>
   );

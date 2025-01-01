@@ -5,17 +5,17 @@ function Footer() {
 
   return (
     <footer className="relative">
-      <div className="w-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-white">
+      <div className="w-full bg-white">
         <div className="w-full px-8">
           <div className="flex flex-col items-center justify-center border-t border-blue-300 py-4 md:flex-row md:justify-between md:px-16">
-            <p className="mb-4 text-center font-normal text-white md:mb-0">
+            <p className="mb-4 mr-6 text-center font-normal text-black md:mb-0">
               &copy; {currentYear}{" "}
               <a href="/" className="font-semibold hover:underline">
-                HobbyVerse
+                <span className="text-black">Hobby</span><span className="text-blue-600">Verse</span>
               </a>
               . All Rights Reserved.
             </p>
-            <div className="flex gap-4 text-white sm:justify-center">
+            <div className="flex gap-4 text-black sm:justify-center">
               <a
                 href="#"
                 className="opacity-80 transition-opacity hover:opacity-100"
@@ -61,7 +61,7 @@ function Footer() {
                 </svg>
               </a>
             </div>
-            <div className="flex gap-4 mt-4 md:mt-0">
+            <div className="flex gap-4 mt-4 md:mt-0 ml-6">
               <p className="mr-2 hover:underline cursor-pointer">
                 Privacy Policy
               </p>

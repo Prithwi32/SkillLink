@@ -114,7 +114,7 @@ export default function SkillRequestForm() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default">Request New Skill</Button>
+        <Button className="bg-cyan-500 hover:bg-cyan-600" variant="default">Request New Skill</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
