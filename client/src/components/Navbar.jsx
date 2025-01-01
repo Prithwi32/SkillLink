@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { UserCircle, X } from "lucide-react";
 import { Button } from "./ui/button.jsx";
@@ -8,6 +8,14 @@ const Navbar = () => {
   const { user, token } = useAuth();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleHomeClick = () => {
+    if (location.pathname === "/" && location.hash !== "") {
+        navigate("/");
+        scrollTo(0, 0);
+    }
+  };
 
   return (
     <nav className="shadow-sm bg-white text-black sticky top-0 z-50 border-b border-b-gray-400">
@@ -21,15 +29,15 @@ const Navbar = () => {
 
         {/* Center Section */}
         <ul className="hidden md:flex items-start gap-5 font-[400]">
-          <NavLink to="/" className="hover:opacity-75">
+          {/* <NavLink to="/" className="hover:opacity-75">
             <li className="py-1">Home</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
           </NavLink>
           <NavLink to="/about" className="hover:opacity-75">
             <li className="py-1">About Us</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
-          </NavLink>
-          {/* <NavLink to="/" className="hover:opacity-75" onClick={handleHomeClick}>>
+          </NavLink> */}
+          <NavLink to="/" className="hover:opacity-75" onClick={handleHomeClick}>
             <li className="py-1">Home</li>
             <hr
               className={`border-none outline-none h-0.5 w-4/5 m-auto ${
@@ -46,7 +54,7 @@ const Navbar = () => {
                 location.hash === "#features" ? "bg-blue-700" : "bg-transparent"
               }`}
             />
-          </NavLink> */}
+          </NavLink>
           <NavLink to="/blogs" className="hover:opacity-75">
             <li className="py-1">Blogs</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />

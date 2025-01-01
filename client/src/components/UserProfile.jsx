@@ -84,7 +84,7 @@ const UserProfile = () => {
       {/* User Profile */}
       <div className="flex flex-col md:flex-row items-start gap-6">
         <img
-          src={user.profilePicture || 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg'} // Default image if user doesn't have one
+          src={user.photo || 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg'} // Default image if user doesn't have one
           alt={user.name}
           className="w-32 h-32 rounded-full object-cover border-4 border-blue-100"
         />
