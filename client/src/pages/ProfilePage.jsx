@@ -66,12 +66,12 @@ export function ProfilePage({ user, isEditing, onEditToggle, onSubmit }) {
       (skill) => skill !== skillToRemove,
     );
     handleFieldChange("skillsRequested", updatedSkills);
-  };
+  };{/* bg-blue-500 text-white */}
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-400 to-blue-600 transition-all duration-500">
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="bg-white rounded-xl shadow-xl p-8 space-y-8 animate-scale-in hover:shadow-2xl transition-all duration-500">
+    <div className="overflow-hidden">
+      <div className="max-w-4xl mx-auto p-6 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-md shadow-blue-300 p-8 space-y-8 animate-scale-in hover:shadow-xl hover:shadow-blue-400 transition-all duration-500">
           {/* Header Section */}
           <div className="flex flex-col sm:flex-row items-start sm:gap-8">
             <Avatar
