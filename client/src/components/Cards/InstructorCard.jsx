@@ -1,27 +1,22 @@
 import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getRandomColor } from "@/constants/colors";
+import { Button } from "../ui/button";
 
 export function InstructorCard({
-  name,
-  photo,
+  name = "Sarah Wilson",
+  about = "Passionate UI designer with 5+ years of experience in creating user-centered digital experiences.",
+  skillsOffered = ["UI Design", "Figma", "User Research", "Prototyping"],
+  photo = "/placeholder.svg?height=40&width=40",
   _id,
   rating,
-  about,
-  skillsOffered,
-  className,
 }) {
   // Show only first 3 skillsOffered if there are more
-  const displayBadges = skillsOffered.slice(0, 2);
-  const remainingBadges = skillsOffered.length - 2;
-
-  const bg = getRandomColor();
+  const displayBadges = skillsOffered.slice(0, 3);
+  const remainingBadges = skillsOffered.length - 3;
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -35,62 +30,66 @@ export function InstructorCard({
   };
 
   return (
-    <Card
-      className={cn(
-        "w-full max-w-md transition-all hover:shadow-lg hover:scale-[1.01] cursor-pointer ",
-        className,
-      )}
-    >
-      <CardContent className="pt-6 flex flex-col h-full justify-between">
-        <div className="flex items-start gap-4">
-          <Avatar className="size-16">
-            <AvatarImage src={photo} className="object-cover" alt={name} />
-            <AvatarFallback className={`${bg} text-white font-semibold`}>
-              {name.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 space-y-2">
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold leading-none text-xl ">
-                {name}
-              </h3>
-              <div className="flex items-center">
-                <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                <span className="ml-1 text-sm font-semibold text-muted-foreground">
-                  {rating}
-                </span>
-              </div>
-            </div>
-            <p className="line-clamp-2 text-sm text-gray-600 text-muted-foreground">
-              {about}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {displayBadges.map((badge) => (
-                <Badge
-                  key={badge}
-                  variant="secondary"
-                  className="rounded-full px-3 py-1 text-xs text-blue-900"
-                >
-                  {badge}
-                </Badge>
-              ))}
-              {remainingBadges > 0 && (
-                <Badge
-                  variant="secondary"
-                  className="rounded-full px-3 py-1 text-xs text-blue-900"
-                >
-                  +{remainingBadges} more
-                </Badge>
-              )}
-            </div>
+    <Card className="w-full max-w-xs h-full overflow-hidden hover:shadow-lg hover:scale-[1.01] transition-all flex flex-col cursor-pointer">
+      <div className="aspect-[4/1] relative bg-gradient-to-b from-slate-300 to-background flex items-center justify-center">
+        <Avatar className="size-20 absolute bottom-0 translate-y-1/2 border-4 border-background">
+          <AvatarImage src={photo} className="object-cover" alt={name} />
+          <AvatarFallback>
+            {name
+              .split(" ")
+              .map((n) => n[0])
+              .join("")
+              .toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+      </div>
+
+      <CardContent className="pt-10 text-center space-y-3 flex-grow">
+        <div className="mb-3">
+          <p className="text-xl font-semibold line-clamp-2">{name}</p>
+          <div className="flex text-yellow-400 justify-center">
+            {[...Array(5)].map((_, i) => (
+              i<rating && <Star key={i} className="size-3 fill-current" />
+            ))}
           </div>
         </div>
-        <div className="mt-4 flex w-full justify-end">
-          <Button onClick={() => handleViewMore(_id)} className="scale-90">
-            View
-          </Button>
+
+        <div className="space-y-2">
+          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
+            {about}
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-1.5 justify-center">
+          {displayBadges.map((skill) => (
+            <Badge
+              key={skill}
+              variant="secondary"
+              className="text-xs rounded-full"
+            >
+              {skill}
+            </Badge>
+          ))}
+          {remainingBadges > 0 && (
+            <Badge
+              className="text-xs rounded-full"
+              variant="secondary"
+            >
+              + {remainingBadges} more
+            </Badge>
+          )}
         </div>
       </CardContent>
+
+      <CardFooter className="flex justify-center pb-4 mt-auto">
+        <Button
+          onClick={() => handleViewMore(_id)}
+          size="sm"
+          className="w-28 bg-blue-950 hover:opacity-90 hover:bg-blue-950"
+        >
+          View Profile
+        </Button>
+      </CardFooter>
     </Card>
   );
 }

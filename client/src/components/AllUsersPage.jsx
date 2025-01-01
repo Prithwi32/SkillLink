@@ -1,15 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Star, UserCircle } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { InstructorCard } from "./Cards/InstructorCard";
 
@@ -69,11 +59,14 @@ const UsersPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-center">
-        HobbeyVerse Community
+    <div className="px-6 py-8 h-full bg-gradient-to-br from-slate-100 to-background">
+      <h1 className="text-3xl sm:text-4xl font-semibold mb-5 text-center">
+        Hobby<span className="text-blue-800">Verse</span> Community
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <p className="text-gray-500 sm:text-lg mx-auto max-w-lg text-center mb-6">
+      Discover the users who align with your interests and goals. Connect and grow together!
+      </p>
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 place-items-center">
         {users.map((instructor,index) => (
            <InstructorCard {...instructor} key={index}/>
         ))}
