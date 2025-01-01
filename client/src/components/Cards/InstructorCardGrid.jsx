@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { InstructorCard } from "./InstructorCard";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
@@ -15,38 +15,44 @@ export function InstructorCardGrid({ instructors }) {
     }
   };
 
-  const [visibleInstructors, setVisibleInstructors] = React.useState(getVisibleInstructors());
+  const [visibleInstructors, setVisibleInstructors] = React.useState(
+    getVisibleInstructors(),
+  );
 
   React.useEffect(() => {
     const handleResize = () => {
       setVisibleInstructors(getVisibleInstructors());
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [instructors]);
 
   const navigate = useNavigate(); // Initialize navigate function
 
-  const token=localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
   const handleExploreClick = () => {
-    if(token)
-    navigate('/allRecommendUsers'); // Redirect to home page
-    else 
-    navigate('/users'); 
+    if (token)
+      navigate("/allRecommendUsers"); // Redirect to home page
+    else navigate("/users");
   };
 
   return (
     <div className="w-full mx-auto px-10 py-5">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-between">
+      <div className="gap-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-center">
         {visibleInstructors.map((instructor, index) => (
-            <InstructorCard {...instructor} key={index}/>
+          <InstructorCard {...instructor} key={index} />
         ))}
       </div>
-      {instructors.length>3 && <div className="mt-8 text-center">
-        <Button variant="default" size="lg"  onClick={handleExploreClick}>Explore</Button>
-      </div>}
+
+      {instructors.length > 3 && (
+        <div className="mt-8 text-center">
+          <Button variant="default" size="sm" className="bg-blue-950 hover:opacity-90 hover:bg-blue-950" onClick={handleExploreClick}>
+            Explore
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
