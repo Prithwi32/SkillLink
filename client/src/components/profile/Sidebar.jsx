@@ -24,9 +24,50 @@ export default function Sidebar({ isOpen, onClose, activeSection, setActiveSecti
     if (sectionId === 'home') navigate('/'); // Redirect to the home page
   };
 
+  // return (
+  //   <div
+  //     className={`fixed z-10 top-0 left-0 h-full w-64 bg-blue-600 text-white transform transition-transform duration-300 ease-in-out ${
+  //       isOpen ? 'translate-x-0' : '-translate-x-full'
+  //     }`}
+  //   >
+  //     <div className="flex flex-col h-full">
+  //       <button
+  //         onClick={() => {
+  //           navigate('/');
+  //           onClose(); // Close the sidebar after navigating
+  //         }}
+  //         className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-6 mb-6 transition-colors duration-300"
+  //       >
+  //         HobbyVerse
+  //       </button>
+  //       <nav className="flex-grow">
+  //         {navItems.map((item) => (
+  //           <button
+  //             key={item.id}
+  //             onClick={() => handleSectionClick(item.id)}
+  //             className={`w-full text-left py-3 px-6 hover:bg-blue-700 transition-colors duration-300 flex items-center ${
+  //               activeSection === item.id ? 'bg-blue-700' : ''
+  //             }`}
+  //           >
+  //             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  //               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+  //             </svg>
+  //             {item.label}
+  //           </button>
+  //         ))}
+  //       </nav>
+  //       <button
+  //         onClick={handleLogout}
+  //         className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 transition-colors duration-300"
+  //       >
+  //         Logout
+  //       </button>
+  //     </div>
+  //   </div>
+  // );
   return (
     <div
-      className={`fixed z-10 top-0 left-0 h-full w-64 bg-blue-600 text-white transform transition-transform duration-300 ease-in-out ${
+      className={`fixed z-10 top-0 left-0 h-full w-64 bg-blue-100 text-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
@@ -36,20 +77,28 @@ export default function Sidebar({ isOpen, onClose, activeSection, setActiveSecti
             navigate('/');
             onClose(); // Close the sidebar after navigating
           }}
-          className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-6 mb-6 transition-colors duration-300"
+          className="text-blue-600 hover:text-blue-700 font-extrabold text-xl py-4 px-6 mb-6 border-b border-gray-200 transition-colors duration-300"
         >
-          HobbyVerse
+          <span className="text-black">Hobby</span>Verse
         </button>
         <nav className="flex-grow">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => handleSectionClick(item.id)}
-              className={`w-full text-left py-3 px-6 hover:bg-blue-700 transition-colors duration-300 flex items-center ${
-                activeSection === item.id ? 'bg-blue-700' : ''
+              className={`w-full text-left py-3 px-6 rounded-md mb-2 flex items-center transition-colors duration-300 ${
+                activeSection === item.id
+                  ? 'bg-blue-500 text-white'
+                  : 'hover:bg-gray-100'
               }`}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mr-3"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
               </svg>
               {item.label}
@@ -58,11 +107,12 @@ export default function Sidebar({ isOpen, onClose, activeSection, setActiveSecti
         </nav>
         <button
           onClick={handleLogout}
-          className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 transition-colors duration-300"
+          className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 mt-auto rounded-md shadow-lg transition-colors duration-300"
         >
           Logout
         </button>
       </div>
     </div>
   );
+  
 }
