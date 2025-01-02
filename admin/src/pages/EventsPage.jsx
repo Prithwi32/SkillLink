@@ -1,12 +1,17 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import EventList from "@/components/events/EventsList"
-import CounterUpCard from '@/components/WebsiteMetricsCard'
+import { MetricCard } from "../components/counterCard/MetricCard";
+import { metrics } from "@/components/counterCard/data";
 
 export default function EventsDashboard() {
   return (
     <div>
-      <CounterUpCard/>
+     <div className="flex flex-wrap justify-center items-center px-8 py-6 gap-4">
+             {metrics.map((metric) => (
+               <MetricCard key={metric.label} {...metric} />
+             ))}
+           </div>
       <div className="flex-1 overflow-hidden bg-gray-50 ml-5 mr-5">
         <div className="h-full flex flex-col">
           <header className="border-b p-6 bg-white">
