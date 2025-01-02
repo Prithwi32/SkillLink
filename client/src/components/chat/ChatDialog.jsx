@@ -199,6 +199,7 @@ export default function ChatDialog() {
     if (socket) {
       socket.on("message", (message) => {
         setMessages((prevMessages) => [...prevMessages, message]);
+        console.log(message, currentUserId);
       });
     }
   }, [socket]);
@@ -344,14 +345,14 @@ export default function ChatDialog() {
                         <div
                           key={message._id}
                           className={`flex ${
-                            message.senderId?._id === currentUserId
+                            message.senderId === currentUserId
                               ? "justify-end"
                               : "justify-start"
                           }`}
                         >
                           <div
                             className={`max-w-[70%] rounded-lg px-3 py-2 ${
-                              message.senderId._id === currentUserId
+                              message.senderId === currentUserId
                                 ? "bg-blue-950 text-primary-foreground"
                                 : "bg-muted"
                             }`}
