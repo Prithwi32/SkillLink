@@ -345,14 +345,14 @@ export default function ChatDialog() {
                         <div
                           key={message._id}
                           className={`flex ${
-                            message.senderId === currentUserId
+                            message.senderId._id === currentUserId
                               ? "justify-end"
                               : "justify-start"
                           }`}
                         >
                           <div
                             className={`max-w-[70%] rounded-lg px-3 py-2 ${
-                              message.senderId === currentUserId
+                              message.senderId._id === currentUserId
                                 ? "bg-blue-950 text-primary-foreground"
                                 : "bg-muted"
                             }`}

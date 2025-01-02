@@ -58,28 +58,32 @@ export const sendMessage = async (req, res) => {
   try {
     const { senderId, receiverId, text } = req.body;
     const conversation = await Conversation.findOne({
-      participants: { $all: [senderId, receiverId] }
+      participants: { $all: [senderId, receiverId] },
     });
 
     if (!conversation) {
-      return res.status(404).json({ message: 'Conversation not found' });
+      return res.status(404).json({ message: "Conversation not found" });
     }
 
     const newMessage = new Message({
       senderId,
       receiverId,
       text,
-      conversationId: conversation._id
+      conversationId: conversation._id,
     });
 
     await newMessage.save();
     conversation.messages.push(newMessage._id);
     await conversation.save();
 
-    res.status(201).json(newMessage);
+    const message = await Message.findOne(newMessage._id)
+      .populate("senderId", "_id name")
+      .populate("receiverId", "_id name");
+
+    res.status(201).json(message);
   } catch (error) {
-    console.error('Error in sendMessage:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error in sendMessage:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
