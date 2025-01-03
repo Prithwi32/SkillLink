@@ -49,7 +49,7 @@ export default function ChatDialog() {
   const currentUserId = localStorage.getItem("userId") || "1";
 
   useEffect(() => {
-    const newSocket = io("http://localhost:5000", {
+    const newSocket = io(`${backendUrl}`, {
       withCredentials: true,
       transports: ["websocket", "polling"],
       reconnectionAttempts: 5,
@@ -114,7 +114,6 @@ export default function ChatDialog() {
             },
           },
         );
-        // console.log("user data" + userResponse);
         if (!userResponse.ok) {
           if (userResponse.status === 403) {
             console.error(
@@ -125,6 +124,8 @@ export default function ChatDialog() {
           throw new Error(`HTTP error! status: ${userResponse.status}`);
         }
         const userData = await userResponse.json();
+        console.log("User data:", userData); // Log the user data here
+        setSelectedUser(userData.user._id);
         data = [userData, ...data];
       }
 
@@ -137,22 +138,24 @@ export default function ChatDialog() {
     }
   };
 
+
+  useEffect(() => {
+    getUsersForSideBar();
+  }, [currentUserId, urlUserId]);
+
   useEffect(() => {
     getUsersForSideBar();
   }, [urlUserId]);
 
   const getOrCreateConversation = async (otherUserId) => {
     try {
-      const response = await fetch(
-        `${backendUrl}/api/chat/conversation`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId: currentUserId, otherUserId }),
+      const response = await fetch(`${backendUrl}/api/chat/conversation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({ userId: currentUserId, otherUserId }),
+      });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -299,7 +302,7 @@ export default function ChatDialog() {
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent className="bg-blue-950" side="right">
-                       <p>{user.name || "Unknown User"}</p>
+                        <p>{user.name || "Unknown User"}</p>
                       </TooltipContent>
                     </Tooltip>
                   ))}
