@@ -12,8 +12,8 @@ const Navbar = () => {
 
   const handleHomeClick = () => {
     if (location.pathname === "/" && location.hash !== "") {
-        navigate("/");
-        scrollTo(0, 0);
+      navigate("/");
+      scrollTo(0, 0);
     }
   };
 
@@ -37,7 +37,11 @@ const Navbar = () => {
             <li className="py-1">About Us</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
           </NavLink> */}
-          <NavLink to="/" className="hover:opacity-75" onClick={handleHomeClick}>
+          <NavLink
+            to="/"
+            className="hover:opacity-75"
+            onClick={handleHomeClick}
+          >
             <li className="py-1">Home</li>
             <hr
               className={`border-none outline-none h-0.5 w-4/5 m-auto ${
@@ -65,6 +69,10 @@ const Navbar = () => {
           </NavLink>
           <NavLink to="/users" className="hover:opacity-75">
             <li className="py-1">Users</li>
+            <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
+          </NavLink>
+          <NavLink to="/rent" className="hover:opacity-75">
+            <li className="py-1">Rent</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
           </NavLink>
         </ul>
@@ -165,11 +173,18 @@ const Navbar = () => {
           >
             Users
           </NavLink>
+          <NavLink
+            className="w-full text-center py-2 rounded-full hover:bg-gray-200"
+            onClick={() => setIsMobileMenuOpen(false)}
+            to="/rent"
+          >
+            Rent
+          </NavLink>
           {!token ? (
             <NavLink
               className="w-full text-center py-2 rounded-full hover:bg-gray-200"
               onClick={() => setIsMobileMenuOpen(false)}
-              to="/blogs"
+              to="/login"
             >
               Login/SignUp
             </NavLink>
