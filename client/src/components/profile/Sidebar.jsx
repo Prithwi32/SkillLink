@@ -23,48 +23,7 @@ export default function Sidebar({ isOpen, onClose, activeSection, setActiveSecti
     onClose(); // Close the sidebar when a button is clicked
     if (sectionId === 'home') navigate('/'); // Redirect to the home page
   };
-
-  // return (
-  //   <div
-  //     className={`fixed z-10 top-0 left-0 h-full w-64 bg-blue-600 text-white transform transition-transform duration-300 ease-in-out ${
-  //       isOpen ? 'translate-x-0' : '-translate-x-full'
-  //     }`}
-  //   >
-  //     <div className="flex flex-col h-full">
-  //       <button
-  //         onClick={() => {
-  //           navigate('/');
-  //           onClose(); // Close the sidebar after navigating
-  //         }}
-  //         className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-6 mb-6 transition-colors duration-300"
-  //       >
-  //         HobbyVerse
-  //       </button>
-  //       <nav className="flex-grow">
-  //         {navItems.map((item) => (
-  //           <button
-  //             key={item.id}
-  //             onClick={() => handleSectionClick(item.id)}
-  //             className={`w-full text-left py-3 px-6 hover:bg-blue-700 transition-colors duration-300 flex items-center ${
-  //               activeSection === item.id ? 'bg-blue-700' : ''
-  //             }`}
-  //           >
-  //             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-  //               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
-  //             </svg>
-  //             {item.label}
-  //           </button>
-  //         ))}
-  //       </nav>
-  //       <button
-  //         onClick={handleLogout}
-  //         className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 transition-colors duration-300"
-  //       >
-  //         Logout
-  //       </button>
-  //     </div>
-  //   </div>
-  // );
+  
   return (
     <div
       className={`fixed z-10 top-0 left-0 h-full w-64 bg-blue-100 text-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out ${

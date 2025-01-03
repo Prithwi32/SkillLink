@@ -106,3 +106,10 @@ export const login = async (req, res) => {
       });
     }
 };
+
+
+export const checkAuth = (req, res) => {
+  if(!req.user)
+    return res.status(401).json({ success: false, message: "Not authenticated" });
+  res.json({ success: true, user: req.user });
+}
