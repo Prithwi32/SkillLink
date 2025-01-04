@@ -582,32 +582,46 @@ export const getEventsBasedOnSkillsRequested = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found", success: false });
     }
+
     const skillsObjectIds = await Skill.find({
       name: { $in: user.skillsRequested },
     }).select("_id");
 
+    let events = [];
+
     if (skillsObjectIds.length === 0) {
+      // Fetch all upcoming events excluding those created by the user
+      events = await Event.find({
+        status: "Upcoming",
+        created_by: { $ne: userId },
+      })
+        .select("title description date start_time end_time skills_id")
+        .populate("skills_id", "name")
+        .populate("created_by", "name rating photo")
+        .populate("participants", "name email _id")
+        .lean();
       return res.status(200).json({
         success: true,
-        events: [],
-        message: "No events found for the requested skills",
+        events,
+        message: events.length === 0 ? "No upcoming events found" : "Fetched all upcoming events",
+      });
+    } else {
+      // Fetch events matching the user's requested skills
+      events = await Event.find({
+        skills_id: { $in: skillsObjectIds.map((skill) => skill._id) },
+        status: "Upcoming",
+      })
+        .select("title description date start_time end_time skills_id")
+        .populate("skills_id", "name")
+        .populate("created_by", "name rating photo")
+        .populate("participants", "name email _id")
+        .lean();
+
+      return res.status(200).json({
+        success: true,
+        events,
       });
     }
-
-    const events = await Event.find({
-      skills_id: { $in: skillsObjectIds.map((skill) => skill._id) },
-      status: "Upcoming",
-    })
-      .select("title description date start_time end_time skills_id")
-      .populate("skills_id", "name")
-      .populate("created_by", "name rating photo")
-      .populate("participants", "name email _id")
-      .lean();
-
-    res.status(200).json({
-      success: true,
-      events,
-    });
   } catch (err) {
     console.error("Error fetching events:", err);
     res.status(500).json({
@@ -657,3 +671,4 @@ export const getEventsForSpecificSkill = async (req, res) => {
     });
   }
 };
+

@@ -32,11 +32,6 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 5,
   },
-  reviews: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Review",
-    default: null,
-  },
   photo: {
     type: String,
   },

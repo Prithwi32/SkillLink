@@ -131,49 +131,6 @@ export const getUserById = async (req, res) => {
   }
 };
 
-export const getUsersBasedOnSkills = async (req, res) => {
-  try {
-    const userId = req.user._id;
-    console.log("User ID:", userId);
-
-    const user = await User.findById(userId).select("skillsRequested").lean();
-    console.log("User:", user);
-
-    if (!user || !user.skillsRequested || user.skillsRequested.length === 0) {
-      console.log("No skills requested by user");
-      return res.status(200).json({
-        success: true,
-        users: [],
-      });
-    }
-
-    const skillsRequestedByUser = user.skillsRequested;
-    console.log("Skills requested by user:", skillsRequestedByUser);
-
-    // Fetch users who offer any of the requested skills and are not banned, excluding the current user
-    const users = await User.find({
-      skillsOffered: { $in: skillsRequestedByUser },
-      isBanned: false,
-      _id: { $ne: userId },
-    })
-      .select("name skillsOffered rating photo about")
-      .lean();
-    console.log("Matching users:", users);
-
-    res.status(200).json({
-      success: true,
-      users: users,
-    });
-  } catch (err) {
-    console.error("Error fetching users based on skills:", err);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: err.message,
-    });
-  }
-};
-
 export const getUsersForSpecificSkill = async (req, res) => {
   try {
     const { skillId } = req.params;
@@ -202,6 +159,78 @@ export const getUsersForSpecificSkill = async (req, res) => {
     res.status(200).json({ success: true, users });
   } catch (err) {
     console.error("Error fetching users for specific skill:", err);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: err.message,
+    });
+  }
+};
+
+export const getUsersBasedOnSkills = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    console.log("User ID:", userId);
+
+    const user = await User.findById(userId).select("skillsRequested").lean();
+    console.log("User:", user);
+
+    let users = [];
+
+    if (!user || !user.skillsRequested || user.skillsRequested.length === 0) {
+      console.log("No skills requested by user");
+
+      // Fetch all users excluding the current user and banned users
+      users = await User.find({
+        isBanned: false,
+        _id: { $ne: userId },
+      })
+        .select("name skillsOffered rating photo about")
+        .lean();
+
+      return res.status(200).json({
+        success: true,
+        users: users,
+        message: "Fetched all users except banned users and the current user",
+      });
+    } else {
+      const skillsRequestedByUser = user.skillsRequested;
+      console.log("Skills requested by user:", skillsRequestedByUser);
+
+      // Fetch users who offer any of the requested skills and are not banned, excluding the current user
+      users = await User.find({
+        skillsOffered: { $in: skillsRequestedByUser },
+        isBanned: false,
+        _id: { $ne: userId },
+      })
+        .select("name skillsOffered rating photo about")
+        .lean();
+
+      if (users.length === 0) {
+        // If no matching users found, fetch all users excluding the current user and banned users
+        users = await User.find({
+          isBanned: false,
+          _id: { $ne: userId },
+        })
+          .select("name skillsOffered rating photo about")
+          .lean();
+        
+        return res.status(200).json({
+          success: true,
+          users: users,
+          message: "No matching users found based on requested skills. Fetched all users except banned users and the current user",
+        });
+      }
+      
+      console.log("Matching users:", users);
+      
+      res.status(200).json({
+        success: true,
+        users: users,
+      });
+    }
+  } catch (err) {
+    console.error("Error fetching users based on skills:", err);
     res.status(500).json({
       success: false,
       message: "Internal server error",

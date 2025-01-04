@@ -49,7 +49,7 @@ const eventSchema = new mongoose.Schema(
     },
     max_participants: {
       type: Number,
-      default: 0,
+      default: 50,
     },
     participants: [
       {
@@ -75,3 +75,4 @@ const eventSchema = new mongoose.Schema(
 const Event = mongoose.model("Event", eventSchema);
 
 export default Event;
+
