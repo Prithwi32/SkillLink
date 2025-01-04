@@ -16,6 +16,7 @@ import reviewRouter from './routes/reviewRoutes.js'
 import sessionRouter from './routes/sessionRoutes.js'
 import ReportedUserRouter from './routes/reportedUserRoutes.js'
 import skillRouter from './routes/skillRoutes.js'
+import chatRouter from './routes/chatRoutes.js'
 dotenv.config();
 
 const app = express();
@@ -92,13 +93,25 @@ app.use('/api/report-user', ReportedUserRouter);
 app.use('/api/user', userRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/skills', skillRouter);
+app.use('/api/chat', chatRouter);
 
+// Socket.io connection handling
 io.on('connection', (socket) => {
     console.log('New client connected');
-    socket.on('disconnect', () => {
-        console.log('Client disconnected');
+  
+    socket.on('join', (conversationId) => {
+      socket.join(conversationId);
+      console.log(`User joined conversation: ${conversationId}`);
     });
-});
+  
+    socket.on('sendMessage', (data) => {
+      io.to(data.conversationId).emit('message', data);
+    });
+  
+    socket.on('disconnect', () => {
+      console.log('Client disconnected');
+    });
+  });
 
 server.listen(PORT, ()=>{
     console.log(`Server is running on port ${PORT}`);

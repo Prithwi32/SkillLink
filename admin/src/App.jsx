@@ -1,7 +1,6 @@
 import { useContext, useEffect } from "react";
 import { AdminContext } from "./context/AdminContext";
 import LoginPage from "./pages/LoginPage";
-import Sidebar from "./components/Sidebar";
 import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import SkillPage from "./pages/SkillPage";
@@ -10,6 +9,8 @@ import UsersPage from "./pages/UsersPage";
 // import Navbar from "./components/Navbar";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import Loader from "./pages/Loader";
+import Navbar from "./components/navbar/Navbar";
+import Footer from "./components/Footer";
 
 function App() {
   const { isLoading, isLoggedIn, checkAuth } = useContext(AdminContext);
@@ -31,10 +32,10 @@ function App() {
         </Routes>
       ) : (
         <>
-          {/* <Navbar /> */}
 
-          <div className="flex items-start">
-            <Sidebar />
+          <div className="min-h-screen flex flex-col justify-between">
+            <Navbar/>
+            {/* <Sidebar /> */}
             <Routes>
               <Route path="/login" element={<Navigate to="/home" />} />
 
@@ -80,6 +81,7 @@ function App() {
 
               <Route path="*" element={<Navigate to="/login" />} />
             </Routes>
+            <Footer/>
           </div>
         </>
       )}

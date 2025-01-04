@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import Sidebar from '../components/Profile/Sidebar';
-import ProfileSection from '../components/Profile/ProfileSection';
-import SessionPage from './SessionPage';
-import EventPage from './EventPage';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 export default function MyUserProfilePage() {
-  const [activeSection, setActiveSection] = useState('profile');
+  const [activeSection, setActiveSection] = useState("profile");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -16,13 +15,18 @@ export default function MyUserProfilePage() {
     setIsSidebarOpen(false);
   };
 
+  const handleSectionChange = (section) => {
+    setActiveSection(section);
+    navigate(section);
+  };
+
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
       <Sidebar
         isOpen={isSidebarOpen}
-        onClose={closeSidebar} // Close the sidebar when a button is clicked
+        onClose={closeSidebar}
         activeSection={activeSection}
-        setActiveSection={setActiveSection}
+        setActiveSection={handleSectionChange}
       />
       <main className="flex-grow p-8">
         <button
@@ -33,9 +37,8 @@ export default function MyUserProfilePage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
           </svg>
         </button>
-        {activeSection === 'profile' && <ProfileSection />}
-        {activeSection === 'events' && <EventPage />}
-        {activeSection === 'session' && <SessionPage />}
+        {/* Render nested routes */}
+        <Outlet />
       </main>
     </div>
   );

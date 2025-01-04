@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import { MessageCircle, Send } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,8 @@ import {
 } from "@/components/ui/tooltip";
 import UserSkeletonLoader from "./UserSkeletonLoader";
 import MessageSkeletonLoader from "./MessageSkeletonLoader";
+import io from "socket.io-client";
+import { useAuth } from "@/context/AuthContext";
 
 const scrollbarHideStyles = `
   .hide-scrollbar::-webkit-scrollbar {
@@ -28,52 +31,47 @@ const scrollbarHideStyles = `
   }
 `;
 
-// Sample user data
-const usersInfo = [
-  {
-    _id: 1,
-    name: "Alice Smith",
-    photo: "/placeholder.svg?height=32&width=32",
-    about: "UX Designer",
-  },
-  {
-    _id: 2,
-    name: "Bob Johnson",
-    photo: "/placeholder.svg?height=32&width=32",
-    about: "Frontend Developer",
-  },
-  {
-    _id: 3,
-    name: "Carol Williams",
-    photo: "/placeholder.svg?height=32&width=32",
-    about: "Project Manager",
-  },
-  {
-    _id: 4,
-    name: "David Brown",
-    photo: "/placeholder.svg?height=32&width=32",
-    about: "Backend Engineer",
-  },
-];
-
 export default function ChatDialog() {
+  const { userId: urlUserId } = useParams();
   const [open, setOpen] = useState(false);
-  const [users, setUsers] = useState(usersInfo);
+  const [users, setUsers] = useState([]);
   const [isUsersLoading, setUsersLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [isMessageLoading, setIsMessageLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [conversation, setConversation] = useState(null);
+  const [socket, setSocket] = useState(null);
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
+  const { backendUrl } = useAuth();
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  const currentUserId = localStorage.getItem("userId") || "1";
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    const newSocket = io(`${backendUrl}`, {
+      withCredentials: true,
+      transports: ["websocket", "polling"],
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+    });
+
+    newSocket.on("connect", () => {
+      console.log("Connected to Socket.io server");
+    });
+
+    newSocket.on("connect_error", (error) => {
+      console.error("Socket.io connection error:", error);
+    });
+
+    newSocket.on("reconnect_failed", () => {
+      console.error("Failed to reconnect to Socket.io server");
+    });
+
+    setSocket(newSocket);
+
+    return () => newSocket.close();
+  }, []);
 
   useEffect(() => {
     const style = document.createElement("style");
@@ -84,67 +82,164 @@ export default function ChatDialog() {
     };
   }, []);
 
-  // Integration part
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
-  // take it from localStorage
-  const userId = 1;
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
-  // api to display users the person chatted previously
   const getUsersForSideBar = async () => {
+    const token = localStorage.getItem("token");
     setUsersLoading(true);
     try {
-      // store user data in users use state
-      // also set selectedUser to user id of the person for which he opened chat
+      const response = await fetch(
+        `${backendUrl}/api/chat/users/chats/${currentUserId}`,
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      let data = await response.json();
+
+      // If urlUserId is provided and not in the list, fetch that user's details and add to the list
+      if (urlUserId && !data.some((user) => user._id === urlUserId)) {
+        const userResponse = await fetch(
+          `${backendUrl}/api/user/get/${urlUserId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          },
+        );
+        if (!userResponse.ok) {
+          if (userResponse.status === 403) {
+            console.error(
+              "Access forbidden. Please check your authentication.",
+            );
+            return;
+          }
+          throw new Error(`HTTP error! status: ${userResponse.status}`);
+        }
+        const userData = await userResponse.json();
+        console.log("User data:", userData); // Log the user data here
+        setSelectedUser(userData.user._id);
+        data = [userData, ...data];
+      }
+
+      setUsers(data);
+      setSelectedUser(urlUserId || (data[0] && data[0]._id));
     } catch (error) {
+      console.error("Error fetching users:", error);
     } finally {
       setUsersLoading(false);
     }
   };
 
+
   useEffect(() => {
     getUsersForSideBar();
-  }, []);
+  }, [currentUserId, urlUserId]);
 
-  // api to get chat between the user and selected user
-  const getChatHistory = async () => {
+  useEffect(() => {
+    getUsersForSideBar();
+  }, [urlUserId]);
+
+  const getOrCreateConversation = async (otherUserId) => {
+    try {
+      const response = await fetch(`${backendUrl}/api/chat/conversation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: currentUserId, otherUserId }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setConversation(data);
+      return data._id;
+    } catch (error) {
+      console.error("Error creating/getting conversation:", error);
+    }
+  };
+
+  const getChatHistory = async (conversationId) => {
     setIsMessageLoading(true);
     try {
-      // store chat data in messages use state
+      const response = await fetch(
+        `${backendUrl}/api/chat/messages/${conversationId}`,
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setMessages(data);
     } catch (error) {
+      console.error("Error fetching chat history:", error);
     } finally {
       setIsMessageLoading(false);
     }
   };
 
   useEffect(() => {
-    getChatHistory();
-  }, [selectedUser]);
+    if (selectedUser) {
+      getOrCreateConversation(selectedUser).then((conversationId) => {
+        if (conversationId) {
+          getChatHistory(conversationId);
+          if (socket) {
+            socket.emit("join", conversationId);
+          }
+        }
+      });
+    }
+  }, [selectedUser, socket]);
 
-  // api to send message
+  useEffect(() => {
+    if (socket) {
+      socket.on("message", (message) => {
+        setMessages((prevMessages) => [...prevMessages, message]);
+        console.log(message, currentUserId);
+      });
+    }
+  }, [socket]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!inputValue.trim() || !selectedUser) return;
+    if (!inputValue.trim() || !selectedUser || !conversation) return;
 
-    // for ui checking purpose
-    // const newMessage = {
-    //   _id: Date.now(),
-    //   senderId: selectedUser,
-    //   receiverId: null,
-    //   text: inputValue.trim(),
-    //   createdAt: new Date().toLocaleTimeString([], {
-    //     hour: "2-digit",
-    //     minute: "2-digit",
-    //   }),
-    // };
-    // setMessages((prev) => [...prev, newMessage]);
-    // setInputValue("");
+    const newMessage = {
+      senderId: currentUserId,
+      receiverId: selectedUser,
+      text: inputValue.trim(),
+    };
 
     try {
-      // api integration here
-      getChatHistory();
-    } catch (error) {}
+      const response = await fetch(`${backendUrl}/api/chat/messages`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newMessage),
+      });
 
-    // don't remove this
+      if (response.ok) {
+        const sentMessage = await response.json();
+        socket.emit("sendMessage", {
+          ...sentMessage,
+          conversationId: conversation._id,
+        });
+        setInputValue("");
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
@@ -171,7 +266,13 @@ export default function ChatDialog() {
           <MessageCircle className="h-6 w-6" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-xl p-0">
+      <DialogContent
+        className="sm:max-w-xl p-0"
+        aria-describedby="chat-dialog-description"
+      >
+        <div id="chat-dialog-description" className="sr-only">
+          Chat interface for messaging other users
+        </div>
         <div className="flex h-[600px] flex-col">
           <div className="flex flex-1 overflow-hidden">
             {/* Left sidebar */}
@@ -195,16 +296,13 @@ export default function ChatDialog() {
                           <Avatar className="h-12 w-12">
                             <AvatarImage src={user.photo} alt={user.name} />
                             <AvatarFallback>
-                              {user.name
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")}
+                              {user.name ? user.name.charAt(0) : "?"}
                             </AvatarFallback>
                           </Avatar>
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent className="bg-blue-950" side="right">
-                        <p>{user.name}</p>
+                        <p>{user.name || "Unknown User"}</p>
                       </TooltipContent>
                     </Tooltip>
                   ))}
@@ -224,17 +322,16 @@ export default function ChatDialog() {
                     />
                     <AvatarFallback>
                       {selectedUserData.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
+                        ? selectedUserData.name.charAt(0)
+                        : "?"}
                     </AvatarFallback>
                   </Avatar>
                   <div>
                     <h2 className="text-lg font-semibold text-blue-950 line-clamp-1">
-                      {selectedUserData.name}
+                      {selectedUserData.name || "Unknown User"}
                     </h2>
                     <p className="text-sm text-muted-foreground line-clamp-1">
-                      {selectedUserData.about}
+                      {selectedUserData.about || "No information available"}
                     </p>
                   </div>
                 </div>
@@ -251,21 +348,27 @@ export default function ChatDialog() {
                         <div
                           key={message._id}
                           className={`flex ${
-                            message.senderId === userId
+                            message.senderId._id === currentUserId
                               ? "justify-end"
                               : "justify-start"
                           }`}
                         >
                           <div
                             className={`max-w-[70%] rounded-lg px-3 py-2 ${
-                              message.senderId === userId
+                              message.senderId._id === currentUserId
                                 ? "bg-blue-950 text-primary-foreground"
                                 : "bg-muted"
                             }`}
                           >
                             <p className="text-sm">{message.text}</p>
                             <p className="text-[10px] opacity-50 mt-1">
-                              {message.createdAt}
+                              {new Date(message.createdAt).toLocaleTimeString(
+                                [],
+                                {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                },
+                              )}
                             </p>
                           </div>
                         </div>
@@ -274,7 +377,9 @@ export default function ChatDialog() {
                     </div>
                   ) : (
                     <div className="h-full flex items-center justify-center">
-                      <p className="text-muted-foreground">No messages yet</p>
+                      <p className="text-muted-foreground">
+                        No messages yet. Start a conversation!
+                      </p>
                     </div>
                   )
                 ) : (
