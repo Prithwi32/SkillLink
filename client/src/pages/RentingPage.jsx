@@ -1,155 +1,113 @@
-import React, { useState, useMemo } from "react";
-import { Music, Calendar, ChevronDown } from "lucide-react";
+import React, { useState } from 'react';
+import { Music } from 'lucide-react';
+import { InstrumentCard } from '../components/Cards/InstrumentCard';
+import { RentForm } from '../components/Forms/RentForm';
 
-// Data
-const instruments = [
+const initialInstruments = [
   {
-    id: "1",
-    name: "Yamaha Grand Piano",
-    ownerName: "Sarah Johnson",
-    ownerImage: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
-    availableDate: "2024-03-20",
-    location: "New York",
+    id: 1,
+    name: 'Vintage Violin',
+    image: 'https://images.unsplash.com/photo-1612225330812-01a9c6b355ec?auto=format&fit=crop&w=800&q=80',
+    userImage: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+    userName: 'Suraj Sharma',
+    location: 'Karnataka',
+    startDate: '2024-03-20',
+    isRented: false
   },
   {
-    id: "2",
-    name: "Fender Stratocaster",
-    ownerName: "Mike Chen",
-    ownerImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
-    availableDate: "2024-03-22",
-    location: "Los Angeles",
-  },
-  {
-    id: "3",
-    name: "Selmer Saxophone",
-    ownerName: "David Wilson",
-    ownerImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
-    availableDate: "2024-03-25",
-    location: "Chicago",
-  },
-  {
-    id: "4",
-    name: "Violin Stradivarius",
-    ownerName: "Emma Davis",
-    ownerImage: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80",
-    availableDate: "2024-03-21",
-    location: "New York",
-  },
-  {
-    id: "5",
-    name: "Roland Drum Kit",
-    ownerName: "James Smith",
-    ownerImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
-    availableDate: "2024-03-23",
-    location: "Los Angeles",
-  },
-  {
-    id: "6",
-    name: "Classical Guitar",
-    ownerName: "Lisa Brown",
-    ownerImage: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
-    availableDate: "2024-03-24",
-    location: "Chicago",
-  },
+    id: 2,
+    name: 'Classical Guitar',
+    image: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=800&q=80',
+    userImage: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
+    userName: 'Krishna Raj',
+    location: 'Kerala',
+    startDate: '2024-03-22',
+    isRented: false
+  }
 ];
 
-// Components
-function LocationDropdown({ locations, selectedLocation, onLocationChange }) {
-  return (
-    <div className="relative w-full max-w-xs">
-      <select
-        value={selectedLocation}
-        onChange={(e) => onLocationChange(e.target.value)}
-        className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        <option value="">All Locations</option>
-        {locations.map((location) => (
-          <option key={location} value={location}>
-            {location}
-          </option>
-        ))}
-      </select>
-      <ChevronDown
-        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
-        size={20}
-      />
-    </div>
-  );
-}
+function RentingPage() {
+  const [instruments, setInstruments] = useState(initialInstruments);
+  const [showRentForm, setShowRentForm] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState('');
 
-function InstrumentCard({ instrument }) {
-  return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
-      <div className="p-4">
-        <div className="flex items-center space-x-4 mb-4">
-          <img
-            src={instrument.ownerImage}
-            alt={instrument.ownerName}
-            className="size-7 rounded-full object-cover"
-          />
-          <div>
-            <h3 className="text-[.9rem] font-semibold text-gray-800">
-              {instrument.ownerName}
-            </h3>
-            <p className="text-xs text-gray-500">{instrument.location}</p>
-          </div>
-        </div>
+  const locations = Array.from(new Set(instruments.map(i => i.location)));
 
-        <h2 className="text-xl font-bold text-gray-900 mb-2">
-          {instrument.name}
-        </h2>
+  const handleRentInstrument = (id) => {
+    setInstruments(prev =>
+      prev.map(instrument =>
+        instrument.id === id ? { ...instrument, isRented: true } : instrument
+      )
+    );
+  };
 
-        <div className="flex items-center text-gray-600 mb-4">
-          <Calendar className="w-4 h-4 mr-2" />
-          <span className="text-sm">
-            Available from {instrument.availableDate}
-          </span>
-        </div>
+  const handleAddInstrument = (data) => {
+    const newInstrument = {
+      id: Date.now(),
+      name: data.instrumentName,
+      image: data.image,
+      userImage: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80',
+      userName: data.name,
+      location: data.location,
+      startDate: data.startDate,
+      isRented: false
+    };
+    setInstruments(prev => [...prev, newInstrument]);
+  };
 
-        <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
-          Rent Now
-        </button>
-      </div>
-    </div>
-  );
-}
-
-export default function RentingPage() {
-  const [selectedLocation, setSelectedLocation] = useState("");
-
-  const locations = useMemo(
-    () => [...new Set(instruments.map((i) => i.location))].sort(),
-    [],
-  );
-
-  const filteredInstruments = useMemo(
-    () =>
-      selectedLocation
-        ? instruments.filter((i) => i.location === selectedLocation)
-        : instruments,
-    [selectedLocation],
-  );
+  const filteredInstruments = selectedLocation
+    ? instruments.filter(i => i.location === selectedLocation)
+    : instruments;
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Start Renting
-          </h1>
-          <LocationDropdown
-            locations={locations}
-            selectedLocation={selectedLocation}
-            onLocationChange={setSelectedLocation}
-          />
+        <div className="flex items-center justify-center mb-8">
+          <Music className="text-blue-500 mr-2" size={32} />
+          <h1 className="text-4xl font-bold text-gray-800">Start Renting</h1>
+        </div>
+
+        <div className="flex justify-between items-center mb-8">
+          <select
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">All Locations</option>
+            {locations.map(location => (
+              <option key={location} value={location}>
+                {location}
+              </option>
+            ))}
+          </select>
+
+          <button
+            onClick={() => setShowRentForm(true)}
+            className="px-6 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors"
+          >
+            Rent My Instrument
+          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredInstruments.map((instrument) => (
-            <InstrumentCard key={instrument.id} instrument={instrument} />
+          {filteredInstruments.map(instrument => (
+            <InstrumentCard
+              key={instrument.id}
+              {...instrument}
+              onRent={() => handleRentInstrument(instrument.id)}
+            />
           ))}
         </div>
+
+        {showRentForm && (
+          <RentForm
+            onClose={() => setShowRentForm(false)}
+            onSubmit={handleAddInstrument}
+          />
+        )}
       </div>
     </div>
   );
 }
+
+export default RentingPage;
