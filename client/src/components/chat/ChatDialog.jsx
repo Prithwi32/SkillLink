@@ -138,7 +138,6 @@ export default function ChatDialog() {
     }
   };
 
-
   useEffect(() => {
     getUsersForSideBar();
   }, [currentUserId, urlUserId]);
@@ -294,7 +293,11 @@ export default function ChatDialog() {
                           onClick={() => setSelectedUser(user._id)}
                         >
                           <Avatar className="h-12 w-12">
-                            <AvatarImage src={user.photo} alt={user.name} />
+                            <AvatarImage
+                              src={user.photo}
+                              alt={user.name}
+                              className="object-cover"
+                            />
                             <AvatarFallback>
                               {user.name ? user.name.charAt(0) : "?"}
                             </AvatarFallback>
@@ -317,6 +320,7 @@ export default function ChatDialog() {
                 <div className="p-4 border-b bg-muted/10 flex items-center space-x-4">
                   <Avatar className="h-12 w-12">
                     <AvatarImage
+                      className="object-cover"
                       src={selectedUserData.photo}
                       alt={selectedUserData.name}
                     />

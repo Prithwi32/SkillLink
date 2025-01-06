@@ -5,12 +5,15 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import AdminContextProvider from "./context/AdminContext";
 import { Toaster } from "react-hot-toast";
+import { TooltipProvider } from "./components/ui/tooltip";
 
 createRoot(document.getElementById("root")).render(
-    <AdminContextProvider>
-      <BrowserRouter>
-         <App />
-         <Toaster/>
-      </BrowserRouter>
-    </AdminContextProvider>  
+  <AdminContextProvider>
+    <BrowserRouter>
+      <TooltipProvider>
+        <App />
+      </TooltipProvider>
+      <Toaster />
+    </BrowserRouter>
+  </AdminContextProvider>
 );

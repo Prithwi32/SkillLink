@@ -5,7 +5,7 @@ import {
   Users,
 } from "lucide-react";
 import React, { useState, useEffect } from "react";
-import landingPageImage from "../../assets/Images/landingPageImage.png";
+import landingPageImage from "../../assets/landingPageImage.png";
 
 export default function AnimatedAbout() {
   return (
