@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import placeholder from "../assets/placeholder.jpg";
 import { Monitor, ShieldCheck, Activity, Settings } from "lucide-react";
+import { skillImage } from "../assets/assets.js";
 
 export default function About() {
   const features = [
@@ -68,9 +69,10 @@ export default function About() {
               className="rounded-2xl overflow-hidden hover:scale-[1.02] transition-all cursor-pointer"
             >
               <img
-                src={placeholder}
+                src={skillImage[i]}
                 alt={`Merch customization ${i + 1}`}
                 className="sm:size-[200px] size-[100px] object-cover"
+                draggable="false"
               />
             </div>
           ))}
@@ -86,7 +88,7 @@ export default function About() {
           Built for administrators, the tools and features ensure smooth
           platform management and endless opportunities for growth.
         </p>
-        <div className="grid gap-8  md:gap-12">
+        <div className="grid gap-8 lg:px-6  md:gap-12">
           {features.map((feature, index) => (
             <div
               key={feature.title}

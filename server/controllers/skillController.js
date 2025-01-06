@@ -55,11 +55,14 @@ export const addSkill = async (req, res) => {
 // get recently added 10 approved skills
 export const getRecentSkills = async (req, res) => {
   try {
-    const skills = await Skill.find({ status: "Approved" }).limit(10);
+    const skills = await Skill.find({ status: "Approved" });
 
     skills.reverse();
 
-    res.json({ success: true, skills });
+    res
+     .status(200)
+     .json({ success: true, skills: skills.slice(0, 7) });
+
   } catch (error) {
     res
       .status(500)

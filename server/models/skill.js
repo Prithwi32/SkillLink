@@ -16,10 +16,10 @@ const skillSchema = new mongoose.Schema({
     enum: ["Pending", "Rejected", "Approved"],
     default: "Pending",
   },
-  photo:{
+  photo: {
     type: String,
     default: "",
-  }
+  },
 });
 
 const Skill = mongoose.model("Skill", skillSchema);

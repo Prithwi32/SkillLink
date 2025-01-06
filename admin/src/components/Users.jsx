@@ -56,7 +56,7 @@ const Users = () => {
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 place-items-center">
         {!isLoading &&
           users.slice(0, intialCount).map((instructor, index) => (
-            <Card className="w-full max-w-xs h-full overflow-hidden hover:shadow-lg hover:scale-[1.01] transition-all flex flex-col cursor-pointer">
+            <Card  key={index} className="w-full max-w-xs h-full overflow-hidden hover:shadow-lg hover:scale-[1.01] transition-all flex flex-col cursor-pointer">
               <div className="aspect-[4/1] relative bg-gradient-to-b from-slate-300 to-white flex items-center justify-center">
                 <Avatar className="size-20 absolute bottom-0 translate-y-1/2 border-4 border-background">
                   <AvatarImage
