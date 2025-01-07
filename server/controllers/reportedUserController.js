@@ -96,6 +96,7 @@ const getAllReportedUserWithCountK = async (req, res) => {
           name: "$userDetails.name",
           email: "$userDetails.email",
           about: "$userDetails.about",
+          photo: "$userDetails.photo",
           reportCount: 1,
         },
       },
@@ -191,7 +192,7 @@ const getAllReasonsForReportedUser = async (req, res) => {
 const getAllBannedUsers = async (req, res) => {
   try {
     const bannedUsers = await User.find({ isBanned: true }).select(
-      "_id name about email"
+      "_id name about email photo"
     );
 
     return res.json({ success: true, bannedUsers });
