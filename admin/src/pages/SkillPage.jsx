@@ -112,13 +112,18 @@ export default function SkillsDashboard() {
         ))}
       </div>
 
-      <div className="h-16 bg-blue-800 mb-8 py-8 mt-5">
-        <div className=" px-4 h-full flex items-center justify-center">
-          <h1 className="text-white text-2xl font-bold">Skills Dashboard</h1>
+      <div className="bg-blue-800 text-white py-6 mt-6">
+        <div className="flex flex-col justify-center items-center px-4">
+          <h1 className="text-3xl text-center font-bold">
+            Skill Management Dashboard
+          </h1>
+          <p className="mt-3 text-sm text-center text-blue-100">
+          Track, approve, and reject new skills
+          </p>
         </div>
       </div>
 
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto mt-5 px-4">
         {/* Tab buttons */}
         <div className="flex justify-center gap-4 mb-6">
           <button

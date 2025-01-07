@@ -221,7 +221,7 @@ export const getEventsByStatus = async (req, res) => {
     const events = await Event.find({ status })
     .populate("skills_id", "name")
     .populate("participants", "name email _id")
-    .populate("created_by", "name rating")
+    .populate("created_by", "name rating photo")
     .populate("requests", "_id")
     .select("title description date start_time end_time status max_participants");
 
