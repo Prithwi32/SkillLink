@@ -58,7 +58,7 @@ const EventDetailsPopup = ({ event, onClose, open }) => {
             <CardContent className="p-4">
               <div className="flex items-center space-x-4">
                 <Avatar className="w-16 h-16">
-                  <AvatarImage src={mentorImage|| defaultHostImage} alt={mentorName} />
+                  <AvatarImage src={mentorImage|| defaultHostImage} alt={mentorName} className="object-cover" />
                   <AvatarFallback>{mentorName?.charAt(0) || ''}</AvatarFallback>
                 </Avatar>
                 <div>
