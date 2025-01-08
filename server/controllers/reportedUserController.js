@@ -202,10 +202,37 @@ const getAllBannedUsers = async (req, res) => {
   }
 };
 
+// check whether user already submitted report once for the given userId
+const checkWetherReportAlreadySubmitted = async (req, res) => {
+  const { _id } = req.user;
+  const { reportedUserId } = req.query;
+
+  try {
+    const alreadyReported = await ReportedUser.findOne({
+      reportedBy: _id,
+      reportedUser: reportedUserId,
+    });
+
+    if (alreadyReported) {
+      return res.status(409).json({
+        success: false,
+        message:
+          "You already reported this user. Cannot report more than once.",
+      });
+    }
+
+    return res.json({ success: true, message: "No report submitted yet." });
+  } catch (error) {
+    console.error("Error checking wether report already submitted:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 export {
   createNewReport,
   getAllReportedUserWithCountK,
   blockReportedUserByAdmin,
   getAllReasonsForReportedUser,
   getAllBannedUsers,
+  checkWetherReportAlreadySubmitted,
 };

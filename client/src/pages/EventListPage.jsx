@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { AllEventCard } from "../components/Cards/AllEventCard";
 import { EventModal } from "../components/HelperComponents/EventModal";
 import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function EventListPage() {
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -9,6 +10,8 @@ function EventListPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const { backendUrl } = useAuth();
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   // Fetch events from the API
   useEffect(() => {
@@ -50,6 +53,7 @@ function EventListPage() {
   }, []);
 
   const handleShowMore = (event) => {
+    if (!token) return navigate("/login");
     setSelectedEvent(event);
   };
 
@@ -65,37 +69,37 @@ function EventListPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-sky-50">
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl sm:text-4xl font-semibold mb-5 text-center">
-        Upcoming <span className="text-blue-800">Events</span>
-      </h1>
-      <p className="text-gray-500 sm:text-lg mx-auto max-w-lg text-center mb-6">
-        Explore our featured upcoming events, where ideas meet opportunities. Stay
-        updated and join the journey!
-      </p>
-      <div className="flex w-full flex-wrap items-center justify-center cursor-pointer gap-8">
-        {!isLoading && events.map((event) => (
-          <AllEventCard
-            key={event._id}
-            event={event}
-            onShowMore={() => handleShowMore(event)}
-          />
-        ))}
-        {isLoading && (
-          <div className="text-center text-gray-500">Loading events...</div>
-        )}
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl sm:text-4xl font-semibold mb-5 text-center">
+          Upcoming <span className="text-blue-800">Events</span>
+        </h1>
+        <p className="text-gray-500 sm:text-lg mx-auto max-w-lg text-center mb-6">
+          Explore our featured upcoming events, where ideas meet opportunities.
+          Stay updated and join the journey!
+        </p>
+        <div className="flex w-full flex-wrap items-center justify-center cursor-pointer gap-8">
+          {!isLoading &&
+            events.map((event) => (
+              <AllEventCard
+                key={event._id}
+                event={event}
+                onShowMore={() => handleShowMore(event)}
+              />
+            ))}
+          {isLoading && (
+            <div className="text-center text-gray-500">Loading events...</div>
+          )}
+        </div>
       </div>
+
+      {selectedEvent && (
+        <EventModal
+          event={selectedEvent}
+          onClose={handleCloseModal}
+          onRegister={handleRegister}
+        />
+      )}
     </div>
-  
-    {selectedEvent && (
-      <EventModal
-        event={selectedEvent}
-        onClose={handleCloseModal}
-        onRegister={handleRegister}
-      />
-    )}
-  </div>
-  
   );
 }
 
