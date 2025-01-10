@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   blockReportedUserByAdmin,
+  checkWetherReportAlreadySubmitted,
   createNewReport,
   getAllBannedUsers,
   getAllReasonsForReportedUser,
@@ -30,5 +31,12 @@ router.get("/reasons/:userId", adminAuth, getAllReasonsForReportedUser);
 
 // get all banned users
 router.get("/blocked", adminAuth, getAllBannedUsers);
+
+// check already reported
+router.get(
+  "/isReported",
+  ensureAuthenticated,
+  checkWetherReportAlreadySubmitted
+);
 
 export default router;

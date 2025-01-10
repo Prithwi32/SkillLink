@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 import { Flag, Star } from "lucide-react";
 import ReportUserForm from "../components/Forms/ReportUserForm";
+import axios from "axios";
 
 const UserProfile = () => {
   const [showReportDialog, setShowReportDialog] = useState(false);
@@ -12,6 +13,7 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { token, backendUrl } = useAuth();
+  const [isReported, setIsReported] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -19,20 +21,20 @@ const UserProfile = () => {
         const response = await fetch(`${backendUrl}/api/user/get/${userId}`, {
           method: "GET",
           headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch user details');
+          throw new Error("Failed to fetch user details");
         }
 
         const data = await response.json();
         setUser(data.user); // Set the user data from the API response
       } catch (err) {
         console.error(err);
-        navigate('/login'); // Redirect to users page on error
+        navigate("/login"); // Redirect to users page on error
       } finally {
         setIsLoading(false);
       }
@@ -40,6 +42,30 @@ const UserProfile = () => {
 
     fetchUser();
   }, [userId, navigate, token]);
+
+  const checkWetherAlreadyOnceReported = async () => {
+    try {
+      const { data } = await axios.get(
+        backendUrl + "/api/report-user/isReported",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+          params: { reportedUserId: userId },
+        }
+      );
+
+      if (data.success) {
+        setIsReported(false);
+      }
+    } catch (error) {
+      setIsReported(true);
+    }
+  };
+
+  useEffect(() => {
+    checkWetherAlreadyOnceReported();
+  }, [showReportDialog]);
 
   if (isLoading) {
     return (
@@ -68,23 +94,26 @@ const UserProfile = () => {
   return (
     <div className="relative bg-white rounded-lg shadow-lg p-6 mb-8">
       {/* Report User Button */}
-      <button
+      {!isReported && <button
         onClick={() => setShowReportDialog(true)}
         className="absolute top-4 right-4 text-gray-600 hover:text-red-500 transition-colors flex items-center gap-2"
       >
         <Flag className="w-5 h-5" />
         <span>Report User</span>
-      </button>
+      </button>}
 
       {/* Report Dialog Popup */}
-      {showReportDialog && (
+      {!isReported && showReportDialog && (
         <ReportUserForm onClose={() => setShowReportDialog(false)} />
       )}
 
       {/* User Profile */}
       <div className="flex flex-col md:flex-row items-start gap-6">
         <img
-          src={user.photo || 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg'} // Default image if user doesn't have one
+          src={
+            user.photo ||
+            "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
+          } // Default image if user doesn't have one
           alt={user.name}
           className="w-32 h-32 rounded-full object-cover border-4 border-blue-100"
         />
@@ -94,11 +123,16 @@ const UserProfile = () => {
             <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
             <div className="flex items-center gap-1">
               <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-              <span className="font-semibold">{user.rating.toFixed(1)}</span> {/* Format the rating to 1 decimal place */}
+              <span className="font-semibold">
+                {user.rating.toFixed(1)}
+              </span>{" "}
+              {/* Format the rating to 1 decimal place */}
             </div>
           </div>
 
-          <p className="text-gray-600 mb-4">{user.about || 'This user has not provided an about section.'}</p>
+          <p className="text-gray-600 mb-4">
+            {user.about || "This user has not provided an about section."}
+          </p>
 
           <div className="space-y-3">
             <div>

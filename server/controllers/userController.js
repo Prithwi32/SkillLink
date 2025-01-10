@@ -134,28 +134,28 @@ export const getUserById = async (req, res) => {
 export const getUsersForSpecificSkill = async (req, res) => {
   try {
     const { skillId } = req.params;
-    console.log("Skill Id:", skillId);
+    // console.log("Skill Id:", skillId);
     if (!skillId) {
       return res
         .status(400)
         .json({ success: false, message: "Skill ID is required" });
     }
     const skill = await Skill.findById(skillId);
-    console.log("Skill found:", skill);
+    // console.log("Skill found:", skill);
     if (!skill) {
       return res
         .status(404)
         .json({ success: false, message: "Skill not found" });
     }
     const skillName = skill.name;
-    console.log("Skill Name:", skillName);
+    // console.log("Skill Name:", skillName);
     const users = await User.find({
       skillsOffered: skillName,
       isBanned: false,
     })
       .select("name skillsOffered about rating photo")
       .lean();
-    console.log("Matching users:", users);
+    // console.log("Matching users:", users);
     res.status(200).json({ success: true, users });
   } catch (err) {
     console.error("Error fetching users for specific skill:", err);
@@ -170,10 +170,10 @@ export const getUsersForSpecificSkill = async (req, res) => {
 export const getUsersBasedOnSkills = async (req, res) => {
   try {
     const userId = req.user._id;
-    console.log("User ID:", userId);
+    // console.log("User ID:", userId);
 
     const user = await User.findById(userId).select("skillsRequested").lean();
-    console.log("User:", user);
+    // console.log("User:", user);
 
     let users = [];
 
