@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import RentingPage from "./pages/RentingPage";
 import RestrictedRoute from "./pages/RestrictedRoute";
+import ReviewSection from "./components/profile/ReviewSection";
 
 function App() {
   const { backendUrl, setToken } = useAuth();
@@ -122,6 +123,7 @@ function App() {
             <Route path="profile" element={<ProfileSection />} />
             <Route path="events" element={<EventPage />} />
             <Route path="session" element={<SessionPage />} />
+            <Route path="review" element={<ReviewSection/>}/>
           </Route>
         </Route>
 
