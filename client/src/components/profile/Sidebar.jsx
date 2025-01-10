@@ -6,6 +6,7 @@ const navItems = [
   { id: 'profile', label: 'Profile', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' },
   { id: 'events', label: 'Events', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
   { id: 'session', label: 'Session', icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z' },
+  { id: 'review', label: 'Review', icon: 'M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 10.9 12 11.5 12 13h-2v-.5c0-.83.34-1.64.93-2.21l1.07-1.09c.27-.27.43-.65.43-1.06 0-.83-.67-1.5-1.5-1.5S10 7.17 10 8H8c0-1.66 1.34-3 3-3s3 1.34 3 3c0 .55-.22 1.05-.59 1.41z' },
 ];
 
 export default function Sidebar({ isOpen, onClose, activeSection, setActiveSection }) {
