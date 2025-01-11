@@ -1,133 +1,120 @@
-import React, { useState } from 'react';
-import { ReviewCard } from '../Cards/ReviewSectionCard';
-import { Modal } from '../HelperComponents/Modal';
+import React, { useState, useCallback, useMemo } from 'react';
+import ReviewsGrid from '../HelperComponents/ReviewGrid';
+import EditReviewModal from '../HelperComponents/EditReviewModal';
 
-// Mock data - replace with actual API calls
-const mockReceivedReviews = [
+// Sample data - replace with actual data from your backend
+const myReviews = [
   {
     id: '1',
-    reviewerName: 'Sarah Johnson',
-    reviewerImage: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330',
-    rating: 4.5,
-    text: 'Exceptional work ethic and great communication throughout the project. Would definitely recommend!',
-    date: 'March 15, 2024',
+    profileImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
+    name: 'John Doe',
+    rating: 4,
+    review: 'Great work ethic and attention to detail. Always delivers on time.',
   },
   {
     id: '2',
-    reviewerName: 'Michael Chen',
-    reviewerImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
+    profileImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
+    name: 'Jane Smith',
     rating: 5,
-    text: 'Outstanding attention to detail and delivered the project ahead of schedule.',
-    date: 'March 10, 2024',
-  },
-  {
-    id: '4',
-    reviewerName: 'Emily Rodriguez',
-    reviewerImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80',
-    rating: 4.5,
-    text: 'A pleasure to work with. Very professional and delivered high-quality work.',
-    date: 'March 5, 2024',
+    review: 'Exceptional communication skills and problem-solving abilities.',
   },
 ];
 
-const mockGivenReviews = [
+const reviewsGiven = [
   {
     id: '3',
-    reviewerName: 'David Wilson',
-    reviewerImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e',
+    profileImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
+    name: 'Mike Johnson',
     rating: 4,
-    text: 'Great experience working together. Very professional and responsive.',
-    date: 'March 8, 2024',
+    review: 'Consistently delivers high-quality work. A pleasure to work with.',
   },
   {
-    id: '5',
-    reviewerName: 'Alex Thompson',
-    reviewerImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e',
+    id: '4',
+    profileImage: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
+    name: 'Sarah Williams',
     rating: 5,
-    text: 'Excellent collaboration and communication throughout the project.',
-    date: 'March 1, 2024',
+    review: 'Outstanding performance on all projects. Highly recommended.',
   },
 ];
 
 function ReviewSection() {
   const [activeTab, setActiveTab] = useState('received');
-  const [selectedReview, setSelectedReview] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingReview, setEditingReview] = useState(null);
+  const [reviews, setReviews] = useState({ received: myReviews, given: reviewsGiven });
 
-  const handleEditReview = (review) => {
-    setSelectedReview(review);
-    setIsModalOpen(true);
-  };
+  const handleEditReview = useCallback((id) => {
+    setEditingReview(id);
+  }, []);
 
-  const handleSaveReview = async (updatedReview) => {
-    try {
-      // Here you would make an API call to update the review
-      console.log('Saving updated review:', updatedReview);
+  const currentReview = useMemo(() => {
+    if (!editingReview) return null;
+    return reviews.given.find((review) => review.id === editingReview);
+  }, [editingReview, reviews.given]);
 
-      // Optimistic update (replace with actual API integration)
-      const updatedReviews = mockGivenReviews.map((review) =>
-        review.id === updatedReview.id ? updatedReview : review
-      );
-      console.log('Updated reviews:', updatedReviews);
-    } catch (error) {
-      console.error('Error updating review:', error);
-      // Handle error (show error message, etc.)
-    }
-  };
+  const handleSaveReview = useCallback(
+    (data) => {
+      if (!editingReview) return;
+
+      setReviews((prev) => ({
+        ...prev,
+        given: prev.given.map((review) =>
+          review.id === editingReview ? { ...review, ...data } : review
+        ),
+      }));
+
+      setEditingReview(null);
+    },
+    [editingReview]
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto py-8">
         <div className="flex justify-center gap-4 mb-8">
           <button
             onClick={() => setActiveTab('received')}
-            className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
+            className={`px-6 py-3 rounded-lg font-medium transition-all ${
               activeTab === 'received'
                 ? 'bg-blue-600 text-white shadow-lg'
-                : 'bg-white text-gray-600 hover:bg-blue-50'
+                : 'bg-white text-gray-600 hover:bg-gray-100'
             }`}
           >
             My Reviews
           </button>
           <button
             onClick={() => setActiveTab('given')}
-            className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
+            className={`px-6 py-3 rounded-lg font-medium transition-all ${
               activeTab === 'given'
                 ? 'bg-blue-600 text-white shadow-lg'
-                : 'bg-white text-gray-600 hover:bg-blue-50'
+                : 'bg-white text-gray-600 hover:bg-gray-100'
             }`}
           >
             Reviews Given
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {activeTab === 'received'
-            ? mockReceivedReviews.map((review) => (
-                <ReviewCard key={review.id} review={review} />
-              ))
-            : mockGivenReviews.map((review) => (
-                <ReviewCard
-                  key={review.id}
-                  review={review}
-                  isEditable
-                  onEdit={handleEditReview}
-                />
-              ))}
+        <div className="transition-opacity duration-300">
+          {activeTab === 'received' ? (
+            <ReviewsGrid reviews={reviews.received} />
+          ) : (
+            <ReviewsGrid
+              reviews={reviews.given}
+              isEditable
+              onEdit={handleEditReview}
+            />
+          )}
         </div>
-      </div>
 
-      {selectedReview && (
-        <Modal
-          review={selectedReview}
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false);
-            setSelectedReview(null);
-          }}
-          onSave={handleSaveReview}
-        />
-      )}
+        {currentReview && (
+          <EditReviewModal
+            isOpen={!!editingReview}
+            onClose={() => setEditingReview(null)}
+            onSave={handleSaveReview}
+            initialRating={currentReview.rating}
+            initialReview={currentReview.review}
+          />
+        )}
+      </div>
     </div>
   );
 }
