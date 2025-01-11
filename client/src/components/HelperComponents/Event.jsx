@@ -2,13 +2,13 @@ import EventCarousel from "@/components/HelperComponents/EventCarousel";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 
 export default function Event() {
   const { backendUrl, token } = useAuth();
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [topEvents, setTopEvents] = useState([]);
 
@@ -25,7 +25,8 @@ export default function Event() {
         date: new Date(event.date).toLocaleDateString(),
         badges: event.skills_id.map((skill) => skill.name),
         mentorName: event.created_by.name,
-        mentorImage: event.created_by.photo ||
+        mentorImage:
+          event.created_by.photo ||
           "https://img.freepik.com/free-vector/user-blue-gradient_78370-4692.jpg?semt=ais_hybrid",
         rating: event.created_by.rating,
         participants: event.participants,
@@ -67,7 +68,9 @@ export default function Event() {
           date: new Date(event.date).toLocaleDateString(),
           badges: event.skills_id.map((skill) => skill.name),
           mentorName: event.created_by.name,
-          mentorImage: event.created_by.photo || "https://img.freepik.com/free-vector/user-blue-gradient_78370-4692.jpg?semt=ais_hybrid",
+          mentorImage:
+            event.created_by.photo ||
+            "https://img.freepik.com/free-vector/user-blue-gradient_78370-4692.jpg?semt=ais_hybrid",
           rating: event.created_by.rating,
           mentorId: event.created_by._id,
           participants: event.participants,
@@ -98,18 +101,23 @@ export default function Event() {
         Featured <span className="text-blue-800">Events</span>
       </h1>
       <p className="text-gray-600 sm:text-lg max-w-lg text-center mb-6">
-      Explore our featured events, where ideas meet opportunities. Stay updated and join the journey!
+        Explore our featured events, where ideas meet opportunities. Stay
+        updated and join the journey!
       </p>
       {!isLoading && <EventCarousel topEvents={topEvents} />}
       {isLoading && (
         <p className="text-lg font-semibold text-slate-400">Loading...</p>
       )}
-      {topEvents.length>3?<Button
+      {topEvents.length > 3 ? (
+        <Button
           onClick={() => (token ? navigate("/events") : navigate("/login"))}
           className="mt-8 bg-blue-900 hover:bg-blue-950"
         >
           Explore More
-        </Button>:""}
+        </Button>
+      ) : (
+        ""
+      )}
     </main>
   );
 }

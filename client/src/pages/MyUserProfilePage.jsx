@@ -28,7 +28,7 @@ export default function MyUserProfilePage() {
         activeSection={activeSection}
         setActiveSection={handleSectionChange}
       />
-      <main className="flex-grow p-8">
+      <main className="flex-grow sm:p-8 p-5">
         <button
           onClick={toggleSidebar}
           className="fixed top-2 left-4 z-50 bg-blue-500 text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300"

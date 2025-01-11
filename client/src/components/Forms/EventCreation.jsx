@@ -3,7 +3,7 @@ import axios from "axios";
 import { InputField } from "../HelperComponents/InputField";
 import SkillSuggest from "../HelperComponents/SkillSuggestionForEventCreation";
 import { useAuth } from "@/context/AuthContext";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 export function EventCreationForm() {
   const [eventDetails, setEventDetails] = useState({
@@ -24,9 +24,11 @@ export function EventCreationForm() {
   };
 
   const handleSkillSelect = (skills) => {
-     setEventDetails((prevDetails) => ({
-       ...prevDetails,
-       skills: skills, })); };
+    setEventDetails((prevDetails) => ({
+      ...prevDetails,
+      skills: skills,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -213,7 +215,7 @@ export function EventCreationForm() {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Skills Offered
             </label>
-            <SkillSuggest onSkillSelect={handleSkillSelect} isMultiple={true}/>
+            <SkillSuggest onSkillSelect={handleSkillSelect} isMultiple={true} />
             {/* <div className="mt-2 flex flex-wrap gap-2">
               {eventDetails.skills.map((skill, index) => (
                 <span
@@ -238,4 +240,3 @@ export function EventCreationForm() {
 }
 
 export default EventCreationForm;
-

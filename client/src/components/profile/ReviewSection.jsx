@@ -1,92 +1,162 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import ReviewsGrid from '../HelperComponents/ReviewGrid';
-import EditReviewModal from '../HelperComponents/EditReviewModal';
-
-// Sample data - replace with actual data from your backend
-const myReviews = [
-  {
-    id: '1',
-    profileImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
-    name: 'John Doe',
-    rating: 4,
-    review: 'Great work ethic and attention to detail. Always delivers on time.',
-  },
-  {
-    id: '2',
-    profileImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
-    name: 'Jane Smith',
-    rating: 5,
-    review: 'Exceptional communication skills and problem-solving abilities.',
-  },
-];
-
-const reviewsGiven = [
-  {
-    id: '3',
-    profileImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
-    name: 'Mike Johnson',
-    rating: 4,
-    review: 'Consistently delivers high-quality work. A pleasure to work with.',
-  },
-  {
-    id: '4',
-    profileImage: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
-    name: 'Sarah Williams',
-    rating: 5,
-    review: 'Outstanding performance on all projects. Highly recommended.',
-  },
-];
+import React, { useState, useCallback, useMemo, useEffect } from "react";
+import ReviewsGrid from "../HelperComponents/ReviewGrid";
+import EditReviewModal from "../HelperComponents/EditReviewModal";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
 
 function ReviewSection() {
-  const [activeTab, setActiveTab] = useState('received');
+  const [activeTab, setActiveTab] = useState("received");
   const [editingReview, setEditingReview] = useState(null);
-  const [reviews, setReviews] = useState({ received: myReviews, given: reviewsGiven });
+  const [reviews, setReviews] = useState({
+    received: [],
+    given: [],
+  });
 
-  const handleEditReview = useCallback((id) => {
-    setEditingReview(id);
+  const [loading, setLoading] = useState(false);
+
+  const myUserId = localStorage.getItem("userId");
+  const { backendUrl, token } = useAuth();
+
+  const getMyReviews = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(
+        backendUrl + `/api/reviews/user/${myUserId}`,
+      );
+
+      if (data.success) {
+        setReviews({ ...reviews, received: data.reviews });
+      } else {
+        toast.error("Couldn't load reviews");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Couldn't load reviews");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getGivenReviews = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(backendUrl + "/api/reviews/given", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (data.success) {
+        const modifiedReview = data.reviews.map((review) => ({
+          ...review,
+          reviewedBy: review.userId,
+        }));
+        setReviews({ ...reviews, given: modifiedReview });
+      } else {
+        toast.error("Couldn't load reviews");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Couldn't load reviews");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab == "received") getMyReviews();
+    else getGivenReviews();
+  }, [activeTab]);
+
+  const handleEditReview = useCallback((_id) => {
+    setEditingReview(_id);
   }, []);
 
   const currentReview = useMemo(() => {
     if (!editingReview) return null;
-    return reviews.given.find((review) => review.id === editingReview);
+    return reviews.given.find((review) => review._id === editingReview);
   }, [editingReview, reviews.given]);
 
   const handleSaveReview = useCallback(
-    (data) => {
+    async (data) => {
       if (!editingReview) return;
 
       setReviews((prev) => ({
         ...prev,
         given: prev.given.map((review) =>
-          review.id === editingReview ? { ...review, ...data } : review
+          review._id === editingReview ? { ...review, ...data } : review,
         ),
       }));
 
+      try {
+        const response = await axios.put(
+          backendUrl + `/api/reviews/edit/${editingReview}`,
+          { comment: data.comment, rating: data.rating },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+
+        if (response.data.success) {
+          toast.success("Review updated successfully");
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Failed to update review");
+      }
+
       setEditingReview(null);
     },
-    [editingReview]
+    [editingReview],
   );
+
+  const handleDeleteReview = async (reviewId) => {
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this review?",
+    );
+    if (isConfirmed) {
+      try {
+        const { data } = await axios.delete(
+          backendUrl + `/api/reviews/remove/${reviewId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          },
+        );
+
+        if (data.success) {
+          getGivenReviews();
+          toast.success(data.message);
+        } else {
+          toast.error(data.message || "Failed to delete review");
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Failed to delete review");
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto py-8">
         <div className="flex justify-center gap-4 mb-8">
           <button
-            onClick={() => setActiveTab('received')}
-            className={`px-6 py-3 rounded-lg font-medium transition-all ${
-              activeTab === 'received'
-                ? 'bg-blue-600 text-white shadow-lg'
-                : 'bg-white text-gray-600 hover:bg-gray-100'
+            onClick={() => setActiveTab("received")}
+            className={`sm:px-6 sm:py-3 px-2 rounded-lg font-medium transition-all ${
+              activeTab === "received"
+                ? "bg-blue-600 text-white shadow-lg"
+                : "bg-white text-gray-600 hover:bg-gray-100"
             }`}
           >
             My Reviews
           </button>
           <button
-            onClick={() => setActiveTab('given')}
+            onClick={() => setActiveTab("given")}
             className={`px-6 py-3 rounded-lg font-medium transition-all ${
-              activeTab === 'given'
-                ? 'bg-blue-600 text-white shadow-lg'
-                : 'bg-white text-gray-600 hover:bg-gray-100'
+              activeTab === "given"
+                ? "bg-blue-600 text-white shadow-lg"
+                : "bg-white text-gray-600 hover:bg-gray-100"
             }`}
           >
             Reviews Given
@@ -94,14 +164,34 @@ function ReviewSection() {
         </div>
 
         <div className="transition-opacity duration-300">
-          {activeTab === 'received' ? (
-            <ReviewsGrid reviews={reviews.received} />
-          ) : (
-            <ReviewsGrid
-              reviews={reviews.given}
-              isEditable
-              onEdit={handleEditReview}
-            />
+          {activeTab === "received"
+            ? !loading && <ReviewsGrid reviews={reviews.received} />
+            : !loading && (
+                <ReviewsGrid
+                  reviews={reviews.given}
+                  isEditable
+                  onEdit={handleEditReview}
+                  handleDelete={handleDeleteReview}
+                />
+              )}
+          {loading && (
+            <div className="flex justify-center items-center font-medium text-slate-400 h-full">
+              Loading...
+            </div>
+          )}
+
+          {!loading &&
+            reviews.received.length === 0 &&
+            activeTab === "received" && (
+              <div className="flex justify-center items-center font-medium text-slate-500 h-full">
+                You haven't received any reviews yet
+              </div>
+            )}
+
+          {!loading && reviews.given.length === 0 && activeTab === "given" && (
+            <div className="flex justify-center items-center font-medium text-slate-500 h-full">
+              You haven't given any reviews yet
+            </div>
           )}
         </div>
 
@@ -111,7 +201,7 @@ function ReviewSection() {
             onClose={() => setEditingReview(null)}
             onSave={handleSaveReview}
             initialRating={currentReview.rating}
-            initialReview={currentReview.review}
+            initialReview={currentReview.comment}
           />
         )}
       </div>

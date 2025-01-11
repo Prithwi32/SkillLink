@@ -3,7 +3,7 @@ import ReviewCard from "../Cards/ReviewCard";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "@/context/AuthContext";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import ReviewPopup from "../Cards/ReviewPopUp"; // Import the ReviewPopup component
 
 const Reviews = () => {

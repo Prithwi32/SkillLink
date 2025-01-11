@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { Button } from "../ui/button";
 
 export function InstructorCard({
@@ -48,9 +48,10 @@ export function InstructorCard({
         <div className="mb-3">
           <p className="text-xl font-semibold line-clamp-2">{name}</p>
           <div className="flex text-yellow-400 justify-center">
-            {[...Array(5)].map((_, i) => (
-              i<rating && <Star key={i} className="size-3 fill-current" />
-            ))}
+            {[...Array(5)].map(
+              (_, i) =>
+                i < rating && <Star key={i} className="size-3 fill-current" />,
+            )}
           </div>
         </div>
 
@@ -71,10 +72,7 @@ export function InstructorCard({
             </Badge>
           ))}
           {remainingBadges > 0 && (
-            <Badge
-              className="text-xs rounded-full"
-              variant="secondary"
-            >
+            <Badge className="text-xs rounded-full" variant="secondary">
               + {remainingBadges} more
             </Badge>
           )}

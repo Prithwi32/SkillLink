@@ -2,7 +2,7 @@ import { InstructorCard } from "@/components/Cards/InstructorCard";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const AllSuggestedLearningPage = () => {
   const { backendUrl } = useAuth();

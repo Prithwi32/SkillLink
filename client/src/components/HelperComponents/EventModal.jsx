@@ -3,7 +3,7 @@ import { X, Users, Clock, Calendar } from "lucide-react";
 import { Rating } from "../ui/Rating";
 import { LoadingSpinner } from "../ui/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { useAuth } from "@/context/AuthContext";
 
 const usePendingRegistrations = () => {
@@ -158,19 +158,19 @@ export function EventModal({ event, onClose, onRegister }) {
               </div>
               <div className="flex items-center space-x-2 text-gray-600">
                 <Clock className="w-5 h-5" />
-                  <span>
-                    {new Date(event.start_time).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      timeZone: "UTC",
-                    })}{" "}
-                    -{" "}
-                    {new Date(event.end_time).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      timeZone: "UTC",
-                    })}{" "}
-                  </span>
+                <span>
+                  {new Date(event.start_time).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    timeZone: "UTC",
+                  })}{" "}
+                  -{" "}
+                  {new Date(event.end_time).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    timeZone: "UTC",
+                  })}{" "}
+                </span>
               </div>
               <div className="flex items-center space-x-2 text-gray-600">
                 <Users className="w-5 h-5" />

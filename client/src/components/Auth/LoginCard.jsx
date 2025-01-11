@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { InputField } from "../HelperComponents/InputField";
 import { useAuth } from "../../context/AuthContext";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 export function LoginCard() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -26,7 +26,7 @@ export function LoginCard() {
       console.log("Login successful:", user);
       navigate("/userDashboard");
     } catch (error) {
-      toast.error("Login Failed!")
+      toast.error("Login Failed!");
       console.error("Login failed:", error.message);
     }
   };

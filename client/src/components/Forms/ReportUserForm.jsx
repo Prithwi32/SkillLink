@@ -15,7 +15,7 @@ import { AuthContext } from "@/context/AuthContext";
 import { useParams } from "react-router-dom";
 import React from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 export default function ReportDialog({ onClose }) {
   const [reason, setReason] = React.useState("");

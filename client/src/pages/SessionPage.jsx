@@ -5,7 +5,7 @@ import { TabNavigation } from "../components/HelperComponents/TabNavigation";
 import SessionForm from "@/components/Forms/SessionForm";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 export default function SessionPage() {
   const [activeTab, setActiveTab] = useState("Scheduled");
@@ -74,20 +74,23 @@ export default function SessionPage() {
             />
           </div>
         ) : (
-          !isLoading && (
-            filteredSessions.length > 0 ? (
-              <SessionList
-                sessions={filteredSessions}
-                getAllSessions={getAllSessions}
-              />
-            ) : (
-              <p className="flex items-center justify-center font-semibold text-slate-400">
-                No Sessions Found
-              </p>
-            )
-          )
+          !isLoading &&
+          (filteredSessions.length > 0 ? (
+            <SessionList
+              sessions={filteredSessions}
+              getAllSessions={getAllSessions}
+            />
+          ) : (
+            <p className="flex items-center justify-center font-semibold text-slate-400">
+              No Sessions Found
+            </p>
+          ))
         )}
-        {isLoading && <p className="flex items-center justify-center font-semibold text-slate-400">Loading...</p>} 
+        {isLoading && (
+          <p className="flex items-center justify-center font-semibold text-slate-400">
+            Loading...
+          </p>
+        )}
       </div>
     </div>
   );

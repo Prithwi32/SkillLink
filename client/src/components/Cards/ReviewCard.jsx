@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Star, MoreVertical } from "lucide-react";
 import { AuthContext } from "@/context/AuthContext";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import axios from "axios";
 
 //3-dot along with edit and delete
@@ -54,8 +54,9 @@ const ReviewCard = ({ review, onEdit, getReviews }) => {
       <div className="flex items-start gap-4">
         <img
           src={
-            review.reviewerImage ||
-            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200&h=200"
+            review.reviewedBy.photo != ""
+              ? review.reviewedBy.photo
+              : "https://as1.ftcdn.net/v2/jpg/03/53/11/00/500_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg"
           }
           alt={review.reviewedBy.name}
           className="w-12 h-12 rounded-full object-cover"

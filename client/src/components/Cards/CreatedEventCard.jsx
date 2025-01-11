@@ -1,6 +1,6 @@
 // import { Calendar, MapPin, Trash2 } from "lucide-react";
 // import { useNavigate } from "react-router-dom";
-// import { toast } from "react-toastify";
+// import toast from "react-hot-toast";
 // import { useAuth } from "@/context/AuthContext";
 
 // export const CreatedEventCard = ({ event, status, onDelete }) => {
@@ -85,7 +85,7 @@
 // };
 import { Calendar, MapPin, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { useAuth } from "@/context/AuthContext";
 
 export const CreatedEventCard = ({ event, status, onDelete }) => {
@@ -168,6 +168,5 @@ export const CreatedEventCard = ({ event, status, onDelete }) => {
     </div>
   );
 };
-
 
 //p-6 py-2 px-4 rounded-md text-center bg-red-100 text-red-800

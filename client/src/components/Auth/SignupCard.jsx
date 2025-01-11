@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { InputField } from "../HelperComponents/InputField";
 import SkillSuggest from "@/components/HelperComponents/SkillSuggestionForEventCreation";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 
@@ -55,20 +55,24 @@ export function SignupCard() {
     }
 
     // Log the form data to ensure it's structured correctly
-    console.log('Form Data:', formData);
+    console.log("Form Data:", formData);
 
     try {
       const response = await fetch(`${backendUrl}/auth/signup`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
           password: formData.password,
-          skillsOffered: Array.isArray(formData.skillsOffered) ? formData.skillsOffered : [formData.skillsOffered],
-          skillsRequested: Array.isArray(formData.skillsRequired) ? formData.skillsRequired : [formData.skillsRequired],
+          skillsOffered: Array.isArray(formData.skillsOffered)
+            ? formData.skillsOffered
+            : [formData.skillsOffered],
+          skillsRequested: Array.isArray(formData.skillsRequired)
+            ? formData.skillsRequired
+            : [formData.skillsRequired],
         }),
       });
 
@@ -81,9 +85,11 @@ export function SignupCard() {
       console.log("Signup successful", responseData);
       // handle successful signup (e.g., redirect to login)
     } catch (error) {
-      toast.error("Signup Failed!")
-      console.error('Error during signup:', error);
-      setErrorMessage(error.message || "Signup failed. Please try again later.");
+      toast.error("Signup Failed!");
+      console.error("Error during signup:", error);
+      setErrorMessage(
+        error.message || "Signup failed. Please try again later.",
+      );
     }
   };
 
