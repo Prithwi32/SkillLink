@@ -25,7 +25,7 @@ export default function SessionPage() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (data.success) {
@@ -44,19 +44,19 @@ export default function SessionPage() {
   }, []);
 
   const filteredSessions = sessions.filter(
-    (session) => session.status === activeTab
+    (session) => session.status === activeTab,
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+    <div className="w-full min-h-[calc(100vh-4rem)] bg-gray-50 overflow-x-hidden">
+      <div className="px-4 py-6 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             Session Management
           </h1>
           <button
             onClick={() => setShowForm(true)}
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto justify-center"
           >
             <PlusCircle className="mr-2" size={20} />
             Add Session
@@ -67,32 +67,34 @@ export default function SessionPage() {
           <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
         )}
 
-        {showForm ? (
-          <div className="mb-8">
-            <SessionForm
-              setShowForm={setShowForm}
-              onCancel={() => setShowForm(false)}
-              getAllSessions={getAllSessions}
-            />
-          </div>
-        ) : (
-          !isLoading &&
-          (filteredSessions.length > 0 ? (
-            <SessionList
-              sessions={filteredSessions}
-              getAllSessions={getAllSessions}
-            />
+        <div className="mt-6">
+          {showForm ? (
+            <div className="mb-6">
+              <SessionForm
+                setShowForm={setShowForm}
+                onCancel={() => setShowForm(false)}
+                getAllSessions={getAllSessions}
+              />
+            </div>
           ) : (
-            <p className="flex items-center justify-center font-semibold text-slate-400">
-              No Sessions Found
+            !isLoading &&
+            (filteredSessions.length > 0 ? (
+              <SessionList
+                sessions={filteredSessions}
+                getAllSessions={getAllSessions}
+              />
+            ) : (
+              <p className="flex items-center justify-center font-semibold text-slate-400 py-8">
+                No Sessions Found
+              </p>
+            ))
+          )}
+          {isLoading && (
+            <p className="flex items-center justify-center font-semibold text-slate-400 py-8">
+              Loading...
             </p>
-          ))
-        )}
-        {isLoading && (
-          <p className="flex items-center justify-center font-semibold text-slate-400">
-            Loading...
-          </p>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

@@ -138,7 +138,15 @@ export const getAllReviewsProvidedByAParticualrUserId = async (req, res) => {
 
     const reviews = await Review.find({ reviewedBy: _id })
       .populate("skillId")
-      .populate("userId", "name _id photo");
+      .populate("userId", "name _id photo")
+      .populate({
+        path: "sessionId",
+        select: "skillTaughtByUserOne skillTaughtByUserTwo",
+        populate: [
+          { path: "skillTaughtByUserOne" },
+          { path: "skillTaughtByUserTwo" },
+        ],
+      });
 
     return res.status(200).json({ success: true, reviews });
   } catch (error) {

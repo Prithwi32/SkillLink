@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Sidebar from '../components/Profile/Sidebar';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { Menu } from 'lucide-react';
 
 export default function MyUserProfilePage() {
   const [activeSection, setActiveSection] = useState("profile");
@@ -21,24 +22,24 @@ export default function MyUserProfilePage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
+    <div className="flex min-h-screen bg-gradient-to-br from-blue-100 to-blue-300 relative">
       <Sidebar
         isOpen={isSidebarOpen}
         onClose={closeSidebar}
         activeSection={activeSection}
         setActiveSection={handleSectionChange}
       />
-      <main className="flex-grow sm:p-8 p-5">
+      <main className="flex-1 p-4 sm:p-6 md:p-8 w-full transition-all duration-300">
         <button
           onClick={toggleSidebar}
-          className="fixed top-2 left-4 z-50 bg-blue-500 text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300"
+          className="fixed top-4 left-4 z-50 bg-blue-500 text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300"
+          aria-label="Toggle Sidebar"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
+          <Menu className="h-5 w-5" />
         </button>
-        {/* Render nested routes */}
-        <Outlet />
+        <div className="mt-14 md:mt-0">
+          <Outlet />
+        </div>
       </main>
     </div>
   );
