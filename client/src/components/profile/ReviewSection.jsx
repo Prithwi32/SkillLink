@@ -138,7 +138,7 @@ function ReviewSection() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen sm:bg-gray-50">
       <div className="max-w-7xl mx-auto py-8">
         <div className="flex justify-center gap-4 mb-8">
           <button

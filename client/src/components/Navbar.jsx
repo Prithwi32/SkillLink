@@ -17,12 +17,16 @@ const Navbar = () => {
     }
   };
 
+  const handleScrollUp = () => {
+    scrollTo(0, 0);
+  };
+
   return (
     <nav className="shadow-sm bg-white text-black sticky top-0 z-50 border-b border-b-gray-400">
       <div className="flex justify-between items-center px-4 py-3">
         {/* Left Section */}
         <div>
-          <Link to="/" className="text-2xl font-bold  hover:opacity-75">
+          <Link to="/" className="text-2xl font-bold  hover:opacity-75" onClick={handleScrollUp}>
             Hobby<span className="text-blue-700">Verse</span>
           </Link>
         </div>
@@ -59,36 +63,37 @@ const Navbar = () => {
               }`}
             />
           </NavLink>
-          <NavLink to="/blogs" className="hover:opacity-75">
+          <NavLink to="/blogs" className="hover:opacity-75" onClick={handleScrollUp}>
             <li className="py-1">Blogs</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
           </NavLink>
-          <NavLink to="/events" className="hover:opacity-75">
+          <NavLink to="/events" className="hover:opacity-75" onClick={handleScrollUp}>
             <li className="py-1">Events</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
           </NavLink>
-          <NavLink to="/users" className="hover:opacity-75">
+          <NavLink to="/users" className="hover:opacity-75" onClick={handleScrollUp}>
             <li className="py-1">Users</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
           </NavLink>
-          <NavLink to="/rent" className="hover:opacity-75">
+          <NavLink to="/rent" className="hover:opacity-75" onClick={handleScrollUp}>
             <li className="py-1">Rent</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
           </NavLink>
         </ul>
 
         {/* Right Section */}
-        <div className="hidden md:flex items-center space-x-4">
+        <div className="hidden md:flex items-center space-x-4" onClick={handleScrollUp}>
           {token ? (
             <Link
               to="/userDashboard"
               className="flex items-center space-x-2 hover:opacity-75"
+              onClick={handleScrollUp}
             >
               <UserCircle size={24} />
               <span>{user?.username || "Profile"}</span>
             </Link>
           ) : (
-            <Link to="/login">
+            <Link to="/login" onClick={handleScrollUp}>
               <Button className="bg-blue-700 text-white hover:bg-blue-800">
                 Login/SignUp
               </Button>
@@ -134,48 +139,48 @@ const Navbar = () => {
           </div>
           <X
             className="size-7 hover:bg-gray-200 p-2 rounded-full"
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={() =>{ setIsMobileMenuOpen(false); handleScrollUp()}}
           />
         </div>
         <ul className="flex flex-col items-center gap-2 mt-5 px-5 text-lg font-medium w-full">
           <NavLink
             className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
             to="/"
           >
             Home
           </NavLink>
           <NavLink
             className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
             to="/about"
           >
             About Us
           </NavLink>
           <NavLink
             className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
             to="/blogs"
           >
             Blogs
           </NavLink>
           <NavLink
             className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
             to="/events"
           >
             Events
           </NavLink>
           <NavLink
             className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
             to="/users"
           >
             Users
           </NavLink>
           <NavLink
             className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
             to="/rent"
           >
             Rent
@@ -183,7 +188,7 @@ const Navbar = () => {
           {!token ? (
             <NavLink
               className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
               to="/login"
             >
               Login/SignUp
@@ -191,7 +196,7 @@ const Navbar = () => {
           ) : (
             <NavLink
               className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
               to="/userDashboard"
             >
               My Profile

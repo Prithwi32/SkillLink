@@ -104,19 +104,19 @@ function App() {
             <Route path="/users/:userId" element={<UserProfilePage />} />
             <Route path="reportuser" element={<ReportUserForm />} />
             <Route
-              path="/userDashboard/:eventId"
+              path="/userDashboard/events/:eventId"
               element={<EventDetailsPage />}
             />
             <Route
               path="/users/allRecommendUsers"
               element={<AllSuggestedLearningPage />}
             />
+            <Route path="/userDashboard/events/createEvent" element={<EventCreationForm />} />
           </Route>
         </Route>
 
         {/* Protected routes with no AppLayout*/}
         <Route element={<ProtectedRoute />}>
-          <Route path="createEvent" element={<EventCreationForm />} />
           <Route path="userDashboard" element={<MyUserProfilePage />}>
             {/* Nested routes */}
             <Route index element={<Navigate to="profile" />} />

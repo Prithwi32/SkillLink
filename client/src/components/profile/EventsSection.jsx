@@ -1,5 +1,3 @@
-import React from 'react';
-
 const events = [
   { id: 1, name: 'Web Dev Conference', date: '2023-08-15', location: 'New York, NY' },
   { id: 2, name: 'React Meetup', date: '2023-09-01', location: 'Online' },

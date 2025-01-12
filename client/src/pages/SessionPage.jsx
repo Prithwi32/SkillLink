@@ -48,7 +48,7 @@ export default function SessionPage() {
   );
 
   return (
-    <div className="w-full min-h-[calc(100vh-4rem)] bg-gray-50 overflow-x-hidden">
+    <div className="w-full min-h-[calc(100vh-4rem)] sm:bg-gray-50 overflow-x-hidden">
       <div className="px-4 py-6 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">

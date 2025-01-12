@@ -88,7 +88,7 @@ export default function About() {
           Built for administrators, the tools and features ensure smooth
           platform management and endless opportunities for growth.
         </p>
-        <div className="grid gap-8 lg:px-6  md:gap-12">
+        <div className="grid gap-8 lg:px-24 md:gap-12">
           {features.map((feature, index) => (
             <div
               key={feature.title}

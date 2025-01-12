@@ -1,12 +1,14 @@
-import { useState } from 'react';
-import { Calendar, MapPin, Video } from 'lucide-react';
-import EventDetailsPopup from '../HelperComponents/EventDetailsPopUp.jsx';
+import { useState } from "react";
+import { Calendar, MapPin, Video } from "lucide-react";
+import EventDetailsPopup from "../HelperComponents/EventDetailsPopUp.jsx";
 
 export const EnrolledEventCard = ({ event, status }) => {
   const [showPopup, setShowPopup] = useState(false);
   const { title, description, host_name, host_img, date, link } = event;
   const formattedDate = new Date(date).toLocaleDateString();
-  const defaultHostImage = host_img || "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid";
+  const defaultHostImage =
+    host_img ||
+    "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid";
 
   const handleViewDetails = () => {
     setShowPopup(true);
@@ -22,7 +24,7 @@ export const EnrolledEventCard = ({ event, status }) => {
         <div className="p-6">
           <h3 className="text-xl font-semibold text-gray-800 mb-2">{title}</h3>
           <p className="text-gray-600 mb-4 line-clamp-2">{description}</p>
-          
+
           <div className="flex items-center mb-4">
             <img
               src={host_img || defaultHostImage}
@@ -46,9 +48,9 @@ export const EnrolledEventCard = ({ event, status }) => {
             </div>
           </div>
 
-          {status === 'scheduled' ? (
+          {status === "scheduled" ? (
             <div className="mt-4 space-y-2">
-              <button 
+              <button
                 className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-300"
                 onClick={handleViewDetails}
               >
@@ -67,17 +69,23 @@ export const EnrolledEventCard = ({ event, status }) => {
               )}
             </div>
           ) : (
-            <div className={`mt-4 py-2 px-4 rounded-md text-center ${
-              status === 'canceled' 
-                ? 'bg-red-100 text-red-800' 
-                : 'bg-green-100 text-green-800'
-            }`}>
-              {status === 'canceled' ? 'Event Canceled' : 'Event Completed'}
+            <div
+              className={`mt-4 py-2 px-4 rounded-md text-center ${
+                status === "canceled"
+                  ? "bg-red-100 text-red-800"
+                  : "bg-green-100 text-green-800"
+              }`}
+            >
+              {status === "canceled" ? "Event Canceled" : "Event Completed"}
             </div>
           )}
         </div>
       </div>
-      <EventDetailsPopup event={event} onClose={handleClosePopup} open={showPopup} />
+      <EventDetailsPopup
+        event={event}
+        onClose={handleClosePopup}
+        open={showPopup}
+      />
     </>
   );
 };
