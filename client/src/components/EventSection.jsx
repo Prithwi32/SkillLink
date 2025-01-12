@@ -57,7 +57,7 @@ export const EventSection = ({ title, type }) => {
     <div className="mb-12">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">{title}</h2>
       
-      <div className="flex space-x-4 mb-6">
+      <div className="flex flex-wrap gap-6 justify-center sm:justify-start mb-6">
         {categories.map((category) => (
           <button
             key={category.id}

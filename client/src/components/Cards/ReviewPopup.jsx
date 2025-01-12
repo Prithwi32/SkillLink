@@ -1,8 +1,14 @@
 import React, { useContext, useState } from "react";
-import { X } from "lucide-react";
 import { AuthContext } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 import axios from "axios";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 export default function ReviewPopup({
   isOpen,
@@ -15,11 +21,8 @@ export default function ReviewPopup({
 
   const { backendUrl } = useContext(AuthContext);
 
-  if (!isOpen) return null;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Integrate with backend API
     try {
       const { data } = await axios.put(
         backendUrl + `/api/reviews/edit/${initialReview._id}`,
@@ -42,17 +45,11 @@ export default function ReviewPopup({
   };
 
   return (
-    <div className="fixed inset-0 p-0 m-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md transform transition-all duration-300 ease-in-out scale-100 opacity-100">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Edit Review</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 transition-colors"
-          >
-            <X size={24} />
-          </button>
-        </div>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Edit Review</DialogTitle>
+        </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -93,7 +90,7 @@ export default function ReviewPopup({
             />
           </div>
 
-          <div className="flex justify-end space-x-3 mt-6">
+          <DialogFooter>
             <button
               type="button"
               onClick={onClose}
@@ -107,9 +104,9 @@ export default function ReviewPopup({
             >
               Submit
             </button>
-          </div>
+          </DialogFooter>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

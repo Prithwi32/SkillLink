@@ -5,7 +5,7 @@ export function TabNavigation({ activeTab, onTabChange }) {
   const tabs = ['Scheduled', 'Completed', 'Cancelled'];
 
   return (
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-wrap gap-6 justify-center sm:justify-start mb-6">
         {tabs.map((tab) => (
           <button
             key={tab}

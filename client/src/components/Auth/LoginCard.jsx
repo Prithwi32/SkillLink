@@ -3,6 +3,7 @@ import { InputField } from "../HelperComponents/InputField";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import LoginImage from "../../assets/loginPage.png";
 
 export function LoginCard() {
   const navigate = useNavigate();
@@ -33,29 +34,34 @@ export function LoginCard() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative">
-      <img
-        src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-        alt="auth_bg_img"
-        className="absolute z-0 opacity-75 w-full h-full object-cover"
-      />
-      <div className="absolute inset-0"></div>
-
-      <div className="w-full max-w-md bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden relative z-10">
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-2">Login</h2>
-          <p className="text-blue-100">Welcome back to our community</p>
+    {/* Left side - Login Form */}
+    <div className="w-full lg:w-1/2 flex items-center justify-center bg-white p-6">
+      <div className="w-full md:max-w-md">
+        {/* Logo and Company Name */}
+        <div className="flex items-center gap-2 mb-8">
+          <span className="text-2xl font-semibold  mx-auto lg:mx-0">
+            Hobby<span className="text-blue-700">Verse</span>
+          </span>
         </div>
-
-        <form onSubmit={handleSubmit} className="p-8 space-y-6">
+  
+        {/* Welcome Text */}
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold mb-2 text-center lg:text-start">Welcome back</h1>
+          <p className="text-gray-600 text-center lg:text-start">Please enter your details</p>
+        </div>
+  
+        {/* Login Form */}
+        <form onSubmit={handleSubmit} className="space-y-6">
           <InputField
-            label="Email"
+            label="Email address"
             name="email"
             type="email"
             value={formData.email}
             onChange={handleInputChange}
             required
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
-
+  
           <InputField
             label="Password"
             name="password"
@@ -63,29 +69,39 @@ export function LoginCard() {
             value={formData.password}
             onChange={handleInputChange}
             required
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
-
+  
+          <p className="text-gray-600 text-sm text-center sm:text-start">
+            Connect with like-minded individuals, exchange skills, and unlock endless possibilities.
+          </p>
+  
           <button
             type="submit"
-            className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-lg 
-                     font-semibold shadow-md hover:from-blue-700 hover:to-indigo-800 
-                     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
-                     transition-all duration-300"
+            className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-semibold shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300"
           >
-            Login
+            Sign in
           </button>
-
+  
           <p className="text-center text-sm text-gray-600">
             Don't have an account?{" "}
-            <a
-              href="/signup"
-              className="text-blue-600 hover:text-blue-800 font-semibold transition-all duration-300"
-            >
+            <a href="/signup" className="text-blue-600 hover:text-blue-800 font-semibold">
               Sign up
             </a>
           </p>
         </form>
       </div>
     </div>
+  
+    {/* Right side - Illustration */}
+    <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-blue-50 rounded-3xl">
+      <img
+        src={LoginImage}
+        alt="Illustration"
+        className="w-full h-full object-cover rounded-3xl"
+      />
+    </div>
+  </div>
+  
   );
 }
