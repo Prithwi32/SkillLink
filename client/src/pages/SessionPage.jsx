@@ -25,7 +25,7 @@ export default function SessionPage() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
 
       if (data.success) {
@@ -44,7 +44,7 @@ export default function SessionPage() {
   }, []);
 
   const filteredSessions = sessions.filter(
-    (session) => session.status === activeTab,
+    (session) => session.status === activeTab
   );
 
   return (
@@ -63,7 +63,9 @@ export default function SessionPage() {
           </button>
         </div>
 
-        <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+        {!showForm && (
+          <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+        )}
 
         {showForm ? (
           <div className="mb-8">
