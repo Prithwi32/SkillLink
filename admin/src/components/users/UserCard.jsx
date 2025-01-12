@@ -8,7 +8,7 @@ const UserCard = ({ user, type, onViewReason, onBlock }) => {
         <div className="flex items-center">
           <img
             src={
-              user.photo.trim() == ""
+              user.photo == ""
                 ? "https://as1.ftcdn.net/v2/jpg/03/53/11/00/500_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg"
                 : user.photo
             }

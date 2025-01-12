@@ -7,7 +7,7 @@ const EditReviewModal = ({ isOpen, onClose, onSave, initialRating, initialReview
   const [hoveredRating, setHoveredRating] = useState(0);
 
   const handleSave = useCallback(() => {
-    onSave({ rating, review });
+    onSave({ rating, comment:review });
     onClose();
   }, [rating, review, onSave, onClose]);
 
@@ -39,7 +39,7 @@ const EditReviewModal = ({ isOpen, onClose, onSave, initialRating, initialReview
                 <Star
                   className={`w-6 h-6 ${
                     index < (hoveredRating || rating)
-                      ? 'fill-blue-500 text-blue-500'
+                      ? 'fill-yellow-400 text-yellow-400'
                       : 'text-gray-300'
                   }`}
                 />

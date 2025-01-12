@@ -29,7 +29,7 @@ const ReportModal = ({ isOpen, onClose, user, reasons, isReasonsLoading }) => {
             >
               <div className="flex items-center">
                 <img
-                  src={report.reportedBy.photo.trim()==""?"https://as1.ftcdn.net/v2/jpg/03/53/11/00/500_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg":report.reportedBy.photo}
+                  src={report.reportedBy.photo==""?"https://as1.ftcdn.net/v2/jpg/03/53/11/00/500_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg":report.reportedBy.photo}
                   alt={report.reportedBy.name}
                   className="w-10 h-10 rounded-full object-cover"
                 />

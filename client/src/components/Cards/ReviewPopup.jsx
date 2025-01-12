@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { X } from "lucide-react";
 import { AuthContext } from "@/context/AuthContext";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import axios from "axios";
 
 export default function ReviewPopup({

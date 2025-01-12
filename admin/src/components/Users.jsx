@@ -1,6 +1,5 @@
 import { AdminContext } from "@/context/AdminContext";
 import { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";

@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import SkillSuggest from "../HelperComponents/SkillSuggestionInputField";
 import { AuthContext } from "@/context/AuthContext";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import axios from "axios";
 
-export default function SessionForm({ setShowForm, onCancel,getAllSessions }) {
+export default function SessionForm({ setShowForm, onCancel, getAllSessions }) {
   const [formData, setFormData] = useState({
     mentor: { name: "" },
     skillsOffered: {},
@@ -12,7 +12,6 @@ export default function SessionForm({ setShowForm, onCancel,getAllSessions }) {
     date: "",
     link: "",
   });
-
 
   const token = localStorage.getItem("token");
   const { backendUrl } = useContext(AuthContext);
@@ -39,11 +38,11 @@ export default function SessionForm({ setShowForm, onCancel,getAllSessions }) {
     getAllUsers();
   }, []);
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const {data} = await axios.post(
+      const { data } = await axios.post(
         `${backendUrl}/api/sessions/new`,
         {
           date: formData.date,

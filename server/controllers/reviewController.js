@@ -110,7 +110,7 @@ export const getReviews = async (req, res) => {
 
     const reviews = await Review.find({ userId: id })
       .populate("skillId")
-      .populate("reviewedBy", "name _id")
+      .populate("reviewedBy", "name _id photo")
       .populate({
         path: "sessionId",
         select: "skillTaughtByUserOne skillTaughtByUserTwo",
@@ -119,6 +119,27 @@ export const getReviews = async (req, res) => {
           { path: "skillTaughtByUserTwo" },
         ],
       });
+    return res.status(200).json({ success: true, reviews });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getAllReviewsProvidedByAParticualrUserId = async (req, res) => {
+  const { _id } = req.user;
+
+  try {
+    if (!_id) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User ID is required" });
+    }
+
+    const reviews = await Review.find({ reviewedBy: _id })
+      .populate("skillId")
+      .populate("userId", "name _id photo");
+
     return res.status(200).json({ success: true, reviews });
   } catch (error) {
     console.log(error);

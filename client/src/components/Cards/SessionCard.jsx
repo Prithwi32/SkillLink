@@ -3,7 +3,7 @@ import { Calendar, ExternalLink, Star, Edit2, Ban, X } from "lucide-react";
 import SkillSuggest from "../HelperComponents/SkillSuggestionInputField";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 export function SessionCard({ session, getAllSessions }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -161,7 +161,9 @@ export function SessionCard({ session, getAllSessions }) {
           Review Session
         </button>
       )}
-       <button className="mt-4 text-violet-800 bg-violet-100 rounded-md w-full py-2 font-semibold">Session Completed</button>
+      <button className="mt-4 text-violet-800 bg-violet-100 rounded-md w-full py-2 font-semibold">
+        Session Completed
+      </button>
     </div>
   );
 
@@ -306,7 +308,9 @@ export function SessionCard({ session, getAllSessions }) {
       {session.status === "Scheduled" && renderScheduledActions()}
       {session.status === "Completed" && renderCompletedActions()}
       {session.status === "Cancelled" && (
-        <button className="mt-4 bg-red-100 text-red-800 rounded-md w-full py-2 font-semibold text-opacity-80">Session Canceled</button>
+        <button className="mt-4 bg-red-100 text-red-800 rounded-md w-full py-2 font-semibold text-opacity-80">
+          Session Canceled
+        </button>
       )}
     </div>
   );

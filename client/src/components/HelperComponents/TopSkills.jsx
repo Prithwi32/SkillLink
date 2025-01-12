@@ -7,14 +7,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import generalSkillImage from '../../assets/generalSkillImage.avif';
+import toast from "react-hot-toast";
+import generalSkillImage from "../../assets/generalSkillImage.avif";
 
 const SkillCard = ({ name, icon }) => {
   return (
     <div className="relative flex flex-col items-center hover:translate-y-[-10px] transition-all duration-500 cursor-pointer">
       <Avatar className="size-24 shadow-xl">
-        <AvatarImage src={icon.trim()==""?generalSkillImage:icon} className="object-cover" />
+        <AvatarImage
+          src={icon.trim() == "" ? generalSkillImage : icon}
+          className="object-cover"
+        />
         <AvatarFallback>{name.slice(0, 2).toUpperCase()}</AvatarFallback>
       </Avatar>
       <span className="mt-3 text-sm text-center md:text-base font-medium text-gray-800">
@@ -83,7 +86,9 @@ const App = () => {
               </HoverCardContent>
             </HoverCard>
           ))}
-        {isLoading && <div className="text-center text-slate-600">Loading...</div>}
+        {isLoading && (
+          <div className="text-center text-slate-600">Loading...</div>
+        )}
       </div>
     </div>
   );

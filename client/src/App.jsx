@@ -5,7 +5,6 @@ import { LoginCard } from "./components/Auth/LoginCard";
 import ReportUserForm from "./components/Forms/ReportUserForm";
 import EventCreationForm from "./components/Forms/EventCreation";
 import { useAuth } from "./context/AuthContext";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./pages/ProtectedRoutes";
 import MyUserProfilePage from "./pages/MyUserProfilePage";
@@ -26,6 +25,7 @@ import axios from "axios";
 import RentingPage from "./pages/RentingPage";
 import RestrictedRoute from "./pages/RestrictedRoute";
 import ReviewSection from "./components/profile/ReviewSection";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const { backendUrl, setToken } = useAuth();
@@ -130,7 +130,7 @@ function App() {
         {/* 404 Page for undefined routes */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-      <ToastContainer />
+      <Toaster/>
     </>
   );
 }

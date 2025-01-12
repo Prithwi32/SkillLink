@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ImagePlus } from "lucide-react";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 
@@ -70,7 +70,7 @@ export default function SkillRequestForm() {
     formData.append("name", values.name);
     formData.append("desc", values.description);
     if (values.image) {
-      formData.append("photo", values.image); 
+      formData.append("photo", values.image);
     }
 
     try {
@@ -114,11 +114,15 @@ export default function SkillRequestForm() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-cyan-500 hover:bg-cyan-600" variant="default">Request New Skill</Button>
+        <Button className="bg-cyan-500 hover:bg-cyan-600" variant="default">
+          Request New Skill
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Request <span className="text-blue-600">New Skill</span></DialogTitle>
+          <DialogTitle>
+            Request <span className="text-blue-600">New Skill</span>
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
