@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { UserCircle, X } from "lucide-react";
@@ -17,6 +17,24 @@ const Navbar = () => {
     }
   };
 
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.getElementById(location.hash.substring(1));
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
+
+  const handleAboutUsClick = () => {
+    if (location.pathname === "/") {
+      navigate("#features");
+    } else {
+      navigate("/#features");
+    }
+    setIsMobileMenuOpen(false);
+  };
+
   const handleScrollUp = () => {
     scrollTo(0, 0);
   };
@@ -26,21 +44,17 @@ const Navbar = () => {
       <div className="flex justify-between items-center px-4 py-3">
         {/* Left Section */}
         <div>
-          <Link to="/" className="text-2xl font-bold  hover:opacity-75" onClick={handleScrollUp}>
+          <Link
+            to="/"
+            className="text-2xl font-bold  hover:opacity-75"
+            onClick={handleScrollUp}
+          >
             Hobby<span className="text-blue-700">Verse</span>
           </Link>
         </div>
 
         {/* Center Section */}
         <ul className="hidden md:flex items-start gap-5 font-[400]">
-          {/* <NavLink to="/" className="hover:opacity-75">
-            <li className="py-1">Home</li>
-            <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
-          </NavLink>
-          <NavLink to="/about" className="hover:opacity-75">
-            <li className="py-1">About Us</li>
-            <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
-          </NavLink> */}
           <NavLink
             to="/"
             className="hover:opacity-75"
@@ -55,7 +69,7 @@ const Navbar = () => {
               }`}
             />
           </NavLink>
-          <NavLink to="/#features" className="hover:opacity-75">
+          <NavLink to="/#features" className="hover:opacity-75" onClick={handleAboutUsClick}>
             <li className="py-1">About Us</li>
             <hr
               className={`border-none outline-none h-0.5 w-4/5 m-auto ${
@@ -63,26 +77,45 @@ const Navbar = () => {
               }`}
             />
           </NavLink>
-          <NavLink to="/blogs" className="hover:opacity-75" onClick={handleScrollUp}>
+          <NavLink
+            to="/blogs"
+            className="hover:opacity-75"
+            onClick={handleScrollUp}
+          >
             <li className="py-1">Blogs</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
           </NavLink>
-          <NavLink to="/events" className="hover:opacity-75" onClick={handleScrollUp}>
+          <NavLink
+            to="/events"
+            className="hover:opacity-75"
+            onClick={handleScrollUp}
+          >
             <li className="py-1">Events</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
           </NavLink>
-          <NavLink to="/users" className="hover:opacity-75" onClick={handleScrollUp}>
+          <NavLink
+            to="/users"
+            className="hover:opacity-75"
+            onClick={handleScrollUp}
+          >
             <li className="py-1">Users</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
           </NavLink>
-          <NavLink to="/rent" className="hover:opacity-75" onClick={handleScrollUp}>
+          <NavLink
+            to="/rent"
+            className="hover:opacity-75"
+            onClick={handleScrollUp}
+          >
             <li className="py-1">Rent</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
           </NavLink>
         </ul>
 
         {/* Right Section */}
-        <div className="hidden md:flex items-center space-x-4" onClick={handleScrollUp}>
+        <div
+          className="hidden md:flex items-center space-x-4"
+          onClick={handleScrollUp}
+        >
           {token ? (
             <Link
               to="/userDashboard"
@@ -139,48 +172,78 @@ const Navbar = () => {
           </div>
           <X
             className="size-7 hover:bg-gray-200 p-2 rounded-full"
-            onClick={() =>{ setIsMobileMenuOpen(false); handleScrollUp()}}
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              handleScrollUp();
+            }}
           />
         </div>
         <ul className="flex flex-col items-center gap-2 mt-5 px-5 text-lg font-medium w-full">
+        <NavLink
+          className={({ isActive }) =>
+            `w-full text-center py-2 rounded-full hover:bg-gray-200 ${
+              isActive && location.hash === "" ? "bg-blue-100" : ""
+            }`
+          }
+          onClick={() => {
+            setIsMobileMenuOpen(false);
+            handleScrollUp();
+          }}
+          to="/"
+        >
+          Home
+        </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            `w-full text-center py-2 rounded-full hover:bg-gray-200 ${
+              isActive && location.hash === "#features" ? "bg-blue-100" : ""
+            }`
+          }
+          onClick={() => {
+            setIsMobileMenuOpen(false);
+            handleScrollUp();
+            handleAboutUsClick();
+          }}
+          to="/#features"
+        >
+          About Us
+        </NavLink>
           <NavLink
             className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-            onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
-            to="/"
-          >
-            Home
-          </NavLink>
-          <NavLink
-            className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-            onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
-            to="/about"
-          >
-            About Us
-          </NavLink>
-          <NavLink
-            className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-            onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              handleScrollUp();
+            }}
             to="/blogs"
           >
             Blogs
           </NavLink>
           <NavLink
             className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-            onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              handleScrollUp();
+            }}
             to="/events"
           >
             Events
           </NavLink>
           <NavLink
             className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-            onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              handleScrollUp();
+            }}
             to="/users"
           >
             Users
           </NavLink>
           <NavLink
             className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-            onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              handleScrollUp();
+            }}
             to="/rent"
           >
             Rent
@@ -188,7 +251,10 @@ const Navbar = () => {
           {!token ? (
             <NavLink
               className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-              onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                handleScrollUp();
+              }}
               to="/login"
             >
               Login/SignUp
@@ -196,7 +262,10 @@ const Navbar = () => {
           ) : (
             <NavLink
               className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-              onClick={() => { setIsMobileMenuOpen(false); handleScrollUp()}}
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                handleScrollUp();
+              }}
               to="/userDashboard"
             >
               My Profile
