@@ -15,7 +15,7 @@ const MainNav = () => {
       <ul className="flex gap-2 transition-all duration-300">
         <li>
           <NavLink
-           to={"/home"} className={navStyles}>
+           to={"/home"} onClick={()=>scrollTo(0,0)} className={navStyles}>
             Home
           </NavLink>
         </li>

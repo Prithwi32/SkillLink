@@ -26,6 +26,7 @@ const MobileNav = () => {
       : 'py-2 px-[40%] rounded-full text-zinc-800 transition-all duration-300 hover:bg-blue-100';
 
   const handleNavClick = () => {
+    scrollTo(0,0);
     setIsOpen(false); // Close the sheet when an option is selected
   };
 

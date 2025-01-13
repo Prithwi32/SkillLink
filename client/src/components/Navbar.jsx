@@ -13,8 +13,8 @@ const Navbar = () => {
   const handleHomeClick = () => {
     if (location.pathname === "/" && location.hash !== "") {
       navigate("/");
-      scrollTo(0, 0);
     }
+    scrollTo(0, 0);
   };
 
   useEffect(() => {

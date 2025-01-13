@@ -2,8 +2,9 @@ import { useState } from "react";
 import { InputField } from "../HelperComponents/InputField";
 import SkillSuggest from "@/components/HelperComponents/SkillSuggestionForEventCreation";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import SignupImage from "../../assets/signupPage.png";
 
 export function SignupCard() {
   const { backendUrl } = useAuth();
@@ -14,13 +15,12 @@ export function SignupCard() {
     password: "",
     confirmPassword: "",
     location: "",
-    skillsOffered: [], // State for skills offered
-    skillsRequired: [], // State for skills required
+    skillsOffered: [],
+    skillsRequired: [],
   });
 
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Handle form input changes for regular fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -34,28 +34,21 @@ export function SignupCard() {
     }
   };
 
-  // Handle changes for skills offered
   const handleSkillsOfferedChange = (newSkills) => {
     setFormData({ ...formData, skillsOffered: newSkills });
   };
 
-  // Handle changes for skills required
   const handleSkillsRequiredChange = (newSkills) => {
     setFormData({ ...formData, skillsRequired: newSkills });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Ensure passwords match before proceeding
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Passwords do not match");
       return;
     }
-
-    // Log the form data to ensure it's structured correctly
-    console.log("Form Data:", formData);
 
     try {
       const response = await fetch(`${backendUrl}/auth/signup`, {
@@ -82,8 +75,6 @@ export function SignupCard() {
       }
       toast.success("Signup successful");
       navigate("/login");
-      console.log("Signup successful", responseData);
-      // handle successful signup (e.g., redirect to login)
     } catch (error) {
       toast.error("Signup Failed!");
       console.error("Error during signup:", error);
@@ -94,98 +85,130 @@ export function SignupCard() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative">
-      <img
-        src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-        alt="auth_bg_img"
-        className="fixed top-0 z-0 opacity-75 w-full h-screen object-cover"
-      />
-      <div className="absolute inset-0"></div>
+    <div className="min-h-screen flex items-center justify-center p-3 lg:p-0 relative">
+      <div className="w-full max-w-screen-2xl flex overflow-hidden">
+        {/* Left side - Signup Form */}
+        <div className="w-full lg:w-1/2 flex items-center justify-center bg-white p-6">
+          <div className="w-full md:max-w-md">
+            {/* Logo and Company Name */}
+            <div className="flex items-center gap-2 mb-8">
+              <span className="text-2xl font-semibold mx-auto lg:mx-0">
+                Hobby<span className="text-blue-700">Verse</span>
+              </span>
+            </div>
 
-      <div className="w-full max-w-md bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden relative z-10">
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
-          <p className="text-blue-100">Join our skill exchange community</p>
+            {/* Welcome Text */}
+            <div className="mb-6">
+              <h1 className="text-3xl font-bold mb-2 text-center lg:text-start">
+                Create Account
+              </h1>
+              <p className="text-gray-600 text-center lg:text-start">
+                Join our skill exchange community
+              </p>
+            </div>
+
+            {/* Signup Form */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <InputField
+                label="Full Name"
+                name="name"
+                type="text"
+                value={formData.name}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+
+              <InputField
+                label="Email address"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+
+              <InputField
+                label="Password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+
+              <InputField
+                label="Confirm Password"
+                name="confirmPassword"
+                type="password"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+                required
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+
+              {errorMessage && (
+                <p className="text-red-500 text-sm">{errorMessage}</p>
+              )}
+
+              <div className="space-y-3">
+                <label className="block text-sm font-medium text-gray-700">
+                  Skills you can offer
+                </label>
+                <SkillSuggest
+                  onSkillSelect={handleSkillsOfferedChange}
+                  isMultiple={true}
+                  existingSkills={formData.skillsOffered}
+                />
+              </div>
+
+              <div className="space-y-3">
+                <label className="block text-sm font-medium text-gray-700">
+                  Skills you want to learn
+                </label>
+                <SkillSuggest
+                  onSkillSelect={handleSkillsRequiredChange}
+                  isMultiple={true}
+                  existingSkills={formData.skillsRequired}
+                />
+              </div>
+
+              <p className="text-gray-600 text-sm text-center sm:text-start">
+                Connect with like-minded individuals, exchange skills, and
+                unlock endless possibilities.
+              </p>
+
+              <button
+                type="submit"
+                className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-semibold shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300"
+              >
+                Sign up
+              </button>
+
+              <p className="text-center text-sm text-gray-600">
+                Already have an account?{" "}
+                <Link
+                  to="/login"
+                  onClick={()=>scrollTo(0,0)}
+                  className="text-blue-600 hover:text-blue-800 font-semibold"
+                >
+                  Sign in
+                </Link>
+              </p>
+            </form>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-8 space-y-6">
-          <InputField
-            label="Full Name"
-            name="name"
-            type="text"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
+        {/* Right side - Illustration */}
+        <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-blue-50">
+          <img
+            src={SignupImage}
+            alt="People collaborating"
+            className="w-full h-full object-cover rounded-3xl"
           />
-
-          <InputField
-            label="Email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
-
-          <InputField
-            label="Password"
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            required
-          />
-
-          <InputField
-            label="Confirm Password"
-            name="confirmPassword"
-            type="password"
-            value={formData.confirmPassword}
-            onChange={handleInputChange}
-            required
-          />
-          {errorMessage && (
-            <p className="text-red-500 text-sm">{errorMessage}</p>
-          )}
-
-          {/* Skills Offered Input */}
-          <SkillSuggest
-            onSkillSelect={handleSkillsOfferedChange}
-            isMultiple={true}
-            existingSkills={formData.skillsOffered}
-          />
-
-          {/* Skills Requested Input */}
-          <SkillSuggest
-            onSkillSelect={handleSkillsRequiredChange}
-            isMultiple={true}
-            existingSkills={formData.skillsRequired}
-          />
-
-          <button
-            type="submit"
-            className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-lg 
-                     font-semibold shadow-md hover:from-blue-700 hover:to-indigo-800 
-                     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
-                     transition-all duration-300"
-          >
-            Sign Up
-          </button>
-
-          <p className="text-center text-sm text-gray-600">
-            Join our community of skilled individuals and start sharing your
-            expertise today
-          </p>
-          <p className="text-center text-sm text-gray-600">
-            Already have an account?{" "}
-            <a
-              href="/login"
-              className="text-blue-600 hover:text-blue-800 font-semibold transition-all duration-300"
-            >
-              Login here
-            </a>
-          </p>
-        </form>
+        </div>
       </div>
     </div>
   );
