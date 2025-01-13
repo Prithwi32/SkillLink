@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
   },
   rating: {
     type: Number,
-    default: 5,
+    default: 4,
   },
   photo: {
     type: String,
