@@ -24,7 +24,8 @@ export function InstructorCard({
   const handleViewMore = (userId) => {
     if (token) navigate(`/users/${userId}`);
     else {
-      toast.error("Login Required...");
+      toast.error("Login Required");
+      scrollTo(0,0);
       navigate("/login");
     }
   };

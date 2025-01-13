@@ -3,6 +3,7 @@ import { AllEventCard } from "../components/Cards/AllEventCard";
 import { EventModal } from "../components/HelperComponents/EventModal";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function EventListPage() {
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -53,7 +54,11 @@ function EventListPage() {
   }, []);
 
   const handleShowMore = (event) => {
-    if (!token) return navigate("/login");
+    if (!token) {
+      toast.error("Login required");
+      scrollTo(0,0);
+      return navigate("/login");
+    }
     setSelectedEvent(event);
   };
 
