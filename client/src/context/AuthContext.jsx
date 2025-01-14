@@ -9,7 +9,7 @@ export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const backendUrl = "http://localhost:5000";
+  const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [userId, setUserId] = useState(null);
