@@ -8,7 +8,7 @@ export const AdminContext = createContext();
 const AdminContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const backendUrl = "http://localhost:5000";
+  const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
 
   const checkAuth = async () => {
     setIsLoading(true);
