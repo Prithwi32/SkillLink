@@ -35,7 +35,7 @@ const allowedOrigins = [
   'http://localhost:5174', // Admin frontend
   'http://localhost:4173', // Client frontend
   'https://hobby-verse-r94m.vercel.app',
-  'https://hobby-verse-pi.vercel.app/hobby-verse.vercel.app'
+  'https://hobby-verse-ppehfxyra-prithwi-gajanan-hegdes-projects.vercel.app'
 ];
 app.use(cors({
     origin: function (origin, callback) {
