@@ -24,7 +24,7 @@ const LoginPage = () => {
     setIsLoading(true);
 
     try {
-      const { data } = await axios.post(`hobby-verse.vercel.app/api/admin/auth/login`, {
+      const { data } = await axios.post(`/api/admin/auth/login`, {
         email,
         password,
       });
