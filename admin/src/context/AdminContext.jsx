@@ -8,12 +8,14 @@ export const AdminContext = createContext();
 const AdminContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
+  // const backendUrl = import.meta.env.VITE_REACT_APP_BACKEND_BASEURL;
+  // const backendUrl = "http://localhost:5000";
+  const backendUrl = "hobby-verse.vercel.app";
 
   const checkAuth = async () => {
     setIsLoading(true);
     setIsLoggedIn(false);
-    
+
     try {
       const { data } = await axios.get(
         backendUrl + "/api/admin/auth/check-auth"

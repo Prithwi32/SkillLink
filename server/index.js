@@ -33,7 +33,7 @@ const PORT = process.env.PORT || 5000;
 app.use(bodyParser.json());
 const allowedOrigins = [
   'http://localhost:5174', // Admin frontend
-  'http://localhost:5173', // Client frontend
+  'http://localhost:4173', // Client frontend
   'https://hobby-verse-r94m.vercel.app'
 ];
 app.use(cors({
