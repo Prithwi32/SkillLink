@@ -85,7 +85,6 @@ export const adminLogin = (req, res) => {
 
   res
     .cookie("token", token, {
-      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
       secure:true,
       sameSite: "strict",
