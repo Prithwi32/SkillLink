@@ -219,14 +219,15 @@ export const getEventsByStatus = async (req, res) => {
       return res.status(400).json({ message: "Invalid status" });
     }
     const events = await Event.find({ status })
-    .populate("skills_id", "name")
-    .populate("participants", "name email _id")
-    .populate("created_by", "name rating photo")
-    .populate("requests", "_id")
-    .select("title description date start_time end_time status max_participants");
+      .populate("skills_id", "name")
+      .populate("participants", "name email _id")
+      .populate("created_by", "name rating photo")
+      .populate("requests", "_id")
+      .select(
+        "title description date start_time end_time status max_participants"
+      );
 
     res.status(200).json(events);
-
   } catch (error) {
     console.error("Error fetching events by status:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -304,35 +305,29 @@ export const registerForEvent = async (req, res) => {
 
     // Check if the user is the host of the event
     if (event.created_by.toString() === userId.toString()) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Host cannot register for their own event",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Host cannot register for their own event",
+      });
     }
 
     if (
       event.participants.includes(userId) ||
       event.requests.includes(userId)
     ) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Already registered or request pending",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Already registered or request pending",
+      });
     }
 
     event.requests.push(userId);
     await event.save();
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Request to join event sent successfully",
-      });
+    res.status(200).json({
+      success: true,
+      message: "Request to join event sent successfully",
+    });
   } catch (error) {
     console.error("Error registering for event:", error);
     res.status(500).json({ success: false, message: "Server error" });
@@ -427,7 +422,8 @@ export const handleEventRequest = async (req, res) => {
     if (userId === event.created_by.toString() && action === "APPROVE") {
       return res.status(400).json({
         status: "error",
-        message: "The event creator cannot approve themselves as a participant.",
+        message:
+          "The event creator cannot approve themselves as a participant.",
       });
     }
 
@@ -580,7 +576,9 @@ export const getEventsBasedOnSkillsRequested = async (req, res) => {
     const user = await User.findById(userId).select("skillsRequested");
 
     if (!user) {
-      return res.status(404).json({ message: "User not found", success: false });
+      return res
+        .status(404)
+        .json({ message: "User not found", success: false });
     }
 
     const skillsObjectIds = await Skill.find({
@@ -600,10 +598,22 @@ export const getEventsBasedOnSkillsRequested = async (req, res) => {
         .populate("created_by", "name rating photo")
         .populate("participants", "name email _id")
         .lean();
+
+      if (events.length == 0)
+        events = await Event.find({ status: "Upcoming" })
+          .select("title description date start_time end_time skills_id")
+          .populate("skills_id", "name")
+          .populate("created_by", "name rating photo")
+          .populate("participants", "name email _id")
+          .lean();
+
       return res.status(200).json({
         success: true,
         events,
-        message: events.length === 0 ? "No upcoming events found" : "Fetched all upcoming events",
+        message:
+          events.length === 0
+            ? "No upcoming events found"
+            : "Fetched all upcoming events",
       });
     } else {
       // Fetch events matching the user's requested skills
@@ -616,6 +626,14 @@ export const getEventsBasedOnSkillsRequested = async (req, res) => {
         .populate("created_by", "name rating photo")
         .populate("participants", "name email _id")
         .lean();
+
+      if (events.length == 0)
+        events = await Event.find({ status: "Upcoming" })
+          .select("title description date start_time end_time skills_id")
+          .populate("skills_id", "name")
+          .populate("created_by", "name rating photo")
+          .populate("participants", "name email _id")
+          .lean();
 
       return res.status(200).json({
         success: true,
@@ -671,4 +689,3 @@ export const getEventsForSpecificSkill = async (req, res) => {
     });
   }
 };
-
