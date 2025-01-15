@@ -33,18 +33,22 @@ const PORT = process.env.PORT || 5000;
 app.use(bodyParser.json());
 const allowedOrigins = [
   'http://localhost:5174', // Admin frontend
-  'http://localhost:5173', // Client frontend
+  'http://localhost:4173', // Client frontend
+  'https://hobby-verse-r94m.vercel.app',
+  'https://hobby-verse-ppehfxyra-prithwi-gajanan-hegdes-projects.vercel.app'
 ];
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
-}));
+// app.use(cors({
+//     origin: function (origin, callback) {
+//         if (!origin || allowedOrigins.includes(origin)) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     },
+//     credentials: true,
+// }));
+
+app.use(cors());
 
 // app.use(cors({
 //     origin: function (origin, callback) {

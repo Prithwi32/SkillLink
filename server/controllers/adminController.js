@@ -86,10 +86,11 @@ export const adminLogin = (req, res) => {
   res
     .cookie("token", token, {
       httpOnly: true,
-      sameSite: "strict",
       maxAge: 1000 * 60 * 60 * 24,
+      secure:true,
+      sameSite: "none",
     })
-    .json({ success: true, message: "Logged in successfully" });
+    .json({ success: true, message: "Logged in successfully", token: token });
 };
 
 // api to to check whether admin is already logged in

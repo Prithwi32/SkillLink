@@ -7,7 +7,6 @@ import { AdminContext } from "@/context/AdminContext";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import adminImage from "../assets/admin.jpg";
 import adminImage2 from "../assets/admin2.jpg";
 
 const LoginPage = () => {
@@ -25,7 +24,7 @@ const LoginPage = () => {
     setIsLoading(true);
 
     try {
-      const { data } = await axios.post(`${backendUrl}/api/admin/auth/login`, {
+      const { data } = await axios.post(`/api/admin/auth/login`, {
         email,
         password,
       });

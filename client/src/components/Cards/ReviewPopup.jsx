@@ -10,12 +10,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
-export default function ReviewPopup({
-  isOpen,
-  onClose,
-  initialReview,
-  getReviews,
-}) {
+const ReviewPopup = ({ isOpen, onClose, initialReview, getReviews }) => {
   const [review, setReview] = useState(initialReview.comment);
   const [rating, setRating] = useState(initialReview.rating);
 
@@ -109,4 +104,6 @@ export default function ReviewPopup({
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default ReviewPopup;
