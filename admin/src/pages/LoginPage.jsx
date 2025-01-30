@@ -20,7 +20,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login attempted with:", { email, password });
+    console.log("Login attempted with:", { email, password }, { withCredentials: true } );
 
     setIsLoading(true);
 
