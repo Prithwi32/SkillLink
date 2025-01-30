@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Sidebar from '../components/Profile/Sidebar';
+import Sidebar from '@/components/profile/Sidebar';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 
