@@ -143,7 +143,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: ['http://localhost:5174', 'http://localhost:5173', 'http://localhost:4173', 'http://localhost:3000', 'https://hobby-verse-frontend.vercel.app', 'https://hobby-verse-admin.vercel.app'],
+        origin: ['http://localhost:5174', 'http://localhost:5173', 'https://hobby-verse-ajnf.vercel.app'],
         methods: ['GET', 'POST'],
         credentials: true,
     }
@@ -157,7 +157,7 @@ const allowedOrigins = [
   'http://localhost:4173', // Client frontend
   'http://localhost:3000', // Client frontend
   'https://hobby-verse-frontend.vercel.app', // Add your frontend Vercel URL
-  'https://hobby-verse-admin.vercel.app'     // Add your admin frontend Vercel URL if different
+  'https://hobby-verse-ajnf.vercel.app'     // Add your admin frontend Vercel URL if different
 ];
 app.use(cors({
     origin: function (origin, callback) {
