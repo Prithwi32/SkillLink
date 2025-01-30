@@ -10,6 +10,9 @@ const AdminContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const backendUrl = "http://localhost:5000";
 
+  // Use environment variable
+  // const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+
   const checkAuth = async () => {
     setIsLoading(true);
     setIsLoggedIn(false);
