@@ -9,7 +9,8 @@ export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const backendUrl = "http://localhost:5000";
+// Use environment variable
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [userId, setUserId] = useState(null);
