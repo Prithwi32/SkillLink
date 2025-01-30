@@ -62,10 +62,10 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-// mongoose.connect(process.env.MONGO_URI, {
-//     authSource: 'admin'
-// })
-mongoose.connect('mongodb+srv://prithwionline11:prithwi@hobbyverse-cluster.9fu1u.mongodb.net/hobbyverse1?retryWrites=true&w=majority')
+mongoose.connect(process.env.MONGO_URI, {
+    authSource: 'admin'
+})
+// mongoose.connect('mongodb+srv://prithwionline11:prithwi@hobbyverse-cluster.9fu1u.mongodb.net/hobbyverse1?retryWrites=true&w=majority')
 .then(()=> console.log('Successfully Connected to MongoDB '))
 .catch((err) => console.error('MongoDB connection error: ', err));
 
