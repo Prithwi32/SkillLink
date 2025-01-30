@@ -8,10 +8,9 @@ export const AdminContext = createContext();
 const AdminContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const backendUrl = "http://localhost:5000";
 
   // Use environment variable
-  // const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
   const checkAuth = async () => {
     setIsLoading(true);
