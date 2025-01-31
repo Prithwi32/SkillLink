@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Calendar, MapPin, Video } from "lucide-react";
-import EventDetailsPopup from "../HelperComponents/EventDetailsPopUp.jsx";
+import EventDetailsPopup from "../HelperComponents/EventDetailsPopup";
 
 export const EnrolledEventCard = ({ event, status }) => {
   const [showPopup, setShowPopup] = useState(false);
