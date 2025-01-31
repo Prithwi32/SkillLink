@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "@/context/AuthContext";
 import toast from "react-hot-toast";
-import ReviewPopup from "../Cards/ReviewPopUp"; // Import the ReviewPopup component
+import ReviewPopup from "../Cards/ReviewPopup";
 
 const Reviews = () => {
   const [hasMore, setHasMore] = useState(false);
