@@ -101,14 +101,6 @@ const Navbar = () => {
             <li className="py-1">Users</li>
             <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
           </NavLink>
-          <NavLink
-            to="/rent"
-            className="hover:opacity-75"
-            onClick={handleScrollUp}
-          >
-            <li className="py-1">Rent</li>
-            <hr className="border-none outline-none h-0.5 bg-blue-700 w-4/5 m-auto hidden" />
-          </NavLink>
         </ul>
 
         {/* Right Section */}
@@ -237,16 +229,6 @@ const Navbar = () => {
             to="/users"
           >
             Users
-          </NavLink>
-          <NavLink
-            className="w-full text-center py-2 rounded-full hover:bg-gray-200"
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-              handleScrollUp();
-            }}
-            to="/rent"
-          >
-            Rent
           </NavLink>
           {!token ? (
             <NavLink

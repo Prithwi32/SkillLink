@@ -20,7 +20,11 @@ function App() {
   }, []);
 
   if (isLoading) {
-    return <Loader />;
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <Loader />
+      </div>
+    );
   }
 
   return (
@@ -32,9 +36,8 @@ function App() {
         </Routes>
       ) : (
         <>
-
           <div className="min-h-screen flex flex-col justify-between">
-            <Navbar/>
+            <Navbar />
             {/* <Sidebar /> */}
             <Routes>
               <Route path="/login" element={<Navigate to="/home" />} />
@@ -59,7 +62,6 @@ function App() {
                 }
               />
 
-             
               <Route
                 path="/users"
                 element={
@@ -78,10 +80,9 @@ function App() {
                 }
               />
 
-
               <Route path="*" element={<Navigate to="/login" />} />
             </Routes>
-            <Footer/>
+            <Footer />
           </div>
         </>
       )}

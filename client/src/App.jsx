@@ -22,10 +22,10 @@ import EventPage from "./pages/EventPage";
 import SessionPage from "./pages/SessionPage";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import RentingPage from "./pages/RentingPage";
 import RestrictedRoute from "./pages/RestrictedRoute";
 import ReviewSection from "./components/profile/ReviewSection";
 import { Toaster } from "react-hot-toast";
+import Loader from "./pages/Loder";
 
 function App() {
   const { backendUrl, setToken } = useAuth();
@@ -67,7 +67,11 @@ function App() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <Loader />
+      </div>
+    );
   }
 
   return (
@@ -97,7 +101,6 @@ function App() {
           <Route path="users" element={<UsersPage />} />
           <Route path="blogs" element={<BlogListPage />} />
           <Route path="blog/:id" element={<BlogDetailPage />} />
-          <Route path="rent" element={<RentingPage />} />
 
           {/*Protected routes with AppLayout */}
           <Route element={<ProtectedRoute />}>
@@ -111,7 +114,10 @@ function App() {
               path="/users/allRecommendUsers"
               element={<AllSuggestedLearningPage />}
             />
-            <Route path="/userDashboard/events/createEvent" element={<EventCreationForm />} />
+            <Route
+              path="/userDashboard/events/createEvent"
+              element={<EventCreationForm />}
+            />
           </Route>
         </Route>
 
@@ -123,14 +129,14 @@ function App() {
             <Route path="profile" element={<ProfileSection />} />
             <Route path="events" element={<EventPage />} />
             <Route path="session" element={<SessionPage />} />
-            <Route path="review" element={<ReviewSection/>}/>
+            <Route path="review" element={<ReviewSection />} />
           </Route>
         </Route>
 
         {/* 404 Page for undefined routes */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-      <Toaster/>
+      <Toaster />
     </>
   );
 }

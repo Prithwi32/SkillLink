@@ -106,7 +106,7 @@ export default function Event() {
       </p>
       {!isLoading && <EventCarousel topEvents={topEvents} />}
       {isLoading && (
-        <p className="text-lg font-semibold text-slate-400">Loading...</p>
+        <p className="text-lg text-slate-400">Loading...</p>
       )}
       {topEvents.length > 3 ? (
         <Button
