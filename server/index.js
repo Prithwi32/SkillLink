@@ -34,7 +34,9 @@ app.use(bodyParser.json());
 const allowedOrigins = [
   'http://localhost:5174', // Admin frontend
   'http://localhost:5173', // Client frontend
-  'https://hobby-verse-ajnf.vercel.app'
+  'http://localhost:4173', // Client frontend
+  'https://hobby-verse-ajnf.vercel.app',
+  'https://hobbyverse-smy6.onrender.com'
 ];
 app.use(cors({
     origin: function (origin, callback) {
