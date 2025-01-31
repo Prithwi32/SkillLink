@@ -27,13 +27,11 @@ const io = new Server(server, {
       "http://localhost:5174",
       "http://localhost:5173",
       "https://hobby-verse-ajnf.vercel.app",
-      "https://hobbyverse-smy6.onrender.com",
-      "http://localhost:4173",
       "https://hobby-verse-main.vercel.app"
     ],
     methods: ["GET", "POST"],
     credentials: true,
-  },
+  },  
 });
 const PORT = process.env.PORT || 5000;
 
@@ -43,7 +41,6 @@ const allowedOrigins = [
   "http://localhost:5173", // Client frontend
   "http://localhost:4173", // Client frontend
   "https://hobby-verse-ajnf.vercel.app",
-  "https://hobbyverse-smy6.onrender.com",
   "https://hobby-verse-main.vercel.app"
 ];
 app.use(
