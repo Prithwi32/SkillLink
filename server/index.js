@@ -26,7 +26,7 @@ const io = new Server(server, {
     origin: [
       "http://localhost:5174",
       "http://localhost:5173",
-      "https://hobby-verse-ajnf.vercel.app",
+      "https://hobby-verse-admin.vercel.app",
       "https://hobby-verse-main.vercel.app"
     ],
     methods: ["GET", "POST"],
@@ -39,7 +39,7 @@ app.use(bodyParser.json());
 const allowedOrigins = [
   "http://localhost:5174", // Admin frontend
   "http://localhost:5173", // Client frontend
-  "https://hobby-verse-ajnf.vercel.app",
+  "https://hobby-verse-admin.vercel.app",
   "https://hobby-verse-main.vercel.app"
 ];
 app.use(
@@ -55,25 +55,9 @@ app.use(
   })
 );
 
-// app.use(cors({
-//     origin: function (origin, callback) {
-//       const regex = /^http:\/\/localhost:(517[3-9])$/;
-//       if (regex.test(origin)) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error('Not allowed by CORS'));
-//       }
-//     },
-//     credentials: true,
-//   }));
-
-// app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-// mongoose.connect(process.env.MONGO_URI, {
-//     authSource: 'admin'
-// })
 mongoose
   .connect(
     "mongodb+srv://prithwionline11:prithwi@hobbyverse-cluster.9fu1u.mongodb.net/hobbyverse1?retryWrites=true&w=majority"
