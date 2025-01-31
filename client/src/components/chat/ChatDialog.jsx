@@ -45,6 +45,7 @@ export default function ChatDialog() {
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
   const { backendUrl } = useAuth();
+  const [isSending, setSending] = useState(false);
 
   const currentUserId = localStorage.getItem("userId") || "1";
 
@@ -217,6 +218,8 @@ export default function ChatDialog() {
     };
 
     try {
+      setInputValue("");
+      setSending(true);
       const response = await fetch(`${backendUrl}/api/chat/messages`, {
         method: "POST",
         headers: {
@@ -231,12 +234,14 @@ export default function ChatDialog() {
           ...sentMessage,
           conversationId: conversation._id,
         });
-        setInputValue("");
       } else {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
     } catch (error) {
+      setInputValue(newMessage.text);
       console.error("Error sending message:", error);
+    } finally {
+      setSending(false);
     }
 
     if (textareaRef.current) {
@@ -406,7 +411,7 @@ export default function ChatDialog() {
                     className="flex-1 min-h-[40px] max-h-[120px] resize-none"
                     disabled={!selectedUser}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
+                      if (e.key === "Enter" && !e.shiftKey && !isSending) {
                         e.preventDefault();
                         handleSubmit(e);
                       }
@@ -416,7 +421,7 @@ export default function ChatDialog() {
                     type="submit"
                     size="icon"
                     className="self-end bg-blue-950"
-                    disabled={!selectedUser || !inputValue.trim()}
+                    disabled={!selectedUser || !inputValue.trim() || isSending}
                   >
                     <Send className="h-4 w-4" />
                     <span className="sr-only">Send message</span>
