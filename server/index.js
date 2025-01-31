@@ -39,7 +39,6 @@ app.use(bodyParser.json());
 const allowedOrigins = [
   "http://localhost:5174", // Admin frontend
   "http://localhost:5173", // Client frontend
-  "http://localhost:4173", // Client frontend
   "https://hobby-verse-ajnf.vercel.app",
   "https://hobby-verse-main.vercel.app"
 ];
