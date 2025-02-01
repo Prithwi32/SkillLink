@@ -20,6 +20,7 @@ import UserSkeletonLoader from "./UserSkeletonLoader";
 import MessageSkeletonLoader from "./MessageSkeletonLoader";
 import io from "socket.io-client";
 import { useAuth } from "@/context/AuthContext";
+import toast from "react-hot-toast";
 
 const scrollbarHideStyles = `
   .hide-scrollbar::-webkit-scrollbar {
@@ -45,6 +46,7 @@ export default function ChatDialog() {
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
   const { backendUrl } = useAuth();
+  const [isSending, setSending] = useState(false);
 
   const currentUserId = localStorage.getItem("userId") || "1";
 
@@ -217,6 +219,7 @@ export default function ChatDialog() {
     };
 
     try {
+      setSending(true);
       const response = await fetch(`${backendUrl}/api/chat/messages`, {
         method: "POST",
         headers: {
@@ -237,6 +240,9 @@ export default function ChatDialog() {
       }
     } catch (error) {
       console.error("Error sending message:", error);
+      toast.error("Uanble to send message. Try again.")
+    } finally {
+      setSending(false);
     }
 
     if (textareaRef.current) {
@@ -406,7 +412,7 @@ export default function ChatDialog() {
                     className="flex-1 min-h-[40px] max-h-[120px] resize-none"
                     disabled={!selectedUser}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
+                      if (e.key === "Enter" && !e.shiftKey && !isSending) {
                         e.preventDefault();
                         handleSubmit(e);
                       }
@@ -416,7 +422,7 @@ export default function ChatDialog() {
                     type="submit"
                     size="icon"
                     className="self-end bg-blue-950"
-                    disabled={!selectedUser || !inputValue.trim()}
+                    disabled={!selectedUser || !inputValue.trim() || isSending}
                   >
                     <Send className="h-4 w-4" />
                     <span className="sr-only">Send message</span>

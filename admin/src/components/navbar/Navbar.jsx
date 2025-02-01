@@ -11,7 +11,7 @@ const Navbar = () => {
     <nav className="flex items-center justify-between w-full px-4 py-3 border-b border-gray-300 sticky top-0 bg-white z-10">
       <div>
         <Link to="/" onClick={()=>scrollTo(0,0)} className="text-2xl font-bold  hover:opacity-75">
-          Hobby<span className="text-blue-700">Verse</span>
+          Skill<span className="text-blue-700">Link</span>
         </Link>
       </div>
 

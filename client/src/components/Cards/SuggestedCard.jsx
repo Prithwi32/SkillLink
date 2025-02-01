@@ -89,7 +89,7 @@ export default function SuggestedCard() {
       </p>
       {!isLoading && <InstructorCardGrid instructors={users} />}
       {isLoading && (
-        <p className="text-lg pb-2 font-semibold text-slate-400">Loading...</p>
+        <p className="text-lg pb-2 text-slate-400">Loading...</p>
       )}
     </main>
   );

@@ -40,7 +40,7 @@ const MobileNav = () => {
       </SheetTrigger>
       <SheetContent side="right" className="w-[300px] sm:w-[400px]">
         <SheetHeader>
-          <SheetTitle className="text-left text-xl">Hobby<span className='text-blue-700'>Verse</span></SheetTitle>
+          <SheetTitle className="text-left text-xl">Skill<span className='text-blue-700'>Link</span></SheetTitle>
         </SheetHeader>
         <nav className="mt-6">
           <ul className="flex flex-col justify-center text-center gap-6">

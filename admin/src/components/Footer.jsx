@@ -11,7 +11,7 @@ function Footer() {
             <p className="mb-4 mr-6 text-center font-normal text-black md:mb-0">
               &copy; {currentYear}{" "}
               <a href="/" className="font-semibold hover:underline">
-                <span className="text-black">Hobby</span><span className="text-blue-600">Verse</span>
+                <span className="text-black">Skill</span><span className="text-blue-600">Link</span>
               </a>
               . All Rights Reserved.
             </p>
