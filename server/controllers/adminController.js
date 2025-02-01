@@ -108,6 +108,11 @@ export const checkAuth = (req, res) => {
 
 // api for admin logout
 export const adminLogout = (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // Secure only in production
+  });
+
   res.status(200).json({ success: true, message: "Logged out" });
 };
+
