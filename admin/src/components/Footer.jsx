@@ -1,5 +1,3 @@
-import React from "react";
-
 function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -11,7 +9,8 @@ function Footer() {
             <p className="mb-4 mr-6 text-center font-normal text-black md:mb-0">
               &copy; {currentYear}{" "}
               <a href="/" className="font-semibold hover:underline">
-                <span className="text-black">Skill</span><span className="text-blue-600">Link</span>
+                <span className="text-black">Skill</span>
+                <span className="text-blue-600">Link</span>
               </a>
               . All Rights Reserved.
             </p>
@@ -21,7 +20,12 @@ function Footer() {
                 className="opacity-80 transition-opacity hover:opacity-100"
                 aria-label="Facebook"
               >
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg
+                  className="h-5 w-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
                   {/* Facebook Icon Path */}
                   <path
                     fillRule="evenodd"
@@ -35,7 +39,12 @@ function Footer() {
                 className="opacity-80 transition-opacity hover:opacity-100"
                 aria-label="Instagram"
               >
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg
+                  className="h-5 w-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
                   {/* Instagram Icon Path */}
                   <path
                     fillRule="evenodd"
@@ -45,13 +54,18 @@ function Footer() {
                 </svg>
               </a>
               <a
-                href="https://github.com/Prithwi32/HobbyVerse"
+                href="https://github.com/Prithwi32/SkillLink"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="opacity-80 transition-opacity hover:opacity-100"
                 aria-label="GitHub"
               >
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg
+                  className="h-5 w-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
                   {/* GitHub Icon Path */}
                   <path
                     fillRule="evenodd"
@@ -66,7 +80,9 @@ function Footer() {
                 Privacy Policy
               </p>
               <p className="mr-2 hover:underline cursor-pointer">Disclaimer</p>
-              <p className="hover:underline cursor-pointer">Contact Us</p>
+              <p className="hover:underline cursor-pointer">
+                <a href="mailto:skilllinkteams@gmail.com">Contact Us</a>
+              </p>
             </div>
           </div>
         </div>

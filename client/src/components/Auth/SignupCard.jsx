@@ -93,7 +93,7 @@ export function SignupCard() {
             {/* Logo and Company Name */}
             <div className="flex items-center gap-2 mb-8">
               <span className="text-2xl font-semibold mx-auto lg:mx-0">
-                Hobby<span className="text-blue-700">Verse</span>
+                Skill<span className="text-blue-700">Link</span>
               </span>
             </div>
 
@@ -191,7 +191,7 @@ export function SignupCard() {
                 Already have an account?{" "}
                 <Link
                   to="/login"
-                  onClick={()=>scrollTo(0,0)}
+                  onClick={() => scrollTo(0, 0)}
                   className="text-blue-600 hover:text-blue-800 font-semibold"
                 >
                   Sign in

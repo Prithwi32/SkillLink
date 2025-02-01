@@ -44,13 +44,10 @@ const Navbar = () => {
       <div className="flex justify-between items-center px-4 py-3">
         {/* Left Section */}
         <div>
-          <Link
-            to="/"
-            className="text-2xl font-bold  hover:opacity-75"
-            onClick={handleScrollUp}
-          >
-            Hobby<span className="text-blue-700">Verse</span>
-          </Link>
+        <Link to="/" onClick={()=>scrollTo(0,0)} className="text-2xl font-bold hover:opacity-75">
+        <img src="/logo.png" alt="Logo" className="inline-block w-8 h-8 mr-2" />
+        Skill<span className="text-blue-700">Link</span>
+        </Link>
         </div>
 
         {/* Center Section */}
@@ -69,7 +66,11 @@ const Navbar = () => {
               }`}
             />
           </NavLink>
-          <NavLink to="/#features" className="hover:opacity-75" onClick={handleAboutUsClick}>
+          <NavLink
+            to="/#features"
+            className="hover:opacity-75"
+            onClick={handleAboutUsClick}
+          >
             <li className="py-1">About Us</li>
             <hr
               className={`border-none outline-none h-0.5 w-4/5 m-auto ${
@@ -159,7 +160,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between px-5 py-6">
           <div>
             <Link to="/" className="text-2xl font-bold  hover:opacity-75">
-              Hobby<span className="text-blue-700">Verse</span>
+              Skill<span className="text-blue-700">Link</span>
             </Link>
           </div>
           <X
@@ -171,35 +172,35 @@ const Navbar = () => {
           />
         </div>
         <ul className="flex flex-col items-center gap-2 mt-5 px-5 text-lg font-medium w-full">
-        <NavLink
-          className={({ isActive }) =>
-            `w-full text-center py-2 rounded-full hover:bg-gray-200 ${
-              isActive && location.hash === "" ? "bg-blue-100" : ""
-            }`
-          }
-          onClick={() => {
-            setIsMobileMenuOpen(false);
-            handleScrollUp();
-          }}
-          to="/"
-        >
-          Home
-        </NavLink>
-        <NavLink
-          className={({ isActive }) =>
-            `w-full text-center py-2 rounded-full hover:bg-gray-200 ${
-              isActive && location.hash === "#features" ? "bg-blue-100" : ""
-            }`
-          }
-          onClick={() => {
-            setIsMobileMenuOpen(false);
-            handleScrollUp();
-            handleAboutUsClick();
-          }}
-          to="/#features"
-        >
-          About Us
-        </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              `w-full text-center py-2 rounded-full hover:bg-gray-200 ${
+                isActive && location.hash === "" ? "bg-blue-100" : ""
+              }`
+            }
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              handleScrollUp();
+            }}
+            to="/"
+          >
+            Home
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              `w-full text-center py-2 rounded-full hover:bg-gray-200 ${
+                isActive && location.hash === "#features" ? "bg-blue-100" : ""
+              }`
+            }
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              handleScrollUp();
+              handleAboutUsClick();
+            }}
+            to="/#features"
+          >
+            About Us
+          </NavLink>
           <NavLink
             className="w-full text-center py-2 rounded-full hover:bg-gray-200"
             onClick={() => {

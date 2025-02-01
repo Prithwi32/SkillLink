@@ -42,16 +42,20 @@ export function LoginCard() {
           {/* Logo and Company Name */}
           <div className="flex items-center gap-2 mb-8">
             <span className="text-2xl font-semibold mx-auto lg:mx-0">
-              Hobby<span className="text-blue-700">Verse</span>
+              Skill<span className="text-blue-700">Link</span>
             </span>
           </div>
-  
+
           {/* Welcome Text */}
           <div className="mb-6">
-            <h1 className="text-3xl font-bold mb-2 text-center lg:text-start">Welcome back</h1>
-            <p className="text-gray-600 text-center lg:text-start">Please enter your details</p>
+            <h1 className="text-3xl font-bold mb-2 text-center lg:text-start">
+              Welcome back
+            </h1>
+            <p className="text-gray-600 text-center lg:text-start">
+              Please enter your details
+            </p>
           </div>
-  
+
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <InputField
@@ -63,7 +67,7 @@ export function LoginCard() {
               required
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
-  
+
             <div className="relative">
               <InputField
                 label="Password"
@@ -86,28 +90,33 @@ export function LoginCard() {
                 )}
               </button>
             </div>
-  
+
             <p className="text-gray-600 text-sm text-center sm:text-start">
-              Connect with like-minded individuals, exchange skills, and unlock endless possibilities.
+              Connect with like-minded individuals, exchange skills, and unlock
+              endless possibilities.
             </p>
-  
+
             <button
               type="submit"
               className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-semibold shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300"
             >
               Sign in
             </button>
-  
+
             <p className="text-center text-sm text-gray-600">
               Don't have an account?{" "}
-              <Link to="/signup" onClick={()=>scrollTo(0,0)} className="text-blue-600 hover:text-blue-800 font-semibold">
+              <Link
+                to="/signup"
+                onClick={() => scrollTo(0, 0)}
+                className="text-blue-600 hover:text-blue-800 font-semibold"
+              >
                 Sign up
               </Link>
             </p>
           </form>
         </div>
       </div>
-  
+
       {/* Right side - Illustration */}
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-blue-50 rounded-3xl">
         <img

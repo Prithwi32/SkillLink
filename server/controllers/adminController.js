@@ -84,12 +84,6 @@ export const adminLogin = (req, res) => {
   // console.log("Generated token" + token);
 
   res
-    // .cookie("token", token, {
-    //   secure: true,
-    //   sameSite: "strict",
-    //   maxAge: 1000 * 60 * 60 * 24,
-    // })
-    // .json({ success: true, message: "Logged in successfully" });
   .cookie("token", token, {
     httpOnly: true, // Helps to prevent XSS attacks
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
