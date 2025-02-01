@@ -26,8 +26,8 @@ const io = new Server(server, {
     origin: [
       "http://localhost:5174",
       "http://localhost:5173",
-      "https://hobby-verse-admin.vercel.app",
-      "https://hobby-verse-main.vercel.app"
+      "https://skill-link-admin.vercel.app",
+      "https://skill-link-main.vercel.app"
     ],
     methods: ["GET", "POST"],
     credentials: true,
@@ -39,8 +39,8 @@ app.use(bodyParser.json());
 const allowedOrigins = [
   "http://localhost:5174", // Admin frontend
   "http://localhost:5173", // Client frontend
-  "https://hobby-verse-admin.vercel.app",
-  "https://hobby-verse-main.vercel.app"
+  "https://skill-link-admin.vercel.app",
+  "https://skill-link-main.vercel.app"
 ];
 app.use(
   cors({
