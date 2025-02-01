@@ -34,9 +34,10 @@ export const addSkill = async (req, res) => {
     // check whether skill already exists in database
     const existingSkill = await Skill.findOne({ name, status: "Approved" });
     if (existingSkill) {
-      return res
-        .status(200)
-        .json({success:true, message: "Skill you are requesting already exists" });
+      return res.status(200).json({
+        success: true,
+        message: "Skill you are requesting already exists",
+      });
     }
 
     const newSkill = new Skill({ name, desc, photo, status: "Pending" });
@@ -57,12 +58,18 @@ export const getRecentSkills = async (req, res) => {
   try {
     const skills = await Skill.find({ status: "Approved" });
 
-    skills.reverse();
+    if (skills.length > 7) {
+      // Shuffle array using Fisher-Yates algorithm
+      for (let i = skills.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [skills[i], skills[j]] = [skills[j], skills[i]];
+      }
+    }
 
-    res
-     .status(200)
-     .json({ success: true, skills: skills.slice(0, 7) });
+    // Pick the first 7 random skills
+    const randomSkills = skills.slice(0, 7);
 
+    res.status(200).json({ success: true, skills: randomSkills });
   } catch (error) {
     res
       .status(500)
