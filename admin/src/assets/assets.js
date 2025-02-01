@@ -5,8 +5,8 @@ import animationEditing from './Animation and video editing.jpg';
 import etiquette from './Etiquette.jpeg';
 import flute from './Flute.jpg';
 import publicSpeaking from './Public speaking.jpg'
-import verbalCommunication from './Verbal communication.png'
 import writing from './Writing skills.png';
+import et from './et.jpg';
 
 
 export const skillImage =[
@@ -15,8 +15,8 @@ export const skillImage =[
     trading,
     animationEditing,
     flute,
+    et,
     singing,
-    verbalCommunication,
     publicSpeaking,
     writing,
  
