@@ -20,6 +20,7 @@ import UserSkeletonLoader from "./UserSkeletonLoader";
 import MessageSkeletonLoader from "./MessageSkeletonLoader";
 import io from "socket.io-client";
 import { useAuth } from "@/context/AuthContext";
+import toast from "react-hot-toast";
 
 const scrollbarHideStyles = `
   .hide-scrollbar::-webkit-scrollbar {
@@ -218,7 +219,6 @@ export default function ChatDialog() {
     };
 
     try {
-      setInputValue("");
       setSending(true);
       const response = await fetch(`${backendUrl}/api/chat/messages`, {
         method: "POST",
@@ -234,12 +234,13 @@ export default function ChatDialog() {
           ...sentMessage,
           conversationId: conversation._id,
         });
+        setInputValue("");
       } else {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
     } catch (error) {
-      setInputValue(newMessage.text);
       console.error("Error sending message:", error);
+      toast.error("Uanble to send message. Try again.")
     } finally {
       setSending(false);
     }
