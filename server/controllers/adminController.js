@@ -87,6 +87,7 @@ export const adminLogin = (req, res) => {
   .cookie("token", token, {
     httpOnly: true, // Helps to prevent XSS attacks
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "strict", // More lenient sameSite in development
     maxAge: 1000 * 60 * 60 * 24, // 1 day
   })
   .json({ success: true, message: "Logged in successfully" });
