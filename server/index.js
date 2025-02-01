@@ -91,7 +91,7 @@ app.use("/api/events", eventRoutes);
 app.use("/api/skills", skillRouter);
 app.use("/api/chat", chatRouter);
 
-// Socket.io connection handling
+// Socket.io connection
 io.on("connection", (socket) => {
   console.log("New client connected");
 
