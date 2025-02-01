@@ -111,6 +111,7 @@ export const adminLogout = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production", // Secure only in production
+    sameSite: process.env.NODE_ENV === "production"? "None" : "strict", // More lenient sameSite in development
   });
 
   res.status(200).json({ success: true, message: "Logged out" });
